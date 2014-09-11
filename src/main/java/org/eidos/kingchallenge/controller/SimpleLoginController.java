@@ -20,9 +20,12 @@ public String loginService(Integer token) throws RuntimeException {
 /**
  * We block the Login Controller public class
  */
-private  SimpleLoginController ()  {this.loginService=null;};
+private  SimpleLoginController ()  {
+	throw new UnsupportedOperationException();
+};
 private SimpleLoginController(Builder builder) {
-    this.loginService = builder.loginService;
+	
+    loginService = builder.loginService;
 
  }
 
@@ -32,14 +35,14 @@ private SimpleLoginController(Builder builder) {
  *
  */
 public static class Builder{
-		private LoginService loginService;
+		private  LoginService loginService;
 		/**
 		 * 
 		 * @param service
 		 * @return
 		 */
 		public Builder service(LoginService service) {
-			this.loginService=service;
+			loginService=service;
 			return this;
 		}
 	    public SimpleLoginController build() {
