@@ -25,7 +25,7 @@ public enum LogicKingError {
 	 * 
 	 * @param code
 	 *            status code
-	 * @return the appropriate DeliveryError
+	 * @return the appropriate LogicKingError
 	 */
 	public static LogicKingError byCode(int code) {
 		for (LogicKingError err : LogicKingError.values()) {

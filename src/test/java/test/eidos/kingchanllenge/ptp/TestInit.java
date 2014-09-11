@@ -7,7 +7,7 @@ import org.easymock.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import org.eidos.kingchallenge.controller.MockLoginController;
+import org.eidos.kingchallenge.controller.SimpleLoginController;
 import org.eidos.kingchallenge.services.LoginService;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +18,7 @@ public class TestInit extends EasyMockSupport {
 	@Mock
 	private LoginService loginService;
 	@TestSubject
-	private MockLoginController loginController = new MockLoginController.Builder()
+	private SimpleLoginController loginController = new SimpleLoginController.Builder()
 			.service(loginService).build();
 
 	/**

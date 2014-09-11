@@ -1,13 +1,14 @@
 package org.eidos.kingchallenge.controller;
 
 import org.eidos.kingchallenge.services.LoginService;
-
+import javax.annotation.concurrent.Immutable;
 /**
  * MockloginController, singleton stateles?
  * @author eidos71
  *
  */
-public class MockLoginController  implements LoginController{
+@Immutable
+public final class SimpleLoginController  implements LoginController{
 	
 private final LoginService  loginService;
 
@@ -19,8 +20,8 @@ public String loginService(Integer token) throws RuntimeException {
 /**
  * We block the Login Controller public class
  */
-private  MockLoginController ()  {this.loginService=null;};
-private MockLoginController(Builder builder) {
+private  SimpleLoginController ()  {this.loginService=null;};
+private SimpleLoginController(Builder builder) {
     this.loginService = builder.loginService;
 
  }
@@ -41,8 +42,8 @@ public static class Builder{
 			this.loginService=service;
 			return this;
 		}
-	    public MockLoginController build() {
-	    	return new MockLoginController(this);
+	    public SimpleLoginController build() {
+	    	return new SimpleLoginController(this);
 	    }
 }
 
