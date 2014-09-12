@@ -6,6 +6,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.concurrent.Immutable;
 
+import org.eidos.kingchallenge.utils.RandomUuidFactory;
+
 /**
  * 
  * @author eidos71
@@ -101,7 +103,7 @@ public final class KingUser implements Serializable {
 		 * @param longId
 		 * @param sessionId
 		 */
-		Builder(int intKingUserId, Date date) {
+		public Builder(int intKingUserId) {
 			this.sessionKey = generateSessionKey(intKingUserId);
 			this.kingUserId = new AtomicInteger(intKingUserId);
 			this.loginDate = new Date();
@@ -115,8 +117,8 @@ public final class KingUser implements Serializable {
 		 * @return
 		 */
 		private final String generateSessionKey(int intKingUserId) {
-			// TODO Auto-generated method stub
-			return "EXCEHOMO";
+			
+			return  RandomUuidFactory.getInstance().createUUID();
 		}
 
 		/**
