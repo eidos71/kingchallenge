@@ -2,12 +2,15 @@ package org.eidos.kingchallenge.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.annotation.concurrent.Immutable;
 
 import org.eidos.kingchallenge.exceptions.KingRunTimeException;
+import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
+import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.utils.RandomUuidFactory;
+import org.eidos.kingchallenge.utils.Validator;
 
 /**
  * 
@@ -22,7 +25,7 @@ public final class KingUser implements Serializable {
 	 */
 	private static final long serialVersionUID = -8792697318509222577L;
 	private final Date dateLogin;
-	private final AtomicInteger kingUserId;
+	private final AtomicLong kingUserId;
 	private final String sessionKey;
 
 	/**
@@ -36,7 +39,7 @@ public final class KingUser implements Serializable {
 		return dateLogin;
 	}
 
-	public AtomicInteger getKingUserId() {
+	public AtomicLong getKingUserId() {
 		return kingUserId;
 	}
 
@@ -95,7 +98,7 @@ public final class KingUser implements Serializable {
 	 *
 	 */
 	public static class Builder {
-		private AtomicInteger kingUserId;
+		private AtomicLong kingUserId;
 		private String sessionKey;
 		private Date loginDate;
 
@@ -104,9 +107,11 @@ public final class KingUser implements Serializable {
 		 * @param longId
 		 * @param sessionId
 		 */
-		public Builder(int intKingUserId) {
-			this.sessionKey = generateSessionKey(intKingUserId);
-			this.kingUserId = new AtomicInteger(intKingUserId);
+		public Builder(long longKingUserId) {
+			if (!Validator.isValidUnsignedInt(longKingUserId) )
+				throw new LogicKingChallengeException(LogicKingError.INVALID_TOKEN);
+			this.sessionKey = generateSessionKey();
+			this.kingUserId = new AtomicLong(longKingUserId);
 			this.loginDate = new Date();
 
 		}
@@ -117,9 +122,9 @@ public final class KingUser implements Serializable {
 		 * @param intKingUserId
 		 * @return
 		 */
-		private final String generateSessionKey(int intKingUserId) {
+		private final String generateSessionKey() {
 			try {
-				return  RandomUuidFactory.getInstance().createUUID();
+				return  RandomUuidFactory.getInstance().createSessionID();
 			}catch (Exception err) {
 				throw new KingRunTimeException( err);
 			}

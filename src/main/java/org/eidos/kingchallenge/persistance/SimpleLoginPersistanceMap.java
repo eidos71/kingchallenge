@@ -3,7 +3,6 @@ package org.eidos.kingchallenge.persistance;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
@@ -11,6 +10,7 @@ import javax.annotation.concurrent.ThreadSafe;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.model.KingUser;
+import org.eidos.kingchallenge.utils.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,16 +22,16 @@ import org.slf4j.LoggerFactory;
  *
  */
 @ThreadSafe
-public final class SimpleLoginPersistanceMap implements LoginPersistanceMap<Integer, String, KingUser> {
+public final class SimpleLoginPersistanceMap implements LoginPersistanceMap<Long, String, KingUser> {
 	static final Logger LOG = LoggerFactory.getLogger(SimpleLoginPersistanceMap.class);
 	@GuardedBy("this")
-	private final Map<Integer, KingUser> mapByLogin = 
-				new ConcurrentHashMap<Integer, KingUser>();
+	private final Map<Long, KingUser> mapByLogin = 
+				new ConcurrentHashMap<Long, KingUser>();
 	@GuardedBy("this")
 	private final Map<String, KingUser> mapBySession =
 				new ConcurrentHashMap<String, KingUser>();
 	@Override
-	public Map<Integer, KingUser> getMapByLogin() {
+	public Map<Long, KingUser> getMapByLogin() {
 		return Collections.unmodifiableMap(mapByLogin);
 	}
 
@@ -41,8 +41,10 @@ public final class SimpleLoginPersistanceMap implements LoginPersistanceMap<Inte
 	}
 
 	@Override
-	public void  put(Integer loginKey, String sessionKey, KingUser value) {
+	public void  put(Long loginKey, String sessionKey, KingUser value) {
 		synchronized(this) {
+			if (!Validator.isValidUnsignedInt(loginKey) )
+				throw new LogicKingChallengeException(LogicKingError.INVALID_TOKEN);
 			LOG.trace("loginKey {}, sessionKey {}, value {} ",loginKey,sessionKey,value );
 			mapByLogin.put(loginKey, value);
 			mapBySession.put(sessionKey, value);
@@ -60,8 +62,8 @@ public final class SimpleLoginPersistanceMap implements LoginPersistanceMap<Inte
 		}
 	}
 	@Override
-	public void removeByLogin(Integer loginKey) {
-		if (loginKey==null || loginKey.equals(0))
+	public void removeByLogin(Long loginKey) {
+		if (!Validator.isValidUnsignedInt(loginKey) )
 			throw new LogicKingChallengeException(LogicKingError.INVALID_TOKEN);
 		synchronized(this) {
 			KingUser removed = mapByLogin.remove(loginKey);

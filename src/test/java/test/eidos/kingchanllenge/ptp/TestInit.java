@@ -2,6 +2,8 @@ package test.eidos.kingchanllenge.ptp;
 
 import static org.easymock.EasyMock.*;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import org.easymock.*;
 
 import static org.junit.Assert.assertEquals;
@@ -27,8 +29,8 @@ public class TestInit extends EasyMockSupport {
 	@Test(expected = RuntimeException.class)
 	public void testInvalidNegativeLogin() {
 		//
-		expect(loginService.loginToken(-1234)).andThrow(new RuntimeException());
+		expect(loginService.loginToken(new AtomicLong(-1234L))).andThrow(new RuntimeException());
 		replay(loginService);
-		loginController.loginService(-1234);
+		loginController.loginService(new AtomicLong(-1234L));
 	}
 }

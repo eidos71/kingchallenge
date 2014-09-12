@@ -1,6 +1,7 @@
 package org.eidos.kingchallenge.services;
 
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicLong;
 
 
 /**
@@ -15,7 +16,7 @@ public interface LoginService {
 	 * @param token
 	 * @return
 	 */
-	public String loginToken(Integer token) ;
+	public String loginToken(AtomicLong token) ;
 	/**
 	 *  Checks if session is invalidated or not
 	 * @param currentTime Current

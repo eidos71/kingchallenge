@@ -4,7 +4,9 @@ import java.util.Random;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 import org.easymock.EasyMockRunner;
+import org.easymock.EasyMockSupport;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.model.KingUser;
@@ -20,12 +22,12 @@ import org.slf4j.LoggerFactory;
 
 
 @RunWith(EasyMockRunner.class)
-public class TestUserPersistance {
+public class TestUserPersistance  extends EasyMockSupport  {
 	static final Logger LOG = LoggerFactory
 			.getLogger(TestUserPersistance.class);
 	private final ExecutorService executor = Executors.newCachedThreadPool();
-	private static final LoginPersistanceMap<Integer, String, KingUser> bag = new SimpleLoginPersistanceMap();
-	private final static int BAG_SIZE = 40000; //10
+	private static final LoginPersistanceMap<Long, String, KingUser> bag = new SimpleLoginPersistanceMap();
+	private final static int BAG_SIZE = 10; //10
 
 	@Before
 	public void setup() {
@@ -64,16 +66,16 @@ public class TestUserPersistance {
 	 *
 	 */
 	private final class Accessor implements Runnable {
-		private final LoginPersistanceMap<Integer, String, KingUser> theBag;
+		private final LoginPersistanceMap<Long, String, KingUser> theBag;
 
 		public Accessor(
-				LoginPersistanceMap<Integer, String, KingUser> abag) {
+				LoginPersistanceMap<Long, String, KingUser> abag) {
 			this.theBag = abag;
 		}
 
 		@Override
 		public void run() {
-			for (Entry<Integer, KingUser> entry : this.theBag
+			for (Entry<Long, KingUser> entry : this.theBag
 					.getMapByLogin().entrySet()) {
 				LOG.debug("Key- {}, Value {}", entry.getKey(), entry.getValue());
 			}
@@ -82,10 +84,10 @@ public class TestUserPersistance {
 
 	private final class Mutator implements Runnable {
 
-		private final LoginPersistanceMap<Integer, String, KingUser> theBag;
+		private final LoginPersistanceMap<Long, String, KingUser> theBag;
 		private final Random random = new Random();
 
-		public Mutator(LoginPersistanceMap<Integer, String, KingUser> abag) {
+		public Mutator(LoginPersistanceMap<Long, String, KingUser> abag) {
 			this.theBag = abag;
 		}
 
@@ -94,10 +96,10 @@ public class TestUserPersistance {
 			KingUser user = null;
 			for (int i = 1; i < BAG_SIZE; i++) {
 				try {
-					int randomInt = random.nextInt(BAG_SIZE);
+					long randomInt = random.nextInt(BAG_SIZE);
 					LOG.debug("element GOING to be deleted-> {}", randomInt);
 					this.theBag.removeByLogin(randomInt);
-					user = new KingUser.Builder(randomInt).build();
+					user = new KingUser.Builder(randomInt ).build();
 					bag.put(user.getKingUserId().get(), user.getSessionKey(), user);
 					LOG.debug("element modified-> {}", randomInt);		
 				}catch (LogicKingChallengeException exception) {

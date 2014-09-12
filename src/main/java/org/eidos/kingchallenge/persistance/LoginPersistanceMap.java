@@ -4,20 +4,20 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @SuppressWarnings("hiding")
-public interface LoginPersistanceMap <Integer, String, KingUser>{
+public interface LoginPersistanceMap <Long, String, KingUser>{
 
-	Map<Integer, KingUser> getMapByLogin();
+	Map<Long, KingUser> getMapByLogin();
 
 
 	Map<String, KingUser> getMapBySession();
 
-	void put(Integer loginKey, String sessionKey, KingUser value);
+	void put(Long loginKey, String sessionKey, KingUser value);
 	
 	
 
 
 
-	void removeByLogin(Integer loginKey);
+	void removeByLogin(Long loginKey);
 
 
 	void removeBySession(String sessionKey);

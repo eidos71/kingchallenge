@@ -5,11 +5,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NavigableMap;
+import java.util.Random;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.util.concurrent.TimeUnit.*;
 
+import org.eidos.kingchallenge.utils.Validator;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,5 +81,20 @@ public class TestDelete {
 
 	      LOG.debug("Now data: {}" ,navmap.descendingMap());
 
+	}
+	@Test
+	public void testInteger() {
+		int size=100;
+		long[]num = new long[size + 1];
+		Random random = new Random();
+		for (int i = 1; i < size + 1; i++) {
+		long result = (long)random.nextInt()+(long)(1L<<31);
+		
+		num[i] =(Validator.isValidUnsignedInt(result) )?result:0 ;
+		Long uuid= new Long(num[i]);
+	    LOG.debug("result:: {}" ,uuid );
+	
+		}
+		
 	}
 }

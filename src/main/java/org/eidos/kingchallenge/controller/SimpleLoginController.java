@@ -1,6 +1,9 @@
 package org.eidos.kingchallenge.controller;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import org.eidos.kingchallenge.services.LoginService;
+
 import javax.annotation.concurrent.Immutable;
 /**
  * MockloginController, singleton stateles?
@@ -13,7 +16,7 @@ public final class SimpleLoginController  implements LoginController{
 private final LoginService  loginService;
 
 @Override
-public String loginService(Integer token) throws RuntimeException {
+public String loginService(AtomicLong token) throws RuntimeException {
 	return this.loginService.loginToken(token);
 
 }
