@@ -2,12 +2,12 @@ package org.eidos.kingchallenge.utils;
 
 import java.util.Random;
 
+import org.eidos.kingchallenge.utils.UtilsEnum.Mode;
+
 public class RandomUuidFactory {
 	private static final RandomUuidFactory _SINGLETON = new RandomUuidFactory();
 
-	public static enum Mode {
-		ALPHA, ALPHANUMERIC, NUMERIC
-	}
+
 
 	/**
 	 * 

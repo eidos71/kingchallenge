@@ -68,10 +68,9 @@ public final class SimpleLoginPersistanceMap implements LoginPersistanceMap<Long
 		synchronized(this) {
 			KingUser removed = mapByLogin.remove(loginKey);
 			if (removed==null) {
-				LOG.warn("invalid Token- loginkey {}", loginKey);
-				throw   new LogicKingChallengeException(LogicKingError.INVALID_TOKEN);
+				LOG.debug("- loginkey {} was not found", loginKey);
+				return;
 			}
-				
 			mapBySession.remove(removed);
 		}
 	}
