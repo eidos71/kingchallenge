@@ -9,7 +9,7 @@
 
   <logger name="org.eidos.kingchanllenge" level="DEBUG" />
 
- <logger name="test.eidos.kingchanllenge" level="TRACE" />
+ <logger name="test.eidos.kingchanllenge" level="DEBUG" />
  
   <root level="debug">
     <appender-ref ref="STDOUT" />

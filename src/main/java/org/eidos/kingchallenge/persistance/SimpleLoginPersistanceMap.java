@@ -22,16 +22,16 @@ import org.slf4j.LoggerFactory;
  *
  */
 @ThreadSafe
-public final class SimpleLoginPersistanceMap implements LoginPersistanceMap<AtomicInteger, String, KingUser> {
+public final class SimpleLoginPersistanceMap implements LoginPersistanceMap<Integer, String, KingUser> {
 	static final Logger LOG = LoggerFactory.getLogger(SimpleLoginPersistanceMap.class);
 	@GuardedBy("this")
-	private final Map<AtomicInteger, KingUser> mapByLogin = 
-				new ConcurrentHashMap<AtomicInteger, KingUser>();
+	private final Map<Integer, KingUser> mapByLogin = 
+				new ConcurrentHashMap<Integer, KingUser>();
 	@GuardedBy("this")
 	private final Map<String, KingUser> mapBySession =
 				new ConcurrentHashMap<String, KingUser>();
 	@Override
-	public Map<AtomicInteger, KingUser> getMapByLogin() {
+	public Map<Integer, KingUser> getMapByLogin() {
 		return Collections.unmodifiableMap(mapByLogin);
 	}
 
@@ -41,9 +41,9 @@ public final class SimpleLoginPersistanceMap implements LoginPersistanceMap<Atom
 	}
 
 	@Override
-	public void  put(AtomicInteger loginKey, String sessionKey, KingUser value) {
+	public void  put(Integer loginKey, String sessionKey, KingUser value) {
 		synchronized(this) {
-			LOG.debug("loginKey {}, sessionKey {}, value {} ",loginKey,sessionKey,value );
+			LOG.trace("loginKey {}, sessionKey {}, value {} ",loginKey,sessionKey,value );
 			mapByLogin.put(loginKey, value);
 			mapBySession.put(sessionKey, value);
 		
@@ -60,7 +60,7 @@ public final class SimpleLoginPersistanceMap implements LoginPersistanceMap<Atom
 		}
 	}
 	@Override
-	public void removeByLogin(AtomicInteger loginKey) {
+	public void removeByLogin(Integer loginKey) {
 		if (loginKey==null || loginKey.equals(0))
 			throw new LogicKingChallengeException(LogicKingError.INVALID_TOKEN);
 		synchronized(this) {

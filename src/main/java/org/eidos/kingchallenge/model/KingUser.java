@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.concurrent.Immutable;
 
+import org.eidos.kingchallenge.exceptions.KingRunTimeException;
 import org.eidos.kingchallenge.utils.RandomUuidFactory;
 
 /**
@@ -117,8 +118,12 @@ public final class KingUser implements Serializable {
 		 * @return
 		 */
 		private final String generateSessionKey(int intKingUserId) {
+			try {
+				return  RandomUuidFactory.getInstance().createUUID();
+			}catch (Exception err) {
+				throw new KingRunTimeException( err);
+			}
 			
-			return  RandomUuidFactory.getInstance().createUUID();
 		}
 
 		/**
