@@ -22,7 +22,5 @@ public final class SimplePageHandler implements  HttpHandler {
 		exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 		
 	}
-	private  SimplePageHandler() {
-		
-	}
+
 }

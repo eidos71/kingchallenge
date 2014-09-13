@@ -94,7 +94,7 @@ public class KingdomServer {
 
 	protected <T extends HttpHandler> void createContext(String context,
 			Class<T> clazz) {
-		LOG.info(context, clazz);
+		LOG.info("context: {},  handler: {}",context, clazz.getName());
 		server.createContext(context, new GenericPageHandler(clazz));
 	}
 
