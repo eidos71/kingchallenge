@@ -18,6 +18,7 @@ import org.easymock.EasyMockRunner;
 import org.easymock.EasyMockSupport;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.model.KingdomHandlerConf;
+import org.eidos.kingchallenge.persistance.KingdomHandlerConfManager;
 import org.eidos.kingchallenge.utils.UtilsEnum.Mode;
 import org.eidos.kingchallenge.utils.Validator;
 import org.junit.Test;
@@ -134,5 +135,9 @@ public class TestDelete extends EasyMockSupport {
 		.contextPath(null).build();
 			LOG.debug(handler.toString() );
 			 assertThat("", handler.getContext(), equalTo(context));
+	}
+	@Test
+	public void testInitHandler() {
+		KingdomHandlerConfManager.getInstance();
 	}
 }
