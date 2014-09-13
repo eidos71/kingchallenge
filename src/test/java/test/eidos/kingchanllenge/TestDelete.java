@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -111,18 +112,18 @@ public class TestDelete extends EasyMockSupport {
 	@Test(expected =LogicKingChallengeException.class)
 	public void testInvalidClass() {
 		KingdomHandlerConf handler = new KingdomHandlerConf.Builder("wrong.eidos.kingchallenge.httpserver.handlers.HeraldHandler")
-	.contextPath("herald/").build();
+	.contextPath("/herald").build();
 	}
 	@Test
 	public void testKingomDefaultConstructor() {
-		String context="";
+		String context="/";
 		KingdomHandlerConf handler = new KingdomHandlerConf.Builder("org.eidos.kingchallenge.httpserver.handlers.HeraldHandler").build();
 		LOG.debug(handler.toString() );
 		 assertThat("", handler.getContext(), equalTo(context));
 	}
 	@Test
 	public void testKindomHandler() {
-		String context="herald/";
+		String context="/herald";
 			KingdomHandlerConf handler = new KingdomHandlerConf.Builder("org.eidos.kingchallenge.httpserver.handlers.HeraldHandler")
 		.contextPath(context).build();
 			LOG.debug(handler.toString() );
@@ -130,7 +131,7 @@ public class TestDelete extends EasyMockSupport {
 	}
 	@Test
 	public void testKindomHandlerWithNullContextPath() {
-		String context="";
+		String context="/";
 			KingdomHandlerConf handler = new KingdomHandlerConf.Builder("org.eidos.kingchallenge.httpserver.handlers.HeraldHandler")
 		.contextPath(null).build();
 			LOG.debug(handler.toString() );
@@ -138,6 +139,7 @@ public class TestDelete extends EasyMockSupport {
 	}
 	@Test
 	public void testInitHandler() {
-		KingdomHandlerConfManager.getInstance();
+		Set<KingdomHandlerConf> map = KingdomHandlerConfManager.getInstance().getHandlerConfList();
+		 assertThat("", map.size(), equalTo(2));
 	}
 }

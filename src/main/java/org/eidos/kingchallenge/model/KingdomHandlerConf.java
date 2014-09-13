@@ -92,13 +92,13 @@ public final class KingdomHandlerConf   implements Serializable{
 				throw new LogicKingChallengeException(LogicKingError.INVALIDHANDLER);
 			try {
 				handlerClass = Class.forName(pHandlerClass);
-				contextPath="";
+				contextPath="/";
 			} catch (ClassNotFoundException e) {
 				throw new LogicKingChallengeException(LogicKingError.INVALIDHANDLER, e);
 			}
 		}
 		public Builder contextPath(String context) {
-			if  (context==null) context="";
+			if  (context==null) context="/";
 			contextPath=context;
 			this.contextPath=context;
 			return this;

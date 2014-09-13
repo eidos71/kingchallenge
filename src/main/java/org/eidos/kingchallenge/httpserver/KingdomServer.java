@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class KingdomServer {
-	private static final String HTTP_LOCALHOST = "http://localhost:";
+
 	static final Logger LOG = LoggerFactory.getLogger(KingdomServer.class);
 	private static final int HTTP_POOL_CONNECTIONS = 50;
 	private static final int HTTP_MAX_CONNECTIONS = HTTP_POOL_CONNECTIONS * 2;
@@ -106,7 +106,7 @@ public class KingdomServer {
 	protected void createContext() {
 		for (KingdomHandlerConf confHandler : KingdomHandlerConfManager
 				.getInstance().getHandlerConfList()) {
-			createContext("/" + confHandler.getContext(),
+			createContext(confHandler.getContext(),
 					confHandler.gethandlerType());
 		}
 	}

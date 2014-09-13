@@ -62,8 +62,8 @@ public class KingdomHandlerConfManager {
 					 try {
 						 Map.Entry<String,String> mapPairs = (Map.Entry<String,String>)it.next();
 						handlerConfSet.add(
-								new KingdomHandlerConf.Builder(mapPairs.getKey())
-								.contextPath(mapPairs.getValue())
+								new KingdomHandlerConf.Builder(mapPairs.getValue())
+								.contextPath(mapPairs.getKey())
 								.build()
 								);
 					 }catch(LogicKingChallengeException ex) {
