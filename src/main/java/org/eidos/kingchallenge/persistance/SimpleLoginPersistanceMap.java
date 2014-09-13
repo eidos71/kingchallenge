@@ -24,12 +24,14 @@ import org.slf4j.LoggerFactory;
 @ThreadSafe
 public final class SimpleLoginPersistanceMap implements LoginPersistanceMap<Long, String, KingUser> {
 	static final Logger LOG = LoggerFactory.getLogger(SimpleLoginPersistanceMap.class);
-	@GuardedBy("this")
+	private final Object lock= new Object();
+	@GuardedBy("lock")
 	private final Map<Long, KingUser> mapByLogin = 
 				new ConcurrentHashMap<Long, KingUser>();
-	@GuardedBy("this")
+	@GuardedBy("lock")
 	private final Map<String, KingUser> mapBySession =
 				new ConcurrentHashMap<String, KingUser>();
+	
 	@Override
 	public Map<Long, KingUser> getMapByLogin() {
 		return Collections.unmodifiableMap(mapByLogin);
@@ -42,7 +44,7 @@ public final class SimpleLoginPersistanceMap implements LoginPersistanceMap<Long
 
 	@Override
 	public void  put(Long loginKey, String sessionKey, KingUser value) {
-		synchronized(this) {
+		synchronized(lock) {
 			if (!Validator.isValidUnsignedInt(loginKey) )
 				throw new LogicKingChallengeException(LogicKingError.INVALID_TOKEN);
 			LOG.trace("loginKey {}, sessionKey {}, value {} ",loginKey,sessionKey,value );
@@ -56,7 +58,7 @@ public final class SimpleLoginPersistanceMap implements LoginPersistanceMap<Long
 		// If empty remove
 		if (  sessionKey==null || "".equals(sessionKey) ) 
 				throw new LogicKingChallengeException(LogicKingError.INVALID_SESSION);
-		synchronized(this) {
+		synchronized(lock) {
 			KingUser removed = mapBySession.remove(sessionKey);
 			mapByLogin.remove(removed);
 		}
@@ -65,7 +67,7 @@ public final class SimpleLoginPersistanceMap implements LoginPersistanceMap<Long
 	public void removeByLogin(Long loginKey) {
 		if (!Validator.isValidUnsignedInt(loginKey) )
 			throw new LogicKingChallengeException(LogicKingError.INVALID_TOKEN);
-		synchronized(this) {
+		synchronized(lock) {
 			KingUser removed = mapByLogin.remove(loginKey);
 			if (removed==null) {
 				LOG.debug("- loginkey {} was not found", loginKey);

@@ -8,7 +8,7 @@ package org.eidos.kingchallenge.exceptions.enums;
 public enum LogicKingError {
 
 	PROCESSING_ERROR(1), INVALID_TOKEN_SIZE(2), INVALID_TOKEN(3), INVALID_SESSION(
-			4), NONE(255), UNKNOWN(256);
+			4), INVALIDHANDLER(5),NONE(255), UNKNOWN(256);
 
 	private final byte code;
 

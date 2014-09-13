@@ -27,7 +27,7 @@ public class TestUserPersistance  extends EasyMockSupport  {
 			.getLogger(TestUserPersistance.class);
 	private final ExecutorService executor = Executors.newCachedThreadPool();
 	private static final LoginPersistanceMap<Long, String, KingUser> bag = new SimpleLoginPersistanceMap();
-	private final static int BAG_SIZE = 10; //10
+	private final static int BAG_SIZE = 4000; //10
 
 	@Before
 	public void setup() {
@@ -103,9 +103,9 @@ public class TestUserPersistance  extends EasyMockSupport  {
 					bag.put(user.getKingUserId().get(), user.getSessionKey(), user);
 					LOG.debug("element modified-> {}", randomInt);		
 				}catch (LogicKingChallengeException exception) {
-					//if the LogicKingChallengeException is of type 3
-					if (exception.getDeliveryError().equals(LogicKingError.INVALID_TOKEN) ) {
-						LOG.info("0 is not a valid sessionID, yet for this test this error is skipped");
+					//if the LogicKingChallengeException is of type INVALID_TOKEN
+					if (LogicKingError.INVALID_TOKEN.equals(exception.getLogicError()) ){
+						LOG.info("0 is not a valid sessionID, yet for this test this error is catched");
 						//Just an invalid token was sent, we can properly ignore it.
 					}else {
 						//Its an error so we just throw it.
