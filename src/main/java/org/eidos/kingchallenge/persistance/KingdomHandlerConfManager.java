@@ -5,16 +5,13 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.Set;
 
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
-import org.eidos.kingchallenge.exceptions.KingRunTimeIOException;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.model.KingdomHandlerConf;
 import org.eidos.kingchallenge.utils.FilReaderUtils;
@@ -30,12 +27,12 @@ import org.slf4j.LoggerFactory;
 @ThreadSafe
 public class KingdomHandlerConfManager {
 	static final Logger LOG = LoggerFactory
-			.getLogger(SimpleLoginPersistanceMap.class);
+			.getLogger(KingdomHandlerConfManager.class);
 
 	private static final String HANDLER_PROPERTIES = "handler.properties";
 	@GuardedBy("lock")
 	private static volatile KingdomHandlerConfManager instance = null;
-	private static Object lock = new Object();
+	private final static Object lock = new Object();
 	final private Set<KingdomHandlerConf> handlerConfSet;
 
 	/**
@@ -84,7 +81,7 @@ public class KingdomHandlerConfManager {
 		return instance;
 	}
 
-	public Set<KingdomHandlerConf> getHandlerConfList() {
+	public synchronized Set<KingdomHandlerConf> getHandlerConfList() {
 		return Collections.unmodifiableSet(handlerConfSet);
 	}
 

@@ -1,14 +1,10 @@
 package org.eidos.kingchallenge.model;
 
 import java.io.Serializable;
-import java.lang.reflect.Type;
-
 import javax.annotation.concurrent.Immutable;
 
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
-
-import com.sun.net.httpserver.HttpHandler;
 
 /**
  * KingdomHandler that defines the specific

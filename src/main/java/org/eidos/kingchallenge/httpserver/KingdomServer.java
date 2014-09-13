@@ -52,9 +52,7 @@ public class KingdomServer {
 				shutdownPort);
 		server = HttpServer.create(new InetSocketAddress(serverPort),
 				HTTP_POOL_CONNECTIONS);
-		// server.createContext("/herald", new HeraldHandler());
-		// server.createContext("/herald", new
-		// GenericPageHandler(HeraldHandler.class));
+
 		createContext();
 		serverExecutor = new ThreadPoolExecutor(HTTP_POOL_CONNECTIONS,
 				HTTP_MAX_CONNECTIONS, DELAY_FOR_TERMINATION,

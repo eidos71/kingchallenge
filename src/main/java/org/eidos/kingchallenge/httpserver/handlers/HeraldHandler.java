@@ -2,6 +2,7 @@ package org.eidos.kingchallenge.httpserver.handlers;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -21,10 +22,10 @@ public class HeraldHandler implements HttpHandler {
 	public void handle(HttpExchange exchange) throws IOException {
 		String requestMethod = exchange.getRequestMethod();
 		LOG.info("herald summoned");
-
+		 
 		Headers responseHeaders = exchange.getResponseHeaders();
 		responseHeaders.set("Content-Type", "text/plain");
-		exchange.sendResponseHeaders(200, 0);
+		exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 		OutputStream responseBody = exchange.getResponseBody();
 		Headers requestHeaders = exchange.getRequestHeaders();
 		Set<String> keySet = requestHeaders.keySet();
