@@ -1,4 +1,4 @@
-package org.eidos.kingchallenge.httpserver;
+package org.eidos.kingchallenge.httpserver.handlers;
 
 import java.io.IOException;
 import java.io.OutputStream;

@@ -11,9 +11,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import junit.framework.Assert;
 import static java.util.concurrent.TimeUnit.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 import org.easymock.EasyMockRunner;
 import org.easymock.EasyMockSupport;
+import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
+import org.eidos.kingchallenge.model.KingdomHandlerConf;
 import org.eidos.kingchallenge.utils.UtilsEnum.Mode;
 import org.eidos.kingchallenge.utils.Validator;
 import org.junit.Test;
@@ -103,4 +107,32 @@ public class TestDelete extends EasyMockSupport {
 		
 	}
 
+	@Test(expected =LogicKingChallengeException.class)
+	public void testInvalidClass() {
+		KingdomHandlerConf handler = new KingdomHandlerConf.Builder("wrong.eidos.kingchallenge.httpserver.handlers.HeraldHandler")
+	.contextPath("herald/").build();
+	}
+	@Test
+	public void testKingomDefaultConstructor() {
+		String context="";
+		KingdomHandlerConf handler = new KingdomHandlerConf.Builder("org.eidos.kingchallenge.httpserver.handlers.HeraldHandler").build();
+		LOG.debug(handler.toString() );
+		 assertThat("", handler.getContext(), equalTo(context));
+	}
+	@Test
+	public void testKindomHandler() {
+		String context="herald/";
+			KingdomHandlerConf handler = new KingdomHandlerConf.Builder("org.eidos.kingchallenge.httpserver.handlers.HeraldHandler")
+		.contextPath(context).build();
+			LOG.debug(handler.toString() );
+			 assertThat("", handler.getContext(), equalTo(context));
+	}
+	@Test
+	public void testKindomHandlerWithNullContextPath() {
+		String context="";
+			KingdomHandlerConf handler = new KingdomHandlerConf.Builder("org.eidos.kingchallenge.httpserver.handlers.HeraldHandler")
+		.contextPath(null).build();
+			LOG.debug(handler.toString() );
+			 assertThat("", handler.getContext(), equalTo(context));
+	}
 }

@@ -10,6 +10,12 @@ import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 
 import com.sun.net.httpserver.HttpHandler;
 
+/**
+ * KingdomHandler that defines the specific
+ * handler and context related.
+ * @author eidos71
+ *
+ */
 @Immutable
 public final class KingdomHandlerConf   implements Serializable{
 
@@ -39,20 +45,63 @@ public final class KingdomHandlerConf   implements Serializable{
 		// TODO Auto-generated method stub
 		return handlerClass;
 	}
+	
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((contextPath == null) ? 0 : contextPath.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		KingdomHandlerConf other = (KingdomHandlerConf) obj;
+		if (contextPath == null) {
+			if (other.contextPath != null)
+				return false;
+		} else if (!contextPath.equals(other.contextPath))
+			return false;
+		return true;
+	}
+	@Override
+	public String toString() {
+		return "KingdomHandlerConf [handlerClass=" + handlerClass
+				+ ", contextPath=" + contextPath + "]";
+	}
+
+
 	public static class Builder {
 		private final Class<?>   handlerClass;
-		private  final String contextPath;
-		public Builder(String phandlerType,String pContextPath) {
+		private   String contextPath;
+		/**
+		 * constructor 
+		 * @param phandlerType  Handler Class full qualifying name
+		 * @param pContextPath ContextPath 
+		 */
+		public Builder(String pHandlerClass) {
 			
-			if (phandlerType==null || "".equals(phandlerType))
+			if (pHandlerClass==null || "".equals(pHandlerClass))
 				throw new LogicKingChallengeException(LogicKingError.INVALIDHANDLER);
 			try {
-				handlerClass = Class.forName(phandlerType);
-				if  (pContextPath==null) pContextPath="";
-				contextPath=pContextPath;
+				handlerClass = Class.forName(pHandlerClass);
+				contextPath="";
 			} catch (ClassNotFoundException e) {
 				throw new LogicKingChallengeException(LogicKingError.INVALIDHANDLER, e);
 			}
+		}
+		public Builder contextPath(String context) {
+			if  (context==null) context="";
+			contextPath=context;
+			this.contextPath=context;
+			return this;
 		}
 		/**
 		 * public constructor
