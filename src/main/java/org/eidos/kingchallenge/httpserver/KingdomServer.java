@@ -39,7 +39,14 @@ public class KingdomServer {
 	static Socket clientSocket;
 	HttpServer server;
 	private ExecutorService serverExecutor;
-
+	/**
+	 * 
+	 * @param args
+	 * @throws Exception
+	 */
+	public static void main(String[] args) throws Exception {
+		new KingdomServer().start();
+	}
 	protected void start() throws Exception {
 		initServer();
 		new ServerSocket(shutdownPort).accept();
@@ -109,12 +116,5 @@ public class KingdomServer {
 		}
 	}
 
-	/**
-	 * 
-	 * @param args
-	 * @throws Exception
-	 */
-	public static void main(String[] args) throws Exception {
-		new KingdomServer().start();
-	}
+
 }
