@@ -13,6 +13,9 @@ import java.util.Map;
 
 import org.eidos.kingchallenge.KingConfigConstants;
 import org.eidos.kingchallenge.exceptions.KingRunTimeIOException;
+import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
+import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
+import org.eidos.kingchallenge.httpserver.enums.KingControllerEnum;
 import org.eidos.kingchallenge.utils.HttpExchangeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,6 +82,29 @@ public class HttpExchangeInfo {
 
 		}
 
+	}
+	/**
+	 * Usage , to define specify which controll this rquestHander will invoke
+	 * @param httpExchange Exchange
+	 * @return @KingConfigConstants controller
+	 */
+	protected KingControllerEnum defineController(HttpExchange httpExchange) {
+		@SuppressWarnings("unchecked")
+		Map<String, Object> requestParamsMap = (Map<String, Object>) httpExchange
+				.getAttribute(KingConfigConstants.KING_REQUEST_PARAM);
+
+		String uri = httpExchange.getRequestURI().toString();
+		String[] tokens = uri.split("[/?=]");
+		if (tokens.length<2) 
+			return KingControllerEnum.UNKNOWN;
+		
+		if (KingControllerEnum.SCORE.controller().equals(tokens[2]))
+			return KingControllerEnum.SCORE;
+		else if (KingControllerEnum.HIGHSCORELIST.controller().equals(tokens[2]))
+			return KingControllerEnum.HIGHSCORELIST;
+		else if (KingControllerEnum.LOGIN.controller().equals(tokens[2]))
+			return KingControllerEnum.LOGIN;
+		return KingControllerEnum.UNKNOWN;
 	}
 
 }

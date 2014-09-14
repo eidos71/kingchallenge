@@ -1,19 +1,14 @@
 package org.eidos.kingchallenge.httpserver.handlers;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.URI;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eidos.kingchallenge.KingConfigConstants;
 import org.eidos.kingchallenge.httpserver.enums.KingControllerEnum;
-import org.eidos.kingchallenge.utils.HttpExchangeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,14 +31,35 @@ public final class SimplePageHandler implements HttpHandler {
 		LOG.debug("{}", httpExchangeInfo.getPath( httpExchange));
 		httpExchangeInfo.parseGetParameters(httpExchange);
 		httpExchangeInfo.parsePostParameters(httpExchange);
-		//Specific to bussiness class.
+		//Specific to this handler class.
 		parseUrlEncodedParameters(httpExchange);
 		//
 	    @SuppressWarnings("unchecked")
         Map<String, Object> params = (Map<String, Object>)httpExchange.getAttribute(KingConfigConstants.KING_REQUEST_PARAM);
-		for( Entry<String, Object> value :params.entrySet()) {
-			LOG.debug("String-{}  Value-{}", value.getKey(), value.getValue());
-			
+		if (LOG.isDebugEnabled()) {
+			for (Entry<String, Object> value : params.entrySet()) 
+				LOG.debug("String-{}  Value-{}", value.getKey(),
+						value.getValue());
+		}
+		switch (httpExchangeInfo.defineController(httpExchange) ) {
+		case HIGHSCORELIST:
+			LOG.debug("HIGHSCORELIST");
+			break;
+		case LOGIN:
+			LOG.debug("LOGIN");
+			break;
+		case SCORE:
+			LOG.debug("SCORE");
+			break;
+		case UNKNOWN:
+			LOG.debug("UNKNOWN");
+			httpStatusCode=HttpURLConnection.HTTP_BAD_REQUEST;
+			break;
+		default:
+			httpStatusCode=HttpURLConnection.HTTP_BAD_REQUEST;
+			LOG.debug("UNKNOWN");
+			break;
+		
 		}
 		httpExchange.sendResponseHeaders(httpStatusCode, (response==null)?0:response.length() );
 
@@ -53,11 +69,7 @@ public final class SimplePageHandler implements HttpHandler {
 		  }finally {
 			  os.close();
 		  }
-	       
-	        
-	}
-
-	
+	  	}
 
 
 
