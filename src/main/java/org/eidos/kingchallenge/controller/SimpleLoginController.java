@@ -26,8 +26,6 @@ public String loginService(Long token)   {
 		throw new LogicKingChallengeException(LogicKingError.INVALID_TOKEN);
 	}
 	StringBuilder response= new StringBuilder();
-	
-	if (token==null) 
 	response.append(this.loginService.loginToken(new AtomicLong(token) ) );
 	return response.toString();
 }
