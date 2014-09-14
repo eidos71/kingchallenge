@@ -8,7 +8,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eidos.kingchallenge.KingConfigConstants;
+import org.eidos.kingchallenge.controller.LoginController;
 import org.eidos.kingchallenge.httpserver.enums.KingControllerEnum;
+import org.eidos.kingchallenge.persistance.KingdomConfManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,12 +22,18 @@ public final class SimplePageHandler implements HttpHandler {
 	//TODO: Move to a static class
 
 	static final Logger LOG = LoggerFactory.getLogger(SimplePageHandler.class);
+	private final LoginController loginController;
+	public SimplePageHandler() {
+		this.loginController=KingdomConfManager.getInstance().getLoginController();
+	}
 
 	@Override
 	public void handle(HttpExchange httpExchange) throws IOException {
 		String response = null;
+		 OutputStream os =null;
 		 int httpStatusCode=HttpURLConnection.HTTP_OK;
 		Headers responseHeaders = httpExchange.getResponseHeaders();
+	
 		responseHeaders.set("Content-Type", "text/plain");
 		HttpExchangeInfo httpExchangeInfo = new HttpExchangeInfo();
 		LOG.debug("{}", httpExchangeInfo.getPath( httpExchange));
@@ -46,7 +54,16 @@ public final class SimplePageHandler implements HttpHandler {
 			LOG.debug("HIGHSCORELIST");
 			break;
 		case LOGIN:
+			
 			LOG.debug("LOGIN");
+			@SuppressWarnings("unchecked")
+			Map<String, Object> requestParamsMap = (Map<String, Object>) httpExchange
+					.getAttribute(KingConfigConstants.KING_REQUEST_PARAM);
+			if (loginController==null) LOG.warn("loginController is null");
+			String result=(String)requestParamsMap.get("userid");
+			Long userid=Long.getLong(result );
+			
+			loginController.loginService(userid);
 			break;
 		case SCORE:
 			LOG.debug("SCORE");
@@ -63,15 +80,13 @@ public final class SimplePageHandler implements HttpHandler {
 		}
 		httpExchange.sendResponseHeaders(httpStatusCode, (response==null)?0:response.length() );
 
-		  OutputStream os = httpExchange.getResponseBody();
+		   os = httpExchange.getResponseBody();
 		  try {
 			  os.write(response.toString().getBytes());
 		  }finally {
 			  os.close();
 		  }
 	  	}
-
-
 
 	/**
 	 * Specific parsing of the incoming request, based on the Handler

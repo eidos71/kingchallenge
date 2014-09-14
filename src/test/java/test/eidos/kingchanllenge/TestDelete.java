@@ -19,7 +19,7 @@ import org.easymock.EasyMockRunner;
 import org.easymock.EasyMockSupport;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.model.KingdomHandlerConf;
-import org.eidos.kingchallenge.persistance.KingdomHandlerConfManager;
+import org.eidos.kingchallenge.persistance.KingdomConfManager;
 import org.eidos.kingchallenge.utils.UtilsEnum.Mode;
 import org.eidos.kingchallenge.utils.Validator;
 import org.junit.Test;
@@ -139,7 +139,7 @@ public class TestDelete extends EasyMockSupport {
 	}
 	@Test
 	public void testInitHandler() {
-		Set<KingdomHandlerConf> map = KingdomHandlerConfManager.getInstance().getHandlerConfList();
+		Set<KingdomHandlerConf> map = KingdomConfManager.getInstance().getHandlerConfList();
 		 assertThat("", map.size(), equalTo(2));
 	}
 }

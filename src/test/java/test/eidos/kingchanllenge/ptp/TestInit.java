@@ -20,8 +20,7 @@ public class TestInit extends EasyMockSupport {
 	@Mock
 	private LoginService loginService;
 	@TestSubject
-	private SimpleLoginController loginController = new SimpleLoginController.Builder()
-			.service(loginService).build();
+	private SimpleLoginController loginController = new SimpleLoginController.Builder(loginService).build();
 
 	/**
 	 * -Test an Invalid character
@@ -31,6 +30,6 @@ public class TestInit extends EasyMockSupport {
 		//
 		expect(loginService.loginToken(new AtomicLong(-1234L))).andThrow(new RuntimeException());
 		replay(loginService);
-		loginController.loginService(new AtomicLong(-1234L));
+		loginController.loginService(1234L );
 	}
 }

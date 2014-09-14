@@ -2,11 +2,14 @@ package org.eidos.kingchallenge.controller;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.eidos.kingchallenge.services.EmptyLoginService;
 import org.eidos.kingchallenge.services.LoginService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.concurrent.Immutable;
 /**
- * MockloginController, singleton stateles?
+ * SimpleLoginController, singleton stateles?
  * @author eidos71
  *
  */
@@ -14,10 +17,12 @@ import javax.annotation.concurrent.Immutable;
 public final class SimpleLoginController  implements LoginController{
 	
 private final LoginService  loginService;
-
+static final Logger LOG = LoggerFactory.getLogger(SimpleLoginController.class);
 @Override
-public String loginService(AtomicLong token) throws RuntimeException {
-	return this.loginService.loginToken(token);
+public String loginService(Long token)   {
+
+	LOG.debug("token {}", token );
+	return this.loginService.loginToken(new AtomicLong(token));
 
 }
 /**
@@ -32,23 +37,22 @@ private SimpleLoginController(Builder builder) {
 
  }
 
-/** 
- * inner class Builder for LoginController
+/**
+ * Inner Builder for LoginController
+ * By constructor, we are setting all the needed
+ * Services
  * @author eidos71
  *
  */
 public static class Builder{
 		private  LoginService loginService;
-		/**
-		 * 
-		 * @param service
-		 * @return
-		 */
-		public Builder service(LoginService service) {
-			loginService=service;
-			return this;
+		public Builder(LoginService aLoginService) {
+			this.loginService=aLoginService;
 		}
+
 	    public SimpleLoginController build() {
+	    	if (loginService==null)
+	    		throw  new IllegalStateException("No LoginService has been instanced"); 
 	    	return new SimpleLoginController(this);
 	    }
 }

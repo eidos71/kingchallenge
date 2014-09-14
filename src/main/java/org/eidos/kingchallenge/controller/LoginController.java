@@ -8,5 +8,5 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  */
 public interface LoginController {
-	public String loginService (AtomicLong token) throws RuntimeException;
+	public String loginService (Long token) throws RuntimeException;
 }

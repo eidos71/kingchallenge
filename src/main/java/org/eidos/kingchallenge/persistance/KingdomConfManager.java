@@ -12,8 +12,11 @@ import java.util.Set;
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
+import org.eidos.kingchallenge.controller.LoginController;
+import org.eidos.kingchallenge.controller.SimpleLoginController;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.model.KingdomHandlerConf;
+import org.eidos.kingchallenge.services.EmptyLoginService;
 import org.eidos.kingchallenge.utils.FilReaderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,30 +28,36 @@ import org.slf4j.LoggerFactory;
  *
  */
 @ThreadSafe
-public class KingdomHandlerConfManager {
+public class KingdomConfManager {
 	static final Logger LOG = LoggerFactory
-			.getLogger(KingdomHandlerConfManager.class);
+			.getLogger(KingdomConfManager.class);
 
 	private static final String HANDLER_PROPERTIES = "handler.properties";
 	@GuardedBy("lock")
-	private static volatile KingdomHandlerConfManager instance = null;
+	private static volatile KingdomConfManager instance = null;
 	private final static Object lock = new Object();
 	final private Set<KingdomHandlerConf> handlerConfSet;
+	
+	final private LoginController loginController;
+
+
 
 	/**
 	 * Usinc confinement to assure thread-bound scope private singleton
 	 * 
 	 * @throws IOException
 	 */
-	private KingdomHandlerConfManager()  {
+	private KingdomConfManager()  {
 		handlerConfSet= new HashSet<KingdomHandlerConf> ();
-		init();
+		loginController=
+				new SimpleLoginController.Builder(new EmptyLoginService()).build();
 	}
 	/**
 	 * Init load from the Handler
 	 * Comes for a properti files
 	 */
 	private void init() {
+		
 		 InputStream inputStream = 
 	    		   getClass().getClassLoader().getResourceAsStream(HANDLER_PROPERTIES);
 		
@@ -70,12 +79,12 @@ public class KingdomHandlerConfManager {
 		 }
 
 	}
-	public static KingdomHandlerConfManager getInstance() {
+	public static KingdomConfManager getInstance() {
 
 		if (instance == null) {
 			synchronized (lock) {
 				if (instance == null)
-					instance = new KingdomHandlerConfManager();
+					instance = new KingdomConfManager();
 			}
 		}
 		return instance;
@@ -83,6 +92,15 @@ public class KingdomHandlerConfManager {
 
 	public synchronized Set<KingdomHandlerConf> getHandlerConfList() {
 		return Collections.unmodifiableSet(handlerConfSet);
+	}
+	/**
+	 * Returns a loginController
+	 * @return
+	 */
+	public LoginController getLoginController() {
+		if (loginController==null) throw 
+			new IllegalStateException("No LoginController has been instanced");
+		return loginController;
 	}
 
 }
