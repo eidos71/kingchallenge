@@ -51,6 +51,8 @@ public class KingdomConfManager {
 		handlerConfSet= new HashSet<KingdomHandlerConf> ();
 		loginController=
 				new SimpleLoginController.Builder(new EmptyLoginService()).build();
+		//Lets init...
+		init();
 	}
 	/**
 	 * Init load from the Handler

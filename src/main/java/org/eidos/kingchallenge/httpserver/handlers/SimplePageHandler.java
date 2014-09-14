@@ -18,6 +18,12 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
+/**
+ * Simple page handler
+ * It implements the default page for the KingChallenge
+ * @author eidos71
+ *
+ */
 public final class SimplePageHandler implements HttpHandler {
 	//TODO: Move to a static class
 
@@ -61,7 +67,8 @@ public final class SimplePageHandler implements HttpHandler {
 					.getAttribute(KingConfigConstants.KING_REQUEST_PARAM);
 			if (loginController==null) LOG.warn("loginController is null");
 			String result=(String)requestParamsMap.get("userid");
-			Long userid=Long.getLong(result );
+			
+			Long userid=Long.parseLong(result );
 			
 			loginController.loginService(userid);
 			break;

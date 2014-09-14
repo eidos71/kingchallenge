@@ -2,7 +2,8 @@ package org.eidos.kingchallenge.controller;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.eidos.kingchallenge.services.EmptyLoginService;
+import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
+import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.services.LoginService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ static final Logger LOG = LoggerFactory.getLogger(SimpleLoginController.class);
 public String loginService(Long token)   {
 
 	LOG.debug("token {}", token );
+	if (token==null) throw new LogicKingChallengeException(LogicKingError.INVALID_TOKEN);
 	return this.loginService.loginToken(new AtomicLong(token));
 
 }

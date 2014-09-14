@@ -28,6 +28,7 @@ public final class KingUser implements Serializable {
 	private final AtomicLong kingUserId;
 	private final String sessionKey;
 
+
 	/**
 	 * Avoid directly calling the private (reflection is always an issue)
 	 */
@@ -52,6 +53,7 @@ public final class KingUser implements Serializable {
 		this.kingUserId = builder.kingUserId;
 		this.dateLogin = builder.loginDate;
 		this.sessionKey = builder.sessionKey;
+	
 
 	}
 
@@ -101,7 +103,7 @@ public final class KingUser implements Serializable {
 		private AtomicLong kingUserId;
 		private String sessionKey;
 		private Date loginDate;
-
+		
 		/**
 		 * 
 		 * @param longId
@@ -115,7 +117,7 @@ public final class KingUser implements Serializable {
 			this.loginDate = new Date();
 
 		}
-
+	
 		/**
 		 * Private method that generates a kinguserId
 		 * 
