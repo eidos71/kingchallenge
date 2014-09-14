@@ -13,10 +13,13 @@ import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.eidos.kingchallenge.controller.LoginController;
+import org.eidos.kingchallenge.controller.ScoreController;
 import org.eidos.kingchallenge.controller.SimpleLoginController;
+import org.eidos.kingchallenge.controller.SimpleScoreController;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.model.KingdomHandlerConf;
 import org.eidos.kingchallenge.services.EmptyLoginService;
+import org.eidos.kingchallenge.services.EmptyScoreService;
 import org.eidos.kingchallenge.utils.FilReaderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +42,7 @@ public class KingdomConfManager {
 	final private Set<KingdomHandlerConf> handlerConfSet;
 	
 	final private LoginController loginController;
-
+	final private ScoreController scoreController;
 
 
 	/**
@@ -51,6 +54,8 @@ public class KingdomConfManager {
 		handlerConfSet= new HashSet<KingdomHandlerConf> ();
 		loginController=
 				new SimpleLoginController.Builder(new EmptyLoginService()).build();
+		scoreController=
+				new SimpleScoreController.Builder(new EmptyScoreService() ).build();
 		//Lets init...
 		init();
 	}
@@ -104,5 +109,14 @@ public class KingdomConfManager {
 			new IllegalStateException("No LoginController has been instanced");
 		return loginController;
 	}
+	/**
+	 * Returns a loginController
+	 * @return
+	 */
+	public ScoreController getScoreController() {
 
+		if (scoreController==null) throw 
+			new IllegalStateException("No LoginController has been instanced");
+		return scoreController;
+	}
 }

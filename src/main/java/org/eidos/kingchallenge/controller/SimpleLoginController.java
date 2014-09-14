@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.services.LoginService;
+import org.eidos.kingchallenge.utils.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,11 +22,14 @@ private final LoginService  loginService;
 static final Logger LOG = LoggerFactory.getLogger(SimpleLoginController.class);
 @Override
 public String loginService(Long token)   {
-
-	LOG.debug("token {}", token );
-	if (token==null) throw new LogicKingChallengeException(LogicKingError.INVALID_TOKEN);
-	return this.loginService.loginToken(new AtomicLong(token));
-
+	if (token==null ||  ! Validator.isValidUnsignedInt(token) ) {
+		throw new LogicKingChallengeException(LogicKingError.INVALID_TOKEN);
+	}
+	StringBuilder response= new StringBuilder();
+	
+	if (token==null) 
+	response.append(this.loginService.loginToken(new AtomicLong(token) ) );
+	return response.toString();
 }
 /**
  * We block the Login Controller public class
@@ -33,10 +37,9 @@ public String loginService(Long token)   {
 private  SimpleLoginController ()  {
 	throw new UnsupportedOperationException();
 };
-private SimpleLoginController(Builder builder) {
-	
-    loginService = builder.loginService;
 
+private SimpleLoginController(Builder builder) {
+    loginService = builder.loginService;
  }
 
 /**

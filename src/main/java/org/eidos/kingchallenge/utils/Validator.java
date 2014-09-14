@@ -18,6 +18,18 @@ public class Validator {
 			return true;
 	}
 	/**
+	 *  Validates if it is a positive Int
+	 * @param val to evaluate
+	 * @return
+	 */
+	public static boolean isValidPositiveInt(int val) {
+		if (val <0) {
+			return false;
+		}else {
+			return true;
+		}
+	}
+	/**
 	 * Validates a String , @Mode is set to default Mode Alpha
 	 * @param val string to validate
 	 * @return True if matches, False if not

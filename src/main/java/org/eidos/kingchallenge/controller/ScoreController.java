@@ -10,12 +10,13 @@ public interface ScoreController {
 	 * separated by , and with a top of 15 elements.
 	 * @return
 	 */
-	public Map<String,String> getHighScoresList();
+	public String getHighScoresList();
 
 	/**
-	 * 
-	 * @param user
+	 *  Method to store a high score
+	 * @param sessionKey
+	 * @param level
 	 * @param score
 	 */
-	public void putHighScore(KingUser user, int score);
+	public String putHighScore(String sessionKey, int level, int score);
 }

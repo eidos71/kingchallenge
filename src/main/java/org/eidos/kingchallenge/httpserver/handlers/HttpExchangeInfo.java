@@ -88,7 +88,7 @@ public class HttpExchangeInfo {
 	 * @param httpExchange Exchange
 	 * @return @KingConfigConstants controller
 	 */
-	protected KingControllerEnum defineController(HttpExchange httpExchange) {
+	protected static KingControllerEnum defineController(HttpExchange httpExchange) {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> requestParamsMap = (Map<String, Object>) httpExchange
 				.getAttribute(KingConfigConstants.KING_REQUEST_PARAM);
