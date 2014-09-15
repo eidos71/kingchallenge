@@ -27,7 +27,7 @@ public class TestUserPersistance  extends EasyMockSupport  {
 			.getLogger(TestUserPersistance.class);
 	private final ExecutorService executor = Executors.newCachedThreadPool();
 	private static final LoginPersistanceMap<Long, String, KingUser> bag = new SimpleLoginPersistanceMap();
-	private final static int BAG_SIZE = 4000; //10
+	private final static int BAG_SIZE = 40000; //10
 
 	@Before
 	public void setup() {

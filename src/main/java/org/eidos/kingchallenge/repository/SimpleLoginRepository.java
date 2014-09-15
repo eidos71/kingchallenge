@@ -63,6 +63,7 @@ public final class SimpleLoginRepository  implements LoginRepository{
 		LOG.debug("We want to remove user by sessionId" + sessionId );
 		boolean missing= ! getAllKingdomBySession().containsKey(sessionId );
 		if (missing) throw new LogicKingChallengeException(LogicKingError.USER_NOT_FOUND);
+		this.loginPersistance.removeBySession(sessionId);
 	}
 	@Override
 	public void removeKingUser(KingUser user) {
@@ -74,12 +75,16 @@ public final class SimpleLoginRepository  implements LoginRepository{
 	public void updateKingUser(KingUser user) {
 		//if the user comes empty, we return the update action
 		if (user==null) return ;
-		synchronized (update){
+		synchronized (loginPersistance){
 			boolean missing= ! getAllKingdomByLogin().containsKey(user.getKingUserId() );
-			if (missing) return;
-			this.removeKingUserByLogin(user.getKingUserId() );
-			this.addKingUser(user);
+			if (!missing) {
+			
+				this.removeKingUserByLogin(user.getKingUserId() );
+				this.addKingUser(user);
+		
+			}
 		}
+
 		
 	}
 
