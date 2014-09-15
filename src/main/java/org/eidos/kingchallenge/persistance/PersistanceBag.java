@@ -7,6 +7,7 @@ import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.eidos.kingchallenge.controller.SimpleLoginController;
+import org.eidos.kingchallenge.model.KingUser;
 
 /**
  *  Holds the Bag of different persistances Elements that
@@ -25,7 +26,7 @@ public final class PersistanceBag implements Serializable {
 	 */
 	private static final long serialVersionUID = 7041243246192738570L;
 	
-	private final LoginPersistanceMap loginPersistance;
+	private final LoginPersistanceMap<Long, String, KingUser> loginPersistance;
 	private final ScorePersistance scorePersistance;
 	
 	/**
@@ -39,13 +40,25 @@ public final class PersistanceBag implements Serializable {
 		this.loginPersistance=builder.loginPersistance;
 		this.scorePersistance=builder.scorePersistance;
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public LoginPersistanceMap<Long, String, KingUser> getLoginPersistance() {
+		return loginPersistance;
+	}
+	public ScorePersistance getScorePersistance() {
+		return scorePersistance;
+	}
+	
 	public static class Builder {
-		LoginPersistanceMap loginPersistance;
+		LoginPersistanceMap<Long, String, KingUser> loginPersistance;
 		ScorePersistance scorePersistance;
 		public Builder() {
 			
 		}
-		public Builder setLoginImp(LoginPersistanceMap loginPersistance) {
+		public Builder setLoginImp(LoginPersistanceMap<Long, String, KingUser> loginPersistance) {
 				this.loginPersistance=loginPersistance;
 				return this;
 		}
@@ -61,4 +74,5 @@ public final class PersistanceBag implements Serializable {
 	    	return new PersistanceBag(this);
 	    }
 	}
+
 }

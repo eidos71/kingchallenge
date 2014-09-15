@@ -52,6 +52,7 @@ public interface LoginRepository {
 	 * @param sessionId
 	 */
 	void removeKingUserBySession(String sessionId);
+
 	
 	
 	

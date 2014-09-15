@@ -22,7 +22,7 @@ public class LogicKingChallengeException extends AbstractKingChallengeException 
     }
     @Override
     public String getMessage() {
-        return "Exception with error code " + logicKingError.code() + " " + cause ;
+    		return "Exception with error code " + logicKingError.code() + " " + ((cause !=null)?cause: "") ;
     }
 
     public LogicKingError getLogicError() {
