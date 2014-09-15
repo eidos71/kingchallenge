@@ -21,4 +21,9 @@ public interface LoginPersistanceMap <Long, String, KingUser>{
 
 
 	void removeBySession(String sessionKey);
+
+	/**
+	 * Cleans the Repository
+	 */
+	void clean();
 }

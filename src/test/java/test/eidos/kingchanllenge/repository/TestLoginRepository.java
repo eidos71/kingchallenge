@@ -24,22 +24,27 @@ public class TestLoginRepository extends EasyMock {
 	private static final Logger LOG = LoggerFactory
 			.getLogger(TestLoginRepository.class);
 	private LoginRepository loginRepository = new SimpleLoginRepository();
-	private KingdomConfManager kingdomManager;
-	private static final int BAG_SIZE = 5;
+	private  static boolean isInit=false;
+	private static final int BAG_SIZE = 100000;
+
 
 	@Before
 	public void init() {
-		kingdomManager = KingdomConfManager.getInstance();
+		 KingdomConfManager.getInstance();
 		LoginPersistanceMap<Long, String, KingUser> bag = KingdomConfManager
 				.getInstance().getPersistanceBag().getLoginPersistance();
-
+		bag.clean();
 		KingUser user = null;
-		// We disregard 0 as the base of sessionId
-		for (int i = 1; i < BAG_SIZE + 1; i++) {
-			user = new KingUser.Builder(i).build();
-			bag.put(user.getKingUserId().get(), user.getSessionKey(), user);
-		}
-		LOG.debug("total elemsn-> {}", bag.getMapByLogin().size());
+		
+			// We disregard 0 as the base of sessionId
+			LOG.debug("this has to be done only once");	
+			for (int i = 1; i < BAG_SIZE + 1; i++) {
+				user = new KingUser.Builder(i).build();
+				bag.put(user.getKingUserId().get(), user.getSessionKey(), user);
+			}
+
+	
+	
 	}
 
 	@Test
@@ -47,14 +52,14 @@ public class TestLoginRepository extends EasyMock {
 		KingUser kingUser = new KingUser.Builder(BAG_SIZE + 5).build();
 		loginRepository.addKingUser(kingUser);
 		assertThat("Total King users ", loginRepository.getAllKingdomByLogin()
-				.size(), equalTo(BAG_SIZE + 1));
-		loginRepository.removeKingUserBySession(kingUser.getSessionKey());
+				.size(), equalTo(BAG_SIZE +1));
 	}
 
 	@Test(expected = LogicKingChallengeException.class)
 	public void testExistingInsertElement() {
 
-		KingUser kingUser = new KingUser.Builder(1).build();
+		KingUser kingUser = new KingUser.Builder(3).build();
+		loginRepository.addKingUser(kingUser);
 	}
 
 	@Test
@@ -73,9 +78,10 @@ public class TestLoginRepository extends EasyMock {
 
 		KingUser kingUser = loginRepository.findByLoginId(new AtomicLong(2));
 		loginRepository.removeKingUserBySession(kingUser.getSessionKey());
-		assertThat("Total King users ", loginRepository.getAllKingdomByLogin()
-				.size(), equalTo(BAG_SIZE));
-		loginRepository.addKingUser(kingUser);
+		assertThat("Total King users ", loginRepository.getAllKingdomBySession()
+				.size(), equalTo(BAG_SIZE-1));
+
+		//loginRepository.addKingUser(kingUser);
 	}
 
 	@Test(expected = LogicKingChallengeException.class)

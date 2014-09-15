@@ -56,13 +56,26 @@ public final class SimpleLoginPersistanceMap implements LoginPersistanceMap<Long
 		}
 	}
 	@Override
+	public void clean() {
+		synchronized(lockSession) {
+			mapBySession.clear();
+			mapByLogin.clear();
+		}
+	}
+	@Override
 	public void removeBySession (String sessionKey) {
 		// If empty remove
 		if (  sessionKey==null || "".equals(sessionKey) ) 
 				throw new LogicKingChallengeException(LogicKingError.INVALID_SESSION);
 		synchronized(lockSession) {
-			KingUser removed = mapBySession.remove(sessionKey);
-			mapByLogin.remove(removed);
+			KingUser removedSession = mapBySession.remove(sessionKey);
+			if (removedSession==null) {
+				LOG.debug("- sessionKey {} was not found", sessionKey);
+			}
+				
+			mapByLogin.remove(removedSession.getKingUserId().get() );
+		
+			
 		}
 	}
 	@Override
@@ -75,7 +88,10 @@ public final class SimpleLoginPersistanceMap implements LoginPersistanceMap<Long
 				LOG.debug("- loginkey {} was not found", loginKey);
 				return;
 			}
-			mapBySession.remove(removed);
+			removed= mapBySession.remove(removed.getSessionKey() );
+			if (removed==null) {
+				LOG.debug("- loginkey {} was not found", loginKey);
+			}
 		}
 	}
 
