@@ -87,7 +87,7 @@ public final class KingUser implements Serializable {
 
 	@Override
 	public String toString() {
-		return "KingUser [dateLogin=" + dateLogin + ", kingUserId="
+		return "KingUser [dateLogin=" + dateLogin+ ",EpochInms="+dateLogin.getTime()  +", kingUserId="
 				+ kingUserId + ", sessionKey=" + sessionKey + "]";
 	}
 

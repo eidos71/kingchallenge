@@ -20,8 +20,7 @@ import test.eidos.kingchanllenge.persistance.TestLoginPersistance;
 public class TestChekExpiration   extends EasyMockSupport  {
 	private   KingdomConfManager kingdomManager;
 	private LoginService loginService;
-	private 
-	static final Logger LOG = LoggerFactory
+	private  static final Logger LOG = LoggerFactory
 			.getLogger(TestLoginPersistance.class);
 	private static final int BAG_SIZE = 5;
 	@Before
@@ -37,7 +36,7 @@ public class TestChekExpiration   extends EasyMockSupport  {
 			}
 	}
 	@Test
-	public void test() {
+	public void sessionCheck() {
 		if (loginService==null) LOG.debug("login service is null");
 		loginService.sessionCheck();
 	}

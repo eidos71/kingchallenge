@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ThreadSafe
-public final class SimpleLoginRepository  implements LoginRepository{
+public final class SimpleLoginRepository implements LoginRepository {
 	static final Logger LOG = LoggerFactory
 			.getLogger(SimpleLoginRepository.class);
 	/**
@@ -24,68 +24,102 @@ public final class SimpleLoginRepository  implements LoginRepository{
 	 */
 	@GuardedBy("loginPersistance")
 	private final LoginPersistanceMap<Long, String, KingUser> loginPersistance;
-	private final Object update = new Object();
 
-	public SimpleLoginRepository(){
-		loginPersistance= KingdomConfManager.getInstance().getPersistanceBag().getLoginPersistance();
+	public SimpleLoginRepository() {
+		loginPersistance = KingdomConfManager.getInstance().getPersistanceBag()
+				.getLoginPersistance();
 	}
-	
+
 	@Override
 	public Map<Long, KingUser> getAllKingdomByLogin() {
 		Map<Long, KingUser> result = loginPersistance.getMapByLogin();
-		if (result==null) return Collections.emptyMap();
+		if (result == null)
+			return Collections.emptyMap();
 		return result;
 	}
+
 	@Override
-	public Map<String, KingUser> getAllKingdomBySession(){
+	public Map<String, KingUser> getAllKingdomBySession() {
 		Map<String, KingUser> result = loginPersistance.getMapBySession();
-		if (result==null) return Collections.emptyMap();
+		if (result == null)
+			return Collections.emptyMap();
 		return result;
-		
+
 	}
+
 	@Override
 	public void addKingUser(KingUser user) {
 		synchronized (loginPersistance) {
-			boolean exists=  getAllKingdomByLogin().containsKey(user.getKingUserId() );
-			if (exists)  throw new LogicKingChallengeException(LogicKingError.USER_EXISTS);
-			this.loginPersistance.put(user.getKingUserId().get(), user.getSessionKey(), user);
+			boolean exists = getAllKingdomByLogin().containsKey(
+					user.getKingUserId().get());
+			if (exists)
+				throw new LogicKingChallengeException(
+						LogicKingError.USER_EXISTS);
+			this.loginPersistance.put(user.getKingUserId().get(),
+					user.getSessionKey(), user);
 		}
 
-		
 	}
+
 	@Override
-	public void removeKingUserByLogin(AtomicLong loginId) {
-		boolean missing= ! getAllKingdomByLogin().containsKey(loginId );
-		if (missing) throw new LogicKingChallengeException(LogicKingError.USER_NOT_FOUND);
+	public void removeKingUserByLogin(AtomicLong loginKey) {
+		if (loginKey == null || loginKey.get() == 0)
+			throw new LogicKingChallengeException(LogicKingError.INVALID_TOKEN);
+		boolean missing = !getAllKingdomByLogin().containsKey(loginKey.get());
+		if (missing)
+			throw new LogicKingChallengeException(LogicKingError.USER_NOT_FOUND);
+		this.loginPersistance.removeByLogin(loginKey.get());
 	}
+
 	@Override
 	public void removeKingUserBySession(String sessionId) {
-		LOG.debug("We want to remove user by sessionId" + sessionId );
-		boolean missing= ! getAllKingdomBySession().containsKey(sessionId );
-		if (missing) throw new LogicKingChallengeException(LogicKingError.USER_NOT_FOUND);
+		if (sessionId == null || "".equals(sessionId))
+			throw new LogicKingChallengeException(
+					LogicKingError.INVALID_SESSION);
+		LOG.debug("We want to remove user by sessionId" + sessionId);
+		boolean missing = !getAllKingdomBySession().containsKey(sessionId);
+		if (missing)
+			throw new LogicKingChallengeException(LogicKingError.USER_NOT_FOUND);
 		this.loginPersistance.removeBySession(sessionId);
 	}
+
 	@Override
 	public void removeKingUser(KingUser user) {
 		throw new UnsupportedOperationException();
-		
+
 	}
 
 	@Override
 	public void updateKingUser(KingUser user) {
-		//if the user comes empty, we return the update action
-		if (user==null) return ;
-		synchronized (loginPersistance){
-			boolean missing= ! getAllKingdomByLogin().containsKey(user.getKingUserId() );
-			if (!missing) {
-			
-				this.removeKingUserByLogin(user.getKingUserId() );
-				this.addKingUser(user);
-		
+		// if the user comes empty, we return the update action
+		if (user == null)
+			return;
+		synchronized (loginPersistance) {
+			boolean found = !getAllKingdomByLogin().containsKey(
+					user.getKingUserId().get());
+			if (found) {
+				this.loginPersistance.removeByLogin(user.getKingUserId().get());
 			}
+			this.loginPersistance.put(user.getKingUserId().get(),
+					user.getSessionKey(), user);
 		}
 
-		
+	}
+
+	@Override
+	public KingUser findByLoginId(AtomicLong loginKey) {
+		if (loginKey == null || loginKey.get() == 0)
+			throw new LogicKingChallengeException(LogicKingError.INVALID_TOKEN);
+		return getAllKingdomByLogin().get(loginKey.get());
+	}
+
+	@Override
+	public KingUser findBySessionId(String sessionId) {
+		if (sessionId == null || "".equals(sessionId))
+			throw new LogicKingChallengeException(
+					LogicKingError.INVALID_SESSION);
+
+		return getAllKingdomBySession().get(sessionId);
 	}
 
 }

@@ -52,7 +52,18 @@ public interface LoginRepository {
 	 * @param sessionId
 	 */
 	void removeKingUserBySession(String sessionId);
-
+	
+	/**
+	 * 
+	 * @param loginId
+	 * @return 
+	 */
+	KingUser findByLoginId(AtomicLong loginId);
+	/**
+	 * 
+	 * @param sessionId
+	 */
+	KingUser findBySessionId(String sessionId);
 	
 	
 	
