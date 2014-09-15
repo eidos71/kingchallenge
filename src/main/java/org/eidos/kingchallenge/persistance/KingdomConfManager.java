@@ -18,8 +18,8 @@ import org.eidos.kingchallenge.controller.SimpleLoginController;
 import org.eidos.kingchallenge.controller.SimpleScoreController;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.model.KingdomHandlerConf;
-import org.eidos.kingchallenge.services.EmptyLoginService;
-import org.eidos.kingchallenge.services.EmptyScoreService;
+import org.eidos.kingchallenge.service.EmptyLoginService;
+import org.eidos.kingchallenge.service.EmptyScoreService;
 import org.eidos.kingchallenge.utils.FilReaderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +43,7 @@ public class KingdomConfManager {
 	
 	final private LoginController loginController;
 	final private ScoreController scoreController;
+	final private PersistanceBag persistanceBag;
 
 
 	/**
@@ -57,6 +58,9 @@ public class KingdomConfManager {
 		scoreController=
 				new SimpleScoreController.Builder(new EmptyScoreService() ).build();
 		//Lets init...
+		persistanceBag = new PersistanceBag.Builder()
+				.setLoginImp(new SimpleLoginPersistanceMap())
+				.setScorePersistance(new EmptyScorePersistance()).build();
 		init();
 	}
 	/**
@@ -118,5 +122,14 @@ public class KingdomConfManager {
 		if (scoreController==null) throw 
 			new IllegalStateException("No LoginController has been instanced");
 		return scoreController;
+	}
+	/**
+	 * Retusn bag of persistance
+	 * @return
+	 */
+	public PersistanceBag getPersistanceBag() {
+		if (persistanceBag==null) throw 
+		new IllegalStateException("No persistanceBag has been instanced");
+		return persistanceBag;
 	}
 }

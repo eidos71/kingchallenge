@@ -1,7 +1,7 @@
 package org.eidos.kingchallenge.persistance;
 
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
+
 
 @SuppressWarnings("hiding")
 public interface LoginPersistanceMap <Long, String, KingUser>{

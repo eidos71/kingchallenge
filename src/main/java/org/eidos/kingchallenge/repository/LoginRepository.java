@@ -2,6 +2,9 @@ package org.eidos.kingchallenge.repository;
 
 
 
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
+
 import org.eidos.kingchallenge.model.KingUser;
 
 /**
@@ -27,5 +30,29 @@ public interface LoginRepository {
 	 * @param user User to update
 	 */
 	void updateKingUser(KingUser user);
+	/**
+	 * Gets all users of Kingod, key is by its int LoginId
+	 * @return Key is the loginId
+	 */
+	Map<Long, KingUser> getAllKingdomByLogin();
+	/**
+	 * Gets all users by Session, 
+	 * @return Key is string of session, its User
+	 */
+	Map<String, KingUser> getAllKingdomBySession();
+
+
+	/**
+	 * 
+	 * @param loginId
+	 */
+	void removeKingUserByLogin(AtomicLong loginId);
+	/**
+	 * 
+	 * @param sessionId
+	 */
+	void removeKingUserBySession(String sessionId);
+	
+	
 	
 }

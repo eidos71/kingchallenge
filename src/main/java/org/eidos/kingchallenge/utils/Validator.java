@@ -1,5 +1,7 @@
 package org.eidos.kingchallenge.utils;
 
+import java.util.Date;
+
 import org.eidos.kingchallenge.utils.UtilsEnum.Mode;
 
 public class Validator {
@@ -69,5 +71,30 @@ public class Validator {
         }
         return false;   
 		
+	}
+	/**
+	 * Validates is a valid Date
+	 * Checks it is not null and it is not on the future of now
+	 * @param currentDate
+	 */
+	public static boolean isValidDate(Date currentDate) {
+		if (currentDate==null || currentDate.after(new Date()))
+			return false;
+		else
+			return true;
+	}
+	/**
+	 * Validates a Date has expired
+	 * @param currentDate
+	 * @param SESSION_EXPIRATION 
+	 * @return
+	 */
+	public static boolean validateSessionExpired(Date lastDate, long SESSION_EXPIRATION ) {
+		Date now= new Date();
+		long duration = now.getTime() - lastDate.getTime();
+		if (duration >= SESSION_EXPIRATION) {
+			return true;
+		}
+		return false;
 	}
 }

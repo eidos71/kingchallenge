@@ -1,7 +1,9 @@
-package org.eidos.kingchallenge.services;
+package org.eidos.kingchallenge.service;
 
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
+
+import org.eidos.kingchallenge.model.KingUser;
 
 
 /**
@@ -22,7 +24,13 @@ public interface LoginService {
 	 * @param currentTime Current
 	 * @return
 	 */
-	public void sessionCheck (Date currentDate ) ;
+	
+	public void sessionCheck();
+	/**
+	 * Check one user by login
+	 * @param user
+	 */
+	public void sessionCheckByLogin(KingUser user);
 		
 	 
 	}

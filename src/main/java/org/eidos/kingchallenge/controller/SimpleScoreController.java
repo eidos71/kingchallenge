@@ -3,7 +3,7 @@ package org.eidos.kingchallenge.controller;
 import javax.annotation.concurrent.Immutable;
 
 import org.eidos.kingchallenge.model.KingScore;
-import org.eidos.kingchallenge.services.ScoreService;
+import org.eidos.kingchallenge.service.ScoreService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,4 +1,4 @@
-package org.eidos.kingchallenge.services;
+package org.eidos.kingchallenge.service;
 
 import java.util.Map;
 
