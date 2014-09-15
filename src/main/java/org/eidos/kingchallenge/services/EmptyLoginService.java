@@ -13,7 +13,7 @@ public class EmptyLoginService implements LoginService {
 	@Override
 	public String loginToken(AtomicLong token) {
 		// TODO Auto-generated method stub
-		return null;
+		return "fakeSessionId";
 	}
 
 	@Override

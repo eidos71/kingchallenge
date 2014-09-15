@@ -8,6 +8,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -33,6 +34,7 @@ public class KingdomServer {
 	static final Logger LOG = LoggerFactory.getLogger(KingdomServer.class);
 	private static final int HTTP_POOL_CONNECTIONS = 50;
 	private static final int HTTP_MAX_CONNECTIONS = HTTP_POOL_CONNECTIONS * 2;
+	private static final int HTTP_QUEUE_MAX_ITEMS = HTTP_POOL_CONNECTIONS * 4;
 	private static final int DELAY_FOR_TERMINATION = 0;
 	final int serverPort = Integer.getInteger("serverPort", 8000);
 	final int shutdownPort = Integer.getInteger("shutdownPort", 8009);
@@ -64,7 +66,7 @@ public class KingdomServer {
 		serverExecutor = new ThreadPoolExecutor(HTTP_POOL_CONNECTIONS,
 				HTTP_MAX_CONNECTIONS, DELAY_FOR_TERMINATION,
 				TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(
-						HTTP_POOL_CONNECTIONS));
+						HTTP_QUEUE_MAX_ITEMS), new ThreadPoolExecutor.AbortPolicy());
 		server.setExecutor(serverExecutor);
 		server.start();
 	}

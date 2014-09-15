@@ -29,7 +29,10 @@ import com.sun.net.httpserver.HttpHandler;
  *
  */
 public final class SimplePageHandler implements HttpHandler {
-	//TODO: Move to a static class
+	//Theard Local Exchange and Info storage
+	 private static ThreadLocal <HttpExchange> tlEx = new ThreadLocal<HttpExchange>();
+	 private static ThreadLocal <HttpExchangeInfo> tlExInfo= new ThreadLocal<HttpExchangeInfo>(); 
+
 
 	static final Logger LOG = LoggerFactory.getLogger(SimplePageHandler.class);
 	private final LoginController loginController;
@@ -37,52 +40,70 @@ public final class SimplePageHandler implements HttpHandler {
 	public SimplePageHandler() {
 		this.loginController=KingdomConfManager.getInstance().getLoginController();
 		this.scoreController=KingdomConfManager.getInstance().getScoreController();
+		
 	}
 
 	@Override
 	public void handle(HttpExchange httpExchange) throws IOException {
+	
+		tlEx.set(httpExchange);
+		tlExInfo.set( new HttpExchangeInfo() );
+		
 		String response = null;
 		OutputStream os = null;
-		int httpStatusCode = HttpURLConnection.HTTP_OK;
-		Headers responseHeaders = httpExchange.getResponseHeaders();
-		responseHeaders.set("Content-Type", "text/plain");
-		HttpExchangeInfo httpExchangeInfo = new HttpExchangeInfo();
-		LOG.debug("{}", httpExchangeInfo.getPath(httpExchange));
-		httpExchangeInfo.parseGetParameters(httpExchange);
-		httpExchangeInfo.parsePostParameters(httpExchange);
+		int httpStatusCode = HttpURLConnection.HTTP_INTERNAL_ERROR;
+		try {
+		
+		if (tlExInfo.get()==null) LOG.info("null tlExinfo");
+		if (tlEx.get()==null) LOG.info("null tlEx");
+	
+		LOG.debug("{}", tlExInfo.get().getPath(tlEx.get()));
+		tlExInfo.get().parseGetParameters(tlEx.get());
+		tlExInfo.get().parsePostParameters(tlEx.get());
 		// Specific to this handler class.
-		parseUrlEncodedParameters(httpExchange);
+		parseUrlEncodedParameters(tlEx.get());
 		//
 		@SuppressWarnings("unchecked")
-		Map<String, Object> params = (Map<String, Object>) httpExchange
+		Map<String, Object> params = (Map<String, Object>) tlEx.get()
 				.getAttribute(KingConfigConstants.KING_REQUEST_PARAM);
-		
-		try {
-			if (LOG.isDebugEnabled()) {
-				for (Entry<String, Object> value : params.entrySet()) 
-					LOG.debug("String-{}  Value-{}", value.getKey(),
-							value.getValue());
-			}
-			response=prepareResponse(params, HttpExchangeInfo.defineController(httpExchange) , httpExchange);
-			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, (response == null) ? 0
+		if (LOG.isDebugEnabled()) {
+			for (Entry<String, Object> value : params.entrySet()) 
+				LOG.debug("String-{}  Value-{}", value.getKey(),
+						value.getValue());
+		}		
+		Headers responseHeaders = tlEx.get().getResponseHeaders();
+		responseHeaders.set("Content-Type", "text/plain");
+
+
+			// we send to the bussiness Logic and return the response
+			response=prepareResponse(params);
+			//Prepare response
+			tlEx.get().sendResponseHeaders(HttpURLConnection.HTTP_OK, (response == null) ? 0
 					: response.length());
-			os = httpExchange.getResponseBody();
+			os = tlEx.get().getResponseBody();
 			os.write(response.toString().getBytes());
 		}catch (KingRunTimeIOException ex) {
-			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, (response == null) ? 0
+			tlEx.get().sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, (response == null) ? 0
 					: response.length());
 			response=ex.getMessage();
-			os = httpExchange.getResponseBody();
+			os = tlEx.get().getResponseBody();
 			os.write(response.toString().getBytes());
 		}catch (LogicKingChallengeException ex) {
 
-			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, (response == null) ? 0
+			tlEx.get().sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, (response == null) ? 0
 					: response.length());
 			response=ex.getMessage();
-			os = httpExchange.getResponseBody();
+			os = tlEx.get().getResponseBody();
 			os.write(response.toString().getBytes());
+		}catch(Exception ex) {
+			LOG.error(" big boom {}", ex);
+			tlEx.get().sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, (response == null) ? 0
+					: response.length());
+
 		} finally {
 			os.close();
+			tlExInfo.remove();
+			tlEx.remove();
 		}
 	}
 	/**
@@ -92,9 +113,9 @@ public final class SimplePageHandler implements HttpHandler {
 	 * @param httpExchange 
 	 * @return
 	 */
-	protected String prepareResponse(Map<String, Object> requestParamMap, KingControllerEnum controller, HttpExchange httpExchange ) {
+	protected String prepareResponse(Map<String, Object> requestParamMap   ) {
 		String response ="";
-	switch (controller ) {
+	switch (tlExInfo.get().defineController(tlEx.get())  ) {
 		case HIGHSCORELIST:
 			LOG.debug("HIGHSCORELIST");
 			break;
@@ -110,11 +131,9 @@ public final class SimplePageHandler implements HttpHandler {
 			LOG.debug("UNKNOWN");
 			throw new  KingRunTimeIOException("HTTP_BAD_REQUEST");
 	
-
 		default:
 			LOG.debug("UNKNOWN");
 			throw new  KingRunTimeIOException("HTTP_BAD_REQUEST");
-
 			
 		}
 		return response;
