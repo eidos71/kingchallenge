@@ -20,9 +20,9 @@ public class EmptyLoginService implements LoginService {
 
 
 	@Override
-	public void sessionCheck() {
+	public Boolean sessionCheck() {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
 

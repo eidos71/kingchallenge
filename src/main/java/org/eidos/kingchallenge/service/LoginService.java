@@ -25,7 +25,7 @@ public interface LoginService {
 	 * @return
 	 */
 	
-	public void sessionCheck();
+	public Boolean sessionCheck();
 	/**
 	 * Check one user by login
 	 * @param user

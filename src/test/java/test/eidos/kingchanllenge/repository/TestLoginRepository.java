@@ -25,7 +25,7 @@ public class TestLoginRepository extends EasyMock {
 			.getLogger(TestLoginRepository.class);
 	private LoginRepository loginRepository = new SimpleLoginRepository();
 	private  static boolean isInit=false;
-	private static final int BAG_SIZE = 100000;
+	private static final int BAG_SIZE = 10000;
 
 
 	@Before
@@ -36,8 +36,7 @@ public class TestLoginRepository extends EasyMock {
 		bag.clean();
 		KingUser user = null;
 		
-			// We disregard 0 as the base of sessionId
-			LOG.debug("this has to be done only once");	
+
 			for (int i = 1; i < BAG_SIZE + 1; i++) {
 				user = new KingUser.Builder(i).build();
 				bag.put(user.getKingUserId().get(), user.getSessionKey(), user);

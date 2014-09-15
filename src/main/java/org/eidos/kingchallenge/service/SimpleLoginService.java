@@ -39,17 +39,17 @@ public final class SimpleLoginService implements LoginService {
 	}
 
 	@Override
-	public void sessionCheck() {
-
+	public Boolean sessionCheck() {
+		Boolean result=false;
 		// we return a list for valid sessions
 		Map<String, KingUser> loginUser = loginRepository
 				.getAllKingdomBySession();
-
+		if (loginUser.isEmpty()) result=false;
 		for (Entry<String, KingUser> entry : loginUser.entrySet()) {
 			sessionCheckBySession(entry.getKey(), entry.getValue()
 					.getDateLogin());
 		}
-
+		return result;
 	}
 
 	/**
