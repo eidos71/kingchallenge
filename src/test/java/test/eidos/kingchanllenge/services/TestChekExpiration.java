@@ -22,7 +22,7 @@ public class TestChekExpiration   extends EasyMockSupport  {
 	private LoginService loginService;
 	private  static final Logger LOG = LoggerFactory
 			.getLogger(TestLoginPersistance.class);
-	private static final int BAG_SIZE = 5;
+	private static final int BAG_SIZE = 5000;
 	@Before
 	public void init() {
 		kingdomManager=KingdomConfManager.getInstance();
@@ -36,7 +36,8 @@ public class TestChekExpiration   extends EasyMockSupport  {
 			}
 	}
 	@Test
-	public void sessionCheck() {
+	public void sessionCheck() throws InterruptedException {
+		Thread.sleep(5000);
 		if (loginService==null) LOG.debug("login service is null");
 		loginService.sessionCheck();
 	}
