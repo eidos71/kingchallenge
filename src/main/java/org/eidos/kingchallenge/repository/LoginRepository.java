@@ -16,11 +16,13 @@ public interface LoginRepository {
 	/**
 	 * Adds a king User into the repository
 	 * @param user adds a king User
+	 * @return Session string
 	 */
-	void addKingUser(KingUser user);
+	String addKingUser(KingUser user);
 	/**
 	 * Removes a kingUser in the repository
 	 * @param user user to delete
+	 * 	 @return Session string
 	 */
 	void removeKingUser (KingUser user);
 	/**
@@ -29,7 +31,7 @@ public interface LoginRepository {
 	 *  will remove the @KingUser existent and create a new @KingUser
 	 * @param user User to update
 	 */
-	void updateKingUser(KingUser user);
+	String updateKingUser(KingUser user);
 	/**
 	 * Gets all users of Kingod, key is by its int LoginId
 	 * @return Key is the loginId

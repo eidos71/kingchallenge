@@ -48,7 +48,7 @@ public final class SimpleLoginRepository implements LoginRepository {
 	}
 
 	@Override
-	public void addKingUser(KingUser user) {
+	public String addKingUser(KingUser user) {
 		synchronized (loginPersistance) {
 			boolean exists = getAllKingdomByLogin().containsKey(
 					user.getKingUserId().get());
@@ -58,6 +58,7 @@ public final class SimpleLoginRepository implements LoginRepository {
 			this.loginPersistance.put(user.getKingUserId().get(),
 					user.getSessionKey(), user);
 		}
+		return user.getSessionKey();
 
 	}
 
@@ -90,10 +91,10 @@ public final class SimpleLoginRepository implements LoginRepository {
 	}
 
 	@Override
-	public void updateKingUser(KingUser user) {
+	public String updateKingUser(KingUser user) {
 		// if the user comes empty, we return the update action
 		if (user == null)
-			return;
+			return "";
 		synchronized (loginPersistance) {
 			boolean found = !getAllKingdomByLogin().containsKey(
 					user.getKingUserId().get());
@@ -103,6 +104,7 @@ public final class SimpleLoginRepository implements LoginRepository {
 			this.loginPersistance.put(user.getKingUserId().get(),
 					user.getSessionKey(), user);
 		}
+		return null;
 
 	}
 

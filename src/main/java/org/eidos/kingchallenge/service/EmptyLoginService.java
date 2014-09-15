@@ -32,4 +32,11 @@ public class EmptyLoginService implements LoginService {
 		
 	}
 
+
+	@Override
+	public String loginToken(KingUser user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

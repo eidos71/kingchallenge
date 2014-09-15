@@ -3,6 +3,7 @@ package org.eidos.kingchallenge.service;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
+
 import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -42,17 +43,17 @@ public final class SimpleLoginService implements LoginService {
 	public Boolean sessionCheck() {
 		Boolean result=false;
 		// we return a list for valid sessions
-		Map<String, KingUser> loginUser = loginRepository
+		Map<String, KingUser> mapLoginUser = loginRepository
 				.getAllKingdomBySession();
-		if (loginUser.isEmpty()) result=false;
-		for (Entry<String, KingUser> entry : loginUser.entrySet()) {
+		if (mapLoginUser.isEmpty()) result=false;
+		for (Entry<String, KingUser> entry : mapLoginUser.entrySet()) {
 			try {
-				
+				checkInvalidSessionByKey(entry.getKey(), entry.getValue()
+						.getDateLogin());
 			}catch (NullPointerException  | LogicKingChallengeException err) {
 				LOG.info("This entry {} has failed:  with the following error {} ",entry .getKey(), err);
 			}
-			checkInvalidSessionByKey(entry.getKey(), entry.getValue()
-					.getDateLogin());
+		
 		}
 		return result;
 	}
@@ -74,6 +75,14 @@ public final class SimpleLoginService implements LoginService {
 			// we have to remove this user
 			loginRepository.removeKingUserBySession(sessionId);
 		}
+	}
+
+	@Override
+	public String loginToken(KingUser user) {
+		LOG.debug("loginToken  {} ", user);
+		if (user==null ) 			throw new LogicKingChallengeException(
+				LogicKingError.INVALID_SESSION);
+		return this.loginRepository.updateKingUser(user);
 	}
 
 }
