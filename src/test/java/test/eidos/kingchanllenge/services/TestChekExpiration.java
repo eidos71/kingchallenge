@@ -111,10 +111,14 @@ public class TestChekExpiration extends EasyMockSupport {
 		@Override
 		public void run() {
 			try {
-				Thread.sleep(250);
+				Thread.sleep(500+(random.nextInt(BAG_SIZE) ) );
 				long randomInt = random.nextInt(BAG_SIZE);
-				 loginService.loginToken(new KingUser.Builder(randomInt)
-						.build());
+				KingUser kingUser= new KingUser.Builder(randomInt)
+				.build();
+				
+				 KingUser result = loginService.sessionCheckByLoginId(kingUser.getKingUserId());
+					LOG.debug("result {}" , result.getSessionKey() );
+				 
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -36,12 +36,10 @@ public interface LoginService {
 
 	public Boolean sessionCheck();
 
-	/**
-	 * Check one user by login
-	 * 
-	 * @param user
-	 */
-	public void sessionCheckByLogin(KingUser user);
+
+	KingUser sessionCheckBySessionKey(String sessionKey);
+
+	KingUser sessionCheckByLoginId(AtomicLong loginId);
 
 
 }

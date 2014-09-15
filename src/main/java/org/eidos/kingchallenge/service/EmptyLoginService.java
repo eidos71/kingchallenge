@@ -1,6 +1,5 @@
 package org.eidos.kingchallenge.service;
 
-import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.eidos.kingchallenge.model.KingUser;
@@ -26,15 +25,26 @@ public class EmptyLoginService implements LoginService {
 	}
 
 
+
+
+
 	@Override
-	public void sessionCheckByLogin(KingUser user) {
+	public String loginToken(KingUser user) {
 		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public KingUser sessionCheckBySessionKey(String sessionKey) {
+		// TODO Auto-generated method stub
+		return null;
 		
 	}
 
 
 	@Override
-	public String loginToken(KingUser user) {
+	public KingUser sessionCheckByLoginId(AtomicLong loginId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

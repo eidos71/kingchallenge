@@ -29,14 +29,26 @@ public final class SimpleLoginService implements LoginService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 	@Override
-	public void sessionCheckByLogin(KingUser user) {
-		if (user == null)
+	public KingUser sessionCheckByLoginId(AtomicLong loginId) {
+		
+		KingUser usr = loginRepository.findByLoginId(loginId);
+		return sessionCheckBySessionKey(usr.getSessionKey() );
+	}
+	@Override
+	public KingUser sessionCheckBySessionKey(String sessionKey) {
+		if (sessionKey == null || "".equals(sessionKey) )
 			throw new LogicKingChallengeException(
 					LogicKingError.INVALID_SESSION);
-		checkInvalidSessionByKey(user.getSessionKey(), user.getDateLogin());
-
+		KingUser kingUser=loginRepository.findBySessionId(sessionKey);	
+		if (kingUser==null) 	throw new LogicKingChallengeException(
+				LogicKingError.INVALID_SESSION);
+		//We check if it is still a valid Session
+		boolean isInvalid=!checkInvalidSessionByKey(sessionKey,kingUser.getDateLogin());
+		if (isInvalid) 	throw new LogicKingChallengeException(
+				LogicKingError.INVALID_SESSION);
+		return kingUser;
+		
 	}
 
 	@Override
@@ -63,24 +75,27 @@ public final class SimpleLoginService implements LoginService {
 	 * @param sessionId
 	 * @param lastLoginDate
 	 */
-	private void checkInvalidSessionByKey(String sessionId, Date lastLoginDate) {
+	private boolean checkInvalidSessionByKey(String sessionId, Date lastLoginDate) {
 		if (sessionId==null || "".equals(sessionId) || lastLoginDate==null) {
-			return;
+			throw new LogicKingChallengeException(
+					LogicKingError.PROCESSING_ERROR);
 		}
-			
+		boolean isValid=true;	
 		long SESSION_EXPIRATION = MILLISECONDS.convert(
 				KingConfigConstants._SESSION_EXPIRATION, MINUTES);
 		if (Validator.validateSessionExpired(lastLoginDate, SESSION_EXPIRATION)) {
 			LOG.debug("expiration is expired for {} ", sessionId);
 			// we have to remove this user
 			loginRepository.removeKingUserBySession(sessionId);
+			isValid=false;
 		}
+		return isValid;
 	}
 
 	@Override
 	public String loginToken(KingUser user) {
 		LOG.debug("loginToken  {} ", user);
-		if (user==null ) 			throw new LogicKingChallengeException(
+		if (user==null ) throw new LogicKingChallengeException(
 				LogicKingError.INVALID_SESSION);
 		return this.loginRepository.updateKingUser(user);
 	}
