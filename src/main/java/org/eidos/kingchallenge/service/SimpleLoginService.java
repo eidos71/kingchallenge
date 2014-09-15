@@ -68,7 +68,7 @@ public final class SimpleLoginService implements LoginService {
 		}
 			
 		long SESSION_EXPIRATION = MILLISECONDS.convert(
-				KingConfigConstants._SESSION_EXPIRATION, SECONDS);
+				KingConfigConstants._SESSION_EXPIRATION, MINUTES);
 		if (Validator.validateSessionExpired(lastLoginDate, SESSION_EXPIRATION)) {
 			LOG.debug("expiration is expired for {} ", sessionId);
 			// we have to remove this user
