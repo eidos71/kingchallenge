@@ -13,8 +13,8 @@ public class EmptyScoreService implements ScoreService{
 	}
 
 	@Override
-	public void insertScore(String sessionKey, KingScore score) {
-		// TODO Auto-generated method stub
+	public Boolean insertScore(String sessionKey, KingScore score) {
+		return false;
 		
 	}
 

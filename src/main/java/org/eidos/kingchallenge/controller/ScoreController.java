@@ -18,5 +18,5 @@ public interface ScoreController {
 	 * @param level
 	 * @param score
 	 */
-	public String putHighScore(String sessionKey, int level, int score);
+	public String putHighScore(String sessionKey, Long level, int score);
 }

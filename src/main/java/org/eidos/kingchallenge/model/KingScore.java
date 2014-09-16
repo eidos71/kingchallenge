@@ -1,6 +1,7 @@
 package org.eidos.kingchallenge.model;
 
 import java.io.Serializable;
+
 import javax.annotation.concurrent.Immutable;
 
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
@@ -20,7 +21,7 @@ public final class KingScore  implements Serializable{
 	private static final long serialVersionUID = 5652221039613378809L;
 
 	private final int points;
-	private final int level;
+	private final Long level;
 	private KingScore() {
 		throw new UnsupportedOperationException();
 	}
@@ -34,14 +35,53 @@ public final class KingScore  implements Serializable{
 	public int getPoints() {
 		return points;
 	}
-	public int getLevel() {
+	public Long getLevel() {
 		return level;
 	}
+	
+	@Override
+	public String toString() {
+		return "KingScore [points=" + points + ", level=" + level + "]";
+	}
+
+
+	/**
+	 * Builder for KingScore
+	 * @author eidos71
+	 *
+	 */
+	public static class Builder {
+		private int points;
+		private Long level;
+		/**
+		 * 
+		 * @param points 
+		 * @param level
+		 */
+		public Builder ( Long pLevel,int pPoints ) {
+			if (!Validator.isValidPositiveInt(pPoints) )
+				throw new LogicKingChallengeException(LogicKingError.INVALID_SCORE);
+			if (!Validator.isValidUnsignedInt(pLevel))
+				throw new LogicKingChallengeException(LogicKingError.INVALID_LEVEL);
+			this.points=pPoints;
+			this.level=pLevel;
+		}
+		/**
+		 * public constructor
+		 * 
+		 * @return a KingScore
+		 */
+		public KingScore build() {
+			return new KingScore(this);
+		}
+	}
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + level;
+		result = prime * result + (int) (level ^ (level >>> 32));
 		result = prime * result + points;
 		return result;
 	}
@@ -59,39 +99,5 @@ public final class KingScore  implements Serializable{
 		if (points != other.points)
 			return false;
 		return true;
-	}
-	@Override
-	public String toString() {
-		return "KingScore [points=" + points + ", level=" + level + "]";
-	}
-
-
-	/**
-	 * Builder for KingScore
-	 * @author eidos71
-	 *
-	 */
-	public static class Builder {
-		private int points;
-		private int level;
-		/**
-		 * 
-		 * @param points 
-		 * @param level
-		 */
-		public Builder (int pPoints, int pLevel) {
-			if (!Validator.isValidPositiveInt(pLevel) )
-				throw new LogicKingChallengeException(LogicKingError.INVALID_SCORE);
-			this.points=pPoints;
-			this.level=pLevel;
-		}
-		/**
-		 * public constructor
-		 * 
-		 * @return a KingScore
-		 */
-		public KingScore build() {
-			return new KingScore(this);
-		}
 	}
 }

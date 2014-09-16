@@ -2,14 +2,20 @@ package org.eidos.kingchallenge.service;
 
 import java.util.Map;
 
+import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
+import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
+import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.model.KingScore;
+import org.eidos.kingchallenge.model.KingUser;
 import org.eidos.kingchallenge.repository.EmptyScoreRepository;
 import org.eidos.kingchallenge.repository.LoginRepository;
 import org.eidos.kingchallenge.repository.ScoreRepository;
 import org.eidos.kingchallenge.repository.SimpleLoginRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class SimpleScoreService implements ScoreService {
-
+	static final Logger LOG = LoggerFactory.getLogger(SimpleScoreService.class);
 	private ScoreRepository scoreRepository= new EmptyScoreRepository();
 	private LoginRepository loginRepository = new SimpleLoginRepository();
 	@Override
@@ -19,22 +25,33 @@ public final class SimpleScoreService implements ScoreService {
 	}
 
 	@Override
-	public void insertScore(String sessionKey, KingScore score) {
-		// TODO Auto-generated method stub
-
+	public Boolean insertScore(String sessionKey, KingScore score) {
+		if (sessionKey==null  || "".equals(sessionKey) )
+			throw new KingInvalidSessionException("Invalid sessionKey");
+		if (this.loginRepository.findBySessionId(sessionKey)==null )
+			throw new KingInvalidSessionException("Invalid sessionKey: " + sessionKey);
+		if (score==null)
+			throw new LogicKingChallengeException(LogicKingError.PROCESSING_ERROR);
+		LOG.debug("{}", score);
+		return this.scoreRepository.insertScore(sessionKey, score.getLevel(), score.getPoints()); 
 	}
-
+	/**
+	 * This setter hs not to be used outside a TEST environment.
+	 * @param loginRepository
+	 */
 	public void setLoginRepository(LoginRepository loginRepository) {
-		// TODO Auto-generated method stub
+		
 		this.loginRepository=loginRepository;
 	}
 	/**
-	 * This is to be set 
+	 * This setter hs not to be used outside a TEST environment.
 	 * @param scoreService
 	 */
 	public void setScoreRepository(ScoreRepository scoreRepository) {
 		this.scoreRepository=scoreRepository;
 		
 	}
+
+
 
 }

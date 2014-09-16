@@ -25,9 +25,9 @@ public final class SimpleScoreController implements ScoreController {
 		return "";
 	}
 	@Override
-	public String putHighScore(String sessionKey, int level, int score) {
+	public String putHighScore(String sessionKey, Long level, int score) {
 		
-		scoreService.insertScore(sessionKey,  new KingScore.Builder(score, level).build());
+		scoreService.insertScore(sessionKey,  new KingScore.Builder(level,score).build());
 		return "";
 	}
 	
