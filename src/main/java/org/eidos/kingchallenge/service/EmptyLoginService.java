@@ -29,7 +29,7 @@ public class EmptyLoginService implements LoginService {
 
 
 	@Override
-	public String loginToken(KingUser user) {
+	public String renewLastLogin(KingUser user) {
 		// TODO Auto-generated method stub
 		return null;
 	}

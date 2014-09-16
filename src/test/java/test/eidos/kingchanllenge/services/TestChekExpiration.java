@@ -1,8 +1,11 @@
 package test.eidos.kingchanllenge.services;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.TimeUnit.MINUTES;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
@@ -15,6 +18,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 import junit.framework.Assert;
 
@@ -40,26 +44,37 @@ public class TestChekExpiration extends EasyMockSupport {
 	LoginService loginService;
 	private static final Logger LOG = LoggerFactory
 			.getLogger(TestLoginPersistance.class);
-	private static final int BAG_SIZE = 5000;
-	private static final int MUTATOR=100;
+	private static final int BAG_SIZE = 10;
+	private static final int SESSIONEXPIRATION=20;
+	private static final int SEED_SESSIONEXPIRATION=30;
+	private static final int MUTATOR = 3;
 	private final ExecutorService executor = Executors.newCachedThreadPool();
+	private final Random random = new Random();
 	@Before
 	public void init() {
+	
 		kingdomManager = KingdomConfManager.getInstance();
 		LoginPersistanceMap<Long, String, KingUser> bag = KingdomConfManager
 				.getInstance().getPersistanceBag().getLoginPersistance();
 		loginService = new SimpleLoginService();
 		KingUser user = null;
+		Date now= new Date();
+		Date finalDate= new Date();
+		//long duration = now.getTime() - lastDate.getTime();
 		for (int i = 1; i < BAG_SIZE; i++) {
-			user = new KingUser.Builder(i).build();
-			LOG.trace("inserting-> {}", bag);
+			long randomValue = MILLISECONDS.convert(
+					random.nextInt(SEED_SESSIONEXPIRATION), MINUTES);
+			finalDate.setTime(now.getTime()-randomValue);
+			LOG.trace("now{}", finalDate);
+			user = new KingUser.Builder(i).setTime(finalDate).build();
+			LOG.debug("inserting-> {}", user);
 			bag.put(user.getKingUserId().get(), user.getSessionKey(), user);
 		}
 	}
 
 	@Test
 	public void sessionCheck() throws InterruptedException {
-		Thread.sleep(5000);
+		
 		if (loginService == null)
 			LOG.debug("login service is null");
 		loginService.sessionCheck();
@@ -68,71 +83,72 @@ public class TestChekExpiration extends EasyMockSupport {
 	@Test
 	public void testSessionExecutor() throws InterruptedException,
 			ExecutionException {
-		Set<Mutator> mutatorList=new LinkedHashSet<Mutator>();
-		 List<Future<?> > listFuture= new ArrayList<Future<?> >();
-		for (int i=0;i < MUTATOR; i++) 
+		Set<Mutator> mutatorList = new LinkedHashSet<Mutator>();
+		List<Future<?>> listFuture = new ArrayList<Future<?>>();
+		for (int i = 0; i < MUTATOR; i++)
 			mutatorList.add(new Mutator());
-	
+
 		ScheduledExecutorService scheduledExecutorService = Executors
 				.newScheduledThreadPool(1);
 
 		scheduledExecutorService.scheduleAtFixedRate(
 				new SessionWorkerManager(), 0, 5, TimeUnit.SECONDS);
 		Thread.sleep(2000);
-		for ( Mutator mutator :mutatorList) {
-			//listFuture.add(	executor.submit(mutator));
-	
+		for (Mutator mutator : mutatorList) {
+			// listFuture.add( executor.submit(mutator));
+
 			executor.execute(mutator);
 		}
 
-/*		for (Future<?> future: listFuture) {
-			try {
-				future.get();
-			} catch (InterruptedException | ExecutionException e) {
-				LOG.error("exception {}",e);
-			}
-		}*/
-		
+		/*
+		 * for (Future<?> future: listFuture) { try { future.get(); } catch
+		 * (InterruptedException | ExecutionException e) {
+		 * LOG.error("exception {}",e); } }
+		 */
+
 		// assertEquals(true, scheduledFuture.get() );
 
 	}
+
 	@After
 	public void after() throws InterruptedException {
 		Thread.sleep(15000);
 	}
+
 	/**
+	 * Implements a simulated user input
 	 * 
 	 * @author eidos71
 	 *
 	 */
 	private final class Mutator implements Runnable {
-		private final Random random = new Random();
+		private final Random mutatorRandom = new Random();
 
 		@Override
 		public void run() {
 			try {
-				Thread.sleep(500+(random.nextInt(BAG_SIZE) ) );
-				long randomInt = random.nextInt(BAG_SIZE);
-				KingUser kingUser= new KingUser.Builder(randomInt)
-				.build();
-				
-				 KingUser result = loginService.sessionCheckByLoginId(kingUser.getKingUserId());
-					LOG.debug("result {}" , result.getSessionKey() );
-				 
+				Thread.sleep(500 + (mutatorRandom.nextInt(BAG_SIZE)));
+				long randomInt = mutatorRandom.nextInt(BAG_SIZE);
+				KingUser result = loginService
+						.sessionCheckByLoginId(new AtomicLong(randomInt));
+				// We define a new KingUser using  keeping the SessionKey
+				KingUser kingUser = new KingUser.Builder(randomInt)
+						.setSessionKey(result.getSessionKey()).build();
+				loginService.renewLastLogin(kingUser);
+				LOG.debug("result {}", result.getSessionKey());
+
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		
-			
+
 		}
 
-/*		@Override
-		public Object call() throws Exception {
-			long randomInt = random.nextInt(BAG_SIZE);
-			return loginService.loginToken(new KingUser.Builder(randomInt)
-					.build());
-		}*/
+		/*
+		 * @Override public Object call() throws Exception { long randomInt =
+		 * random.nextInt(BAG_SIZE); return loginService.loginToken(new
+		 * KingUser.Builder(randomInt) .build()); }
+		 */
 
 	}
 

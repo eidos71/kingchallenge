@@ -117,7 +117,30 @@ public final class KingUser implements Serializable {
 			this.loginDate = new Date();
 
 		}
-	
+		/**
+		 * Sets a login time with a specific date
+		 * @param date date to be specific 
+		 * @return Builder
+		 */
+		public Builder  setTime(Date date) {
+			if ((date==null)  )
+				throw 	 new IllegalArgumentException( "Invalid Date ");
+			this.loginDate=date;
+			return this;
+		}
+		/**
+		 * 
+		 * @param aSessionkey
+		 * @return
+		 */
+		public Builder setSessionKey(String aSessionkey) {
+			if ((aSessionkey==null) || "".equals(aSessionkey) )
+				throw 	 new IllegalArgumentException( "Invalid Session Key");
+			this.sessionKey=aSessionkey;
+			return this;
+		}
+		
+		
 		/**
 		 * Private method that generates a kinguserId
 		 * 
@@ -132,7 +155,7 @@ public final class KingUser implements Serializable {
 			}
 			
 		}
-
+		
 		/**
 		 * public constructor
 		 * 

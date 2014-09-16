@@ -33,6 +33,8 @@ public final class SimpleLoginService implements LoginService {
 	public KingUser sessionCheckByLoginId(AtomicLong loginId) {
 		
 		KingUser usr = loginRepository.findByLoginId(loginId);
+		if (usr==null) throw new LogicKingChallengeException(
+					LogicKingError.INVALID_SESSION);
 		return sessionCheckBySessionKey(usr.getSessionKey() );
 	}
 	@Override
@@ -93,7 +95,7 @@ public final class SimpleLoginService implements LoginService {
 	}
 
 	@Override
-	public String loginToken(KingUser user) {
+	public String renewLastLogin(KingUser user) {
 		LOG.debug("loginToken  {} ", user);
 		if (user==null ) throw new LogicKingChallengeException(
 				LogicKingError.INVALID_SESSION);

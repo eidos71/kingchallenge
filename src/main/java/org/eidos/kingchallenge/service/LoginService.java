@@ -24,7 +24,7 @@ public interface LoginService {
 	 * @param user
 	 * @return
 	 */
-	public String loginToken(KingUser user);
+	public String renewLastLogin(KingUser user);
 
 	/**
 	 * Checks if session is invalidated or not
