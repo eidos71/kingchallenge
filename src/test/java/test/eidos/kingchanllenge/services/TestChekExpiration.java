@@ -40,37 +40,42 @@ import test.eidos.kingchanllenge.persistance.TestLoginPersistance;
 
 @RunWith(EasyMockRunner.class)
 public class TestChekExpiration extends EasyMockSupport {
-	KingdomConfManager kingdomManager;
-	LoginService loginService;
+	
+	LoginService  	loginService = new SimpleLoginService();
 	private static final Logger LOG = LoggerFactory
 			.getLogger(TestLoginPersistance.class);
-	private static final int BAG_SIZE = 10;
+	private static final int BAG_SIZE = 1000;
 	private static final int SESSIONEXPIRATION=20;
 	private static final int SEED_SESSIONEXPIRATION=30;
-	private static final int MUTATOR = 3;
+	private static final int MUTATOR = 10;
 	private final ExecutorService executor = Executors.newCachedThreadPool();
 	private final Random random = new Random();
+	private static boolean init=false;
 	@Before
 	public void init() {
-	
-		kingdomManager = KingdomConfManager.getInstance();
-		LoginPersistanceMap<Long, String, KingUser> bag = KingdomConfManager
-				.getInstance().getPersistanceBag().getLoginPersistance();
-		loginService = new SimpleLoginService();
-		KingUser user = null;
-		Date now= new Date();
-		Date finalDate=null;
-		//long duration = now.getTime() - lastDate.getTime();
-		for (int i = 1; i < BAG_SIZE; i++) {
-			 finalDate= new Date();
-			long randomValue = MILLISECONDS.convert(
-					random.nextInt(SEED_SESSIONEXPIRATION), MINUTES);
-			finalDate.setTime(now.getTime()-randomValue);
-			LOG.trace("now{}", finalDate);
-			user = new KingUser.Builder(i).setTime(finalDate).build();
-			LOG.debug("inserting-> {}", user);
-			bag.put(user.getKingUserId().get(), user.getSessionKey(), user);
+		 KingdomConfManager.getInstance();
+		if (!init){
+
+			LoginPersistanceMap<Long, String, KingUser> bag = KingdomConfManager
+					.getInstance().getPersistanceBag().getLoginPersistance();
+		
+			KingUser user = null;
+			Date now= new Date();
+			Date finalDate=null;
+			//long duration = now.getTime() - lastDate.getTime();
+			for (int i = 1; i < BAG_SIZE; i++) {
+				 finalDate= new Date();
+				long randomValue = MILLISECONDS.convert(
+						random.nextInt(SEED_SESSIONEXPIRATION), MINUTES);
+				finalDate.setTime(now.getTime()-randomValue);
+				LOG.trace("now{}", finalDate);
+				user = new KingUser.Builder(i).setTime(finalDate).build();
+				LOG.debug("inserting-> {}", user);
+				bag.put(user.getKingUserId().get(), user.getSessionKey(), user);
+			}
+			init=true;
 		}
+
 	}
 
 	@Test
@@ -128,14 +133,14 @@ public class TestChekExpiration extends EasyMockSupport {
 		@Override
 		public void run() {
 			try {
-				Thread.sleep(500 + (mutatorRandom.nextInt(BAG_SIZE)));
+				Thread.sleep(500 + (mutatorRandom.nextInt(BAG_SIZE)*5));
 				long randomInt = mutatorRandom.nextInt(BAG_SIZE);
 				KingUser result = loginService
 						.sessionCheckByLoginId(new AtomicLong(randomInt));
 				// We define a new KingUser using  keeping the SessionKey
 				KingUser kingUser = new KingUser.Builder(randomInt)
 						.setSessionKey(result.getSessionKey()).build();
-				loginService.renewLastLogin(kingUser);
+			
 				LOG.debug("result {}", result.getSessionKey());
 
 			} catch (InterruptedException e) {

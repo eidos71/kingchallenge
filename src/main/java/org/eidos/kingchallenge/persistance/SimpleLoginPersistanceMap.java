@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
+import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.model.KingUser;
@@ -66,7 +67,7 @@ public final class SimpleLoginPersistanceMap implements LoginPersistanceMap<Long
 	public void removeBySession (String sessionKey) {
 		// If empty remove
 		if (  sessionKey==null || "".equals(sessionKey) ) 
-				throw new LogicKingChallengeException(LogicKingError.INVALID_SESSION);
+				throw new KingInvalidSessionException();
 		synchronized(lockSession) {
 			KingUser removedSession = mapBySession.remove(sessionKey);
 			if (removedSession==null) {

@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.eidos.kingchallenge.KingConfigConstants;
+import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.model.KingUser;
@@ -26,29 +27,26 @@ public final class SimpleLoginService implements LoginService {
 
 	@Override
 	public String loginToken(AtomicLong token) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 	@Override
 	public KingUser sessionCheckByLoginId(AtomicLong loginId) {
 		
 		KingUser usr = loginRepository.findByLoginId(loginId);
-		if (usr==null) throw new LogicKingChallengeException(
-					LogicKingError.INVALID_SESSION);
+		if (usr==null)
+			throw new KingInvalidSessionException();
 		return sessionCheckBySessionKey(usr.getSessionKey() );
 	}
 	@Override
 	public KingUser sessionCheckBySessionKey(String sessionKey) {
 		if (sessionKey == null || "".equals(sessionKey) )
-			throw new LogicKingChallengeException(
-					LogicKingError.INVALID_SESSION);
+			throw new KingInvalidSessionException();
 		KingUser kingUser=loginRepository.findBySessionId(sessionKey);	
-		if (kingUser==null) 	throw new LogicKingChallengeException(
-				LogicKingError.INVALID_SESSION);
+		if (kingUser==null) throw	new KingInvalidSessionException("Not found sessionKey");
 		//We check if it is still a valid Session
+		LOG.debug("user to check: {}",kingUser);
 		boolean isInvalid=!checkInvalidSessionByKey(sessionKey,kingUser.getDateLogin());
-		if (isInvalid) 	throw new LogicKingChallengeException(
-				LogicKingError.INVALID_SESSION);
+		if (isInvalid) 	throw new KingInvalidSessionException();
 		return kingUser;
 		
 	}
@@ -62,7 +60,7 @@ public final class SimpleLoginService implements LoginService {
 		if (mapLoginUser.isEmpty()) result=false;
 		for (Entry<String, KingUser> entry : mapLoginUser.entrySet()) {
 			try {
-				LOG.debug("entry-> {}",entry.getValue());
+				LOG.trace("entry-> {}",entry.getValue());
 				checkInvalidSessionByKey(entry.getKey(), entry.getValue()
 						.getDateLogin());
 			}catch (NullPointerException  | LogicKingChallengeException err) {
@@ -96,11 +94,15 @@ public final class SimpleLoginService implements LoginService {
 	}
 
 	@Override
-	public String renewLastLogin(KingUser user) {
-		LOG.debug("loginToken  {} ", user);
-		if (user==null ) throw new LogicKingChallengeException(
-				LogicKingError.INVALID_SESSION);
-		return this.loginRepository.updateKingUser(user);
-	}
+	public String renewLastLogin(String sessionKey ) {
+		LOG.debug("loginToken  {} ", sessionKey);
+		if (sessionKey==null || "".equals(sessionKey) )
+			throw new KingInvalidSessionException();
+	
+		KingUser toUpdateUser= sessionCheckBySessionKey(sessionKey);
+		LOG.debug("user to Update: {}",toUpdateUser);
+		toUpdateUser= new KingUser.Builder(toUpdateUser.getKingUserId().get()).setSessionKey(toUpdateUser.getSessionKey()).build();
+		return this.loginRepository.updateKingUser(toUpdateUser);
 
+	}
 }

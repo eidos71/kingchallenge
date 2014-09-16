@@ -19,12 +19,6 @@ public interface LoginService {
 	 * @return
 	 */
 	public String loginToken(AtomicLong token);
-	/**
-	 * 
-	 * @param user
-	 * @return
-	 */
-	public String renewLastLogin(KingUser user);
 
 	/**
 	 * Checks if session is invalidated or not
@@ -40,6 +34,12 @@ public interface LoginService {
 	KingUser sessionCheckBySessionKey(String sessionKey);
 
 	KingUser sessionCheckByLoginId(AtomicLong loginId);
+	/**
+	 * 
+	 * @param sessionKey
+	 * @return
+	 */
+	String renewLastLogin(String sessionKey);
 
 
 }

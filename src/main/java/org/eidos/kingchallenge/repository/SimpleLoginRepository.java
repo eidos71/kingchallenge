@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
+import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.model.KingUser;
@@ -75,8 +76,7 @@ public final class SimpleLoginRepository implements LoginRepository {
 	@Override
 	public void removeKingUserBySession(String sessionId) {
 		if (sessionId == null || "".equals(sessionId))
-			throw new LogicKingChallengeException(
-					LogicKingError.INVALID_SESSION);
+			throw new  KingInvalidSessionException();
 		LOG.debug("We want to remove user by sessionId" + sessionId);
 		boolean missing = !getAllKingdomBySession().containsKey(sessionId);
 		if (missing)
@@ -93,6 +93,7 @@ public final class SimpleLoginRepository implements LoginRepository {
 	@Override
 	public String updateKingUser(KingUser user) {
 		// if the user comes empty, we return the update action
+		String resultSession="";
 		if (user == null)
 			return "";
 		synchronized (loginPersistance) {
@@ -101,10 +102,11 @@ public final class SimpleLoginRepository implements LoginRepository {
 			if (found) {
 				this.loginPersistance.removeByLogin(user.getKingUserId().get());
 			}
-			this.loginPersistance.put(user.getKingUserId().get(),
+		 this.loginPersistance.put(user.getKingUserId().get(),
 					user.getSessionKey(), user);
+		 resultSession=user.getSessionKey();
 		}
-		return null;
+		return resultSession;
 
 	}
 
@@ -118,8 +120,7 @@ public final class SimpleLoginRepository implements LoginRepository {
 	@Override
 	public KingUser findBySessionId(String sessionId) {
 		if (sessionId == null || "".equals(sessionId))
-			throw new LogicKingChallengeException(
-					LogicKingError.INVALID_SESSION);
+			throw new KingInvalidSessionException();
 
 		return getAllKingdomBySession().get(sessionId);
 	}

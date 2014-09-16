@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
+import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.model.KingUser;
 import org.eidos.kingchallenge.persistance.KingdomConfManager;
@@ -89,12 +90,12 @@ public class TestLoginRepository extends EasyMock {
 		loginRepository.removeKingUserBySession("FAKESESSIONID");
 	}
 
-	@Test(expected = LogicKingChallengeException.class)
+	@Test(expected =  KingInvalidSessionException.class)
 	public void deleteEmptySessionKeyElement() {
 		// A new king user, guarantees a different session ID.
 		loginRepository.removeKingUserBySession("");
 	}
-	@Test(expected = LogicKingChallengeException.class)
+	@Test(expected =  KingInvalidSessionException.class)
 	public void deleteNullSessionKeyElement() {
 		// A new king user, guarantees a different session ID.
 		loginRepository.removeKingUserBySession(null);
@@ -107,11 +108,11 @@ public class TestLoginRepository extends EasyMock {
 	public void findBy0Logind() {
 		loginRepository.findByLoginId(new AtomicLong(0) );
 	}
-	@Test(expected = LogicKingChallengeException.class)
+	@Test(expected = KingInvalidSessionException.class)
 	public void findByEmptyString() {
 		loginRepository.findBySessionId("");
 	}
-	@Test(expected = LogicKingChallengeException.class)
+	@Test(expected = KingInvalidSessionException.class)
 	public void findByNullString() {
 		loginRepository.findBySessionId(null);
 	}
