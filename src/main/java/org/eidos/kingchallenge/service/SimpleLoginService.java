@@ -23,8 +23,12 @@ import org.slf4j.LoggerFactory;
 public final class SimpleLoginService implements LoginService {
 	static final Logger LOG = LoggerFactory.getLogger(SimpleLoginService.class);
 
-	private final LoginRepository loginRepository = new SimpleLoginRepository();
+	private  LoginRepository loginRepository = new SimpleLoginRepository();
 
+	public SimpleLoginService(){
+		
+	}
+	
 	@Override
 	public String loginToken(AtomicLong token) {
 		throw new UnsupportedOperationException();
@@ -105,4 +109,9 @@ public final class SimpleLoginService implements LoginService {
 		return this.loginRepository.updateKingUser(toUpdateUser);
 
 	}
+
+	public LoginRepository getLoginRepository() {
+		return loginRepository;
+	}
+
 }

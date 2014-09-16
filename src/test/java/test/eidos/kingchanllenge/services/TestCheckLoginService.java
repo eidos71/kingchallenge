@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 import java.util.Date;
 
+import org.easymock.EasyMockRunner;
 import org.easymock.EasyMockSupport;
 import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
 import org.eidos.kingchallenge.model.KingUser;
@@ -17,6 +18,7 @@ import org.eidos.kingchallenge.service.SimpleLoginService;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +29,7 @@ import test.eidos.kingchanllenge.persistance.TestLoginPersistance;
  * @author ernestpetit
  *
  */
+@RunWith(EasyMockRunner.class)
 public class TestCheckLoginService extends EasyMockSupport {
 	private static final String EXPIREDUSER = "EXPIREDUSER";
 	private static final String OKUSER = "OKUSER";
@@ -73,6 +76,5 @@ public class TestCheckLoginService extends EasyMockSupport {
 	@Test(expected=KingInvalidSessionException.class)
 	public void testRenewBadUser(){
 		String sessionKey=loginService.renewLastLogin(EXPIREDUSER);
-	
 	}
 }

@@ -18,8 +18,6 @@ import org.eidos.kingchallenge.controller.SimpleLoginController;
 import org.eidos.kingchallenge.controller.SimpleScoreController;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.model.KingdomHandlerConf;
-import org.eidos.kingchallenge.service.EmptyLoginService;
-import org.eidos.kingchallenge.service.EmptyScoreService;
 import org.eidos.kingchallenge.utils.FilReaderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,9 +38,7 @@ public class KingdomConfManager {
 	private static volatile KingdomConfManager instance = null;
 	private final static Object lock = new Object();
 	final private Set<KingdomHandlerConf> handlerConfSet;
-	
-	final private LoginController loginController;
-	final private ScoreController scoreController;
+
 	final private PersistanceBag persistanceBag;
 
 
@@ -52,15 +48,14 @@ public class KingdomConfManager {
 	 * @throws IOException
 	 */
 	private KingdomConfManager()  {
-		handlerConfSet= new HashSet<KingdomHandlerConf> ();
-		loginController=
-				new SimpleLoginController.Builder(new EmptyLoginService()).build();
-		scoreController=
-				new SimpleScoreController.Builder(new EmptyScoreService() ).build();
-		//Lets init...
 		persistanceBag = new PersistanceBag.Builder()
-				.setLoginImp(new SimpleLoginPersistanceMap())
-				.setScorePersistance(new EmptyScorePersistance()).build();
+			.setLoginImp(new SimpleLoginPersistanceMap())
+			.setScorePersistance(new EmptyScorePersistance())
+			.build();
+		handlerConfSet= new HashSet<KingdomHandlerConf> ();
+
+		//Lets init...
+	
 		init();
 	}
 	/**
@@ -104,25 +99,7 @@ public class KingdomConfManager {
 	public synchronized Set<KingdomHandlerConf> getHandlerConfList() {
 		return Collections.unmodifiableSet(handlerConfSet);
 	}
-	/**
-	 * Returns a loginController
-	 * @return
-	 */
-	public LoginController getLoginController() {
-		if (loginController==null) throw 
-			new IllegalStateException("No LoginController has been instanced");
-		return loginController;
-	}
-	/**
-	 * Returns a loginController
-	 * @return
-	 */
-	public ScoreController getScoreController() {
 
-		if (scoreController==null) throw 
-			new IllegalStateException("No LoginController has been instanced");
-		return scoreController;
-	}
 	/**
 	 * Retusn bag of persistance
 	 * @return

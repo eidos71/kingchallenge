@@ -17,6 +17,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
+import org.eidos.kingchallenge.controller.KingControllerManager;
 import org.eidos.kingchallenge.httpserver.handlers.GenericPageHandler;
 import org.eidos.kingchallenge.model.KingdomHandlerConf;
 import org.eidos.kingchallenge.persistance.KingdomConfManager;
@@ -63,6 +64,7 @@ public class KingdomServer {
 				HTTP_POOL_CONNECTIONS);
 
 		createContext();
+		initControllers();
 		serverExecutor = new ThreadPoolExecutor(HTTP_POOL_CONNECTIONS,
 				HTTP_MAX_CONNECTIONS, DELAY_FOR_TERMINATION,
 				TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(
@@ -71,6 +73,11 @@ public class KingdomServer {
 		server.start();
 	}
 
+	private void initControllers() {
+		KingControllerManager
+		.getInstance();
+		
+	}
 	/**
 	 * Stop the server.
 	 * 

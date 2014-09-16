@@ -8,13 +8,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eidos.kingchallenge.KingConfigConstants;
+import org.eidos.kingchallenge.controller.KingControllerManager;
 import org.eidos.kingchallenge.controller.LoginController;
 import org.eidos.kingchallenge.controller.ScoreController;
 import org.eidos.kingchallenge.exceptions.KingRunTimeIOException;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.httpserver.enums.KingControllerEnum;
-import org.eidos.kingchallenge.persistance.KingdomConfManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,8 +38,8 @@ public final class SimplePageHandler implements HttpHandler {
 	private final LoginController loginController;
 	private final ScoreController scoreController;
 	public SimplePageHandler() {
-		this.loginController=KingdomConfManager.getInstance().getLoginController();
-		this.scoreController=KingdomConfManager.getInstance().getScoreController();
+		this.loginController=KingControllerManager.getInstance().getLoginController();
+		this.scoreController=KingControllerManager.getInstance().getScoreController();
 		
 	}
 

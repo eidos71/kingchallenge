@@ -4,7 +4,9 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
+import org.eidos.kingchallenge.service.EmptyLoginService;
 import org.eidos.kingchallenge.service.LoginService;
+import org.eidos.kingchallenge.service.SimpleLoginService;
 import org.eidos.kingchallenge.utils.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,13 +51,13 @@ private SimpleLoginController(Builder builder) {
  */
 public static class Builder{
 		private  LoginService loginService;
-		public Builder(LoginService aLoginService) {
-			this.loginService=aLoginService;
+		public Builder() {
+		
 		}
 
 	    public SimpleLoginController build() {
 	    	if (loginService==null)
-	    		throw  new IllegalStateException("No LoginService has been instanced"); 
+	    		this.loginService=new SimpleLoginService();
 	    	return new SimpleLoginController(this);
 	    }
 }

@@ -20,7 +20,7 @@ public class TestInit extends EasyMockSupport {
 	@Mock
 	private LoginService loginService;
 	@TestSubject
-	private SimpleLoginController loginController = new SimpleLoginController.Builder(loginService).build();
+	private SimpleLoginController loginController = new SimpleLoginController.Builder().build();
 
 	/**
 	 * -Test an Invalid character

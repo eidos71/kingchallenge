@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.eidos.kingchallenge.model.KingUser;
+import org.eidos.kingchallenge.repository.LoginRepository;
 
 /**
  * Interface that deals with LoginServices
@@ -40,6 +41,8 @@ public interface LoginService {
 	 * @return
 	 */
 	String renewLastLogin(String sessionKey);
+
+	
 
 
 }
