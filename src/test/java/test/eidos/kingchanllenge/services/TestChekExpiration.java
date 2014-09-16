@@ -59,9 +59,10 @@ public class TestChekExpiration extends EasyMockSupport {
 		loginService = new SimpleLoginService();
 		KingUser user = null;
 		Date now= new Date();
-		Date finalDate= new Date();
+		Date finalDate=null;
 		//long duration = now.getTime() - lastDate.getTime();
 		for (int i = 1; i < BAG_SIZE; i++) {
+			 finalDate= new Date();
 			long randomValue = MILLISECONDS.convert(
 					random.nextInt(SEED_SESSIONEXPIRATION), MINUTES);
 			finalDate.setTime(now.getTime()-randomValue);

@@ -62,6 +62,7 @@ public final class SimpleLoginService implements LoginService {
 		if (mapLoginUser.isEmpty()) result=false;
 		for (Entry<String, KingUser> entry : mapLoginUser.entrySet()) {
 			try {
+				LOG.debug("entry-> {}",entry.getValue());
 				checkInvalidSessionByKey(entry.getKey(), entry.getValue()
 						.getDateLogin());
 			}catch (NullPointerException  | LogicKingChallengeException err) {
@@ -86,7 +87,7 @@ public final class SimpleLoginService implements LoginService {
 		long SESSION_EXPIRATION = MILLISECONDS.convert(
 				KingConfigConstants._SESSION_EXPIRATION, MINUTES);
 		if (Validator.validateSessionExpired(lastLoginDate, SESSION_EXPIRATION)) {
-			LOG.debug("expiration is expired for {} ", sessionId);
+			LOG.debug("expiration is expired for {} with lastLoginDate {}", sessionId, lastLoginDate);
 			// we have to remove this user
 			loginRepository.removeKingUserBySession(sessionId);
 			isValid=false;
