@@ -12,9 +12,11 @@ import org.eidos.kingchallenge.model.KingScore;
 public interface ScoreService {
 
 	/**
+	 * @param level 
 	 * 
 	 */
-	public Map<String,String > getHighScoreList() ;
+	public Map<Long ,KingScore > getHighScoreList(Long level) ;
 
 	public Boolean insertScore(String sessionKey, KingScore score);
+;
 }

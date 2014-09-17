@@ -98,7 +98,7 @@ public final class SimpleLoginService implements LoginService {
 	}
 
 	@Override
-	public String renewLastLogin(String sessionKey ) {
+	public KingUser renewLastLogin(String sessionKey ) {
 		LOG.debug("loginToken  {} ", sessionKey);
 		if (sessionKey==null || "".equals(sessionKey) )
 			throw new KingInvalidSessionException();

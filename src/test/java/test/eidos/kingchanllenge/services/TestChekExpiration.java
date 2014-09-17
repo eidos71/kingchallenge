@@ -45,8 +45,8 @@ public class TestChekExpiration extends EasyMockSupport {
 	private static final Logger LOG = LoggerFactory
 			.getLogger(TestLoginPersistance.class);
 	private static final int BAG_SIZE = 1000;
-	private static final int SESSIONEXPIRATION=20;
-	private static final int SEED_SESSIONEXPIRATION=30;
+	private static final int SESSIONEXPIRATION=10;
+	private static final int SEED_SESSIONEXPIRATION=15;
 	private static final int MUTATOR = 10;
 	private final ExecutorService executor = Executors.newCachedThreadPool();
 	private final Random random = new Random();

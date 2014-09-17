@@ -42,13 +42,13 @@ public class TestScoreService extends EasyMock{
 	public void testScoreService() {
 		//expect(loginService.loginToken(new AtomicLong(-1234L))).andThrow(new RuntimeException());
 		expect(loginRepository.findBySessionId("MOCK") ).andReturn(
-				new KingUser.Builder(3).build() );
+				new KingUser.Builder(3150).build() );
 		expect(scoreRepository.insertScore("MOCK", 1L, 15350) ).andReturn(true);
 		replay(loginRepository);
 		replay(scoreRepository);
 		scoreService.setLoginRepository(loginRepository);
 		scoreService.setScoreRepository(scoreRepository);
-		KingScore score= new KingScore.Builder(1L, 15350).build();
+		KingScore score= new KingScore.Builder(1L, 15350,3150L).build();
 		assertThat("", scoreService.insertScore("MOCK", score), equalTo(true));
 	}
 	@Test(expected=KingInvalidSessionException.class)
@@ -56,7 +56,7 @@ public class TestScoreService extends EasyMock{
 		expect(loginRepository.findBySessionId("MOCK") ).andReturn(null
 				);
 		replay(loginRepository);
-		KingScore score= new KingScore.Builder(1L, 15350).build();
+		KingScore score= new KingScore.Builder(1L, 15350,3150L).build();
 		assertThat("", scoreService.insertScore("MOCK", score), equalTo(true));
 	}
 	@Test(expected=KingInvalidSessionException.class)
@@ -64,7 +64,7 @@ public class TestScoreService extends EasyMock{
 		expect(loginRepository.findBySessionId("MOCK") ).andReturn(null
 				);
 		replay(loginRepository);
-		KingScore score= new KingScore.Builder(1L, 15350).build();
+		KingScore score= new KingScore.Builder(1L, 15350,3150L).build();
 		assertThat("", scoreService.insertScore(null, score), equalTo(true));
 	}
 }

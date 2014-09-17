@@ -31,7 +31,7 @@ public interface LoginRepository {
 	 *  will remove the @KingUser existent and create a new @KingUser
 	 * @param user User to update
 	 */
-	String updateKingUser(KingUser user);
+	KingUser updateKingUser(KingUser user);
 	/**
 	 * Gets all users of Kingod, key is by its int LoginId
 	 * @return Key is the loginId

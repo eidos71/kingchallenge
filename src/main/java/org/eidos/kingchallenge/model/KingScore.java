@@ -22,16 +22,21 @@ public final class KingScore  implements Serializable{
 
 	private final int points;
 	private final Long level;
+	private final Long kingUserId;
 	private KingScore() {
 		throw new UnsupportedOperationException();
 	}
 	private  KingScore(Builder builder) {
 		this.points=builder.points;
 		this.level=builder.level;
+		this.kingUserId=builder.userId;;
 		
 	}
-	
-	// Setters
+	// GETTERS
+	public Long getKingUserId() {
+		return kingUserId;
+	}
+
 	public int getPoints() {
 		return points;
 	}
@@ -41,47 +46,16 @@ public final class KingScore  implements Serializable{
 	
 	@Override
 	public String toString() {
-		return "KingScore [points=" + points + ", level=" + level + "]";
+		return "KingScore [points=" + points + ", level=" + level
+				+ ", kingUserId=" + kingUserId + "]";
 	}
-
-
-	/**
-	 * Builder for KingScore
-	 * @author eidos71
-	 *
-	 */
-	public static class Builder {
-		private int points;
-		private Long level;
-		/**
-		 * 
-		 * @param points 
-		 * @param level
-		 */
-		public Builder ( Long pLevel,int pPoints ) {
-			if (!Validator.isValidPositiveInt(pPoints) )
-				throw new LogicKingChallengeException(LogicKingError.INVALID_SCORE);
-			if (!Validator.isValidUnsignedInt(pLevel))
-				throw new LogicKingChallengeException(LogicKingError.INVALID_LEVEL);
-			this.points=pPoints;
-			this.level=pLevel;
-		}
-		/**
-		 * public constructor
-		 * 
-		 * @return a KingScore
-		 */
-		public KingScore build() {
-			return new KingScore(this);
-		}
-	}
-
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (level ^ (level >>> 32));
+		result = prime * result
+				+ ((kingUserId == null) ? 0 : kingUserId.hashCode());
+		result = prime * result + ((level == null) ? 0 : level.hashCode());
 		result = prime * result + points;
 		return result;
 	}
@@ -94,10 +68,60 @@ public final class KingScore  implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		KingScore other = (KingScore) obj;
-		if (level != other.level)
+		if (kingUserId == null) {
+			if (other.kingUserId != null)
+				return false;
+		} else if (!kingUserId.equals(other.kingUserId))
+			return false;
+		if (level == null) {
+			if (other.level != null)
+				return false;
+		} else if (!level.equals(other.level))
 			return false;
 		if (points != other.points)
 			return false;
 		return true;
 	}
+
+
+	/**
+	 * Builder for KingScore
+	 * @author eidos71
+	 *
+	 */
+	public static class Builder {
+		private int points;
+		private Long level;
+		private Long userId;
+		/**
+		 * 
+		 * @param points 
+		 * @param level
+		 */
+		public Builder ( Long pLevel,int pPoints, Long pUserId ) {
+			if (!Validator.isValidPositiveInt(pPoints) )
+				throw new LogicKingChallengeException(LogicKingError.INVALID_SCORE);
+			if (!Validator.isValidUnsignedInt(pLevel))
+				throw new LogicKingChallengeException(LogicKingError.INVALID_LEVEL);
+			if (!Validator.isValidUnsignedInt(pUserId))
+				throw new LogicKingChallengeException(LogicKingError.INVALID_TOKEN);
+			this.points=pPoints;
+			this.level=pLevel;
+			this.userId=pUserId;
+		}
+		/**
+		 * public constructor
+		 * 
+		 * @return a KingScore
+		 */
+		public KingScore build() {
+			return new KingScore(this);
+		}
+	}
+
+
+
+	
+
+
 }

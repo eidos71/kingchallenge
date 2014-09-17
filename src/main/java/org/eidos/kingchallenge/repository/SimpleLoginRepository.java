@@ -91,11 +91,11 @@ public final class SimpleLoginRepository implements LoginRepository {
 	}
 
 	@Override
-	public String updateKingUser(KingUser user) {
+	public KingUser updateKingUser(KingUser user) {
 		// if the user comes empty, we return the update action
 		String resultSession="";
 		if (user == null)
-			return "";
+			return null;
 		synchronized (loginPersistance) {
 			boolean found = !getAllKingdomByLogin().containsKey(
 					user.getKingUserId().get());
@@ -104,9 +104,9 @@ public final class SimpleLoginRepository implements LoginRepository {
 			}
 		 this.loginPersistance.put(user.getKingUserId().get(),
 					user.getSessionKey(), user);
-		 resultSession=user.getSessionKey();
+
 		}
-		return resultSession;
+		return user;
 
 	}
 

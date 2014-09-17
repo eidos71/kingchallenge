@@ -36,11 +36,12 @@ public interface LoginService {
 
 	KingUser sessionCheckByLoginId(AtomicLong loginId);
 	/**
-	 * 
-	 * @param sessionKey
-	 * @return
+	 * Checks a SessionKey is valid (still between the time of persistence of session)
+	 * and refreshes the date of the session
+	 * @param sessionKey SessionKey
+	 * @return a String representing a sesskionKey
 	 */
-	String renewLastLogin(String sessionKey);
+	KingUser renewLastLogin(String sessionKey);
 
 	
 

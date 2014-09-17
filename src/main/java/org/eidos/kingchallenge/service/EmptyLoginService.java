@@ -3,7 +3,6 @@ package org.eidos.kingchallenge.service;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.eidos.kingchallenge.model.KingUser;
-import org.eidos.kingchallenge.repository.LoginRepository;
 
 /**
  * An LoginService that does nothing!
@@ -42,7 +41,7 @@ public class EmptyLoginService implements LoginService {
 
 
 	@Override
-	public String renewLastLogin(String sessionKey) {
+	public KingUser renewLastLogin(String sessionKey) {
 		// TODO Auto-generated method stub
 		return null;
 	}

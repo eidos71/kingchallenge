@@ -5,12 +5,7 @@ import java.util.Map;
 import org.eidos.kingchallenge.model.KingUser;
 
 public interface ScoreController {
-	/**
-	 * Returns the high score list on a map
-	 * separated by , and with a top of 15 elements.
-	 * @return
-	 */
-	public String getHighScoresList();
+
 
 	/**
 	 *  Method to store a high score
@@ -19,4 +14,12 @@ public interface ScoreController {
 	 * @param score
 	 */
 	public String putHighScore(String sessionKey, Long level, int score);
+	/**
+	 * Returns the high score list on a map
+	 * separated by , and with a top of 15 elements.
+	 * @param sessionKey
+	 * @param level
+	 * @return
+	 */
+	String getHighScoreByLevel(String sessionKey, Long level);
 }

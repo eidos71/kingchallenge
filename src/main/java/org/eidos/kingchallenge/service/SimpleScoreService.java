@@ -1,5 +1,6 @@
 package org.eidos.kingchallenge.service;
 
+import java.util.Collections;
 import java.util.Map;
 
 import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
@@ -18,17 +19,14 @@ public final class SimpleScoreService implements ScoreService {
 	static final Logger LOG = LoggerFactory.getLogger(SimpleScoreService.class);
 	private ScoreRepository scoreRepository= new EmptyScoreRepository();
 	private LoginRepository loginRepository = new SimpleLoginRepository();
-	@Override
-	public Map<String, String> getHighScoreList() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 	@Override
 	public Boolean insertScore(String sessionKey, KingScore score) {
 		if (sessionKey==null  || "".equals(sessionKey) )
 			throw new KingInvalidSessionException("Invalid sessionKey");
-		if (this.loginRepository.findBySessionId(sessionKey)==null )
+		KingUser kinguser= this.loginRepository.findBySessionId(sessionKey);
+		if (kinguser==null )
 			throw new KingInvalidSessionException("Invalid sessionKey: " + sessionKey);
 		if (score==null)
 			throw new LogicKingChallengeException(LogicKingError.PROCESSING_ERROR);
@@ -51,6 +49,15 @@ public final class SimpleScoreService implements ScoreService {
 		this.scoreRepository=scoreRepository;
 		
 	}
+	@Override
+	public Map<Long, KingScore> getHighScoreList(Long level) {
+		// TODO Auto-generated method stub
+		
+		Map<Long, KingScore>map= Collections.emptyMap();
+		return map;
+	}
+
+
 
 
 

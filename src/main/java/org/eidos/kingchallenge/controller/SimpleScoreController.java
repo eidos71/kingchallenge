@@ -3,6 +3,7 @@ package org.eidos.kingchallenge.controller;
 import javax.annotation.concurrent.Immutable;
 
 import org.eidos.kingchallenge.model.KingScore;
+import org.eidos.kingchallenge.model.KingUser;
 import org.eidos.kingchallenge.repository.SimpleLoginRepository;
 import org.eidos.kingchallenge.service.EmptyLoginService;
 import org.eidos.kingchallenge.service.EmptyScoreService;
@@ -10,6 +11,7 @@ import org.eidos.kingchallenge.service.LoginService;
 import org.eidos.kingchallenge.service.ScoreService;
 import org.eidos.kingchallenge.service.SimpleLoginService;
 import org.eidos.kingchallenge.service.SimpleScoreService;
+import org.eidos.kingchallenge.utils.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,19 +20,21 @@ public final class SimpleScoreController implements ScoreController {
 	private final ScoreService  scoreService;
 	private final LoginService loginService;
 	static final Logger LOG = LoggerFactory.getLogger(SimpleScoreController.class);
-	@Override
-	public String getHighScoresList() {
-		//conver this to a response
-		scoreService.getHighScoreList();
-		return "";
-	}
+
 	@Override
 	public String putHighScore(String sessionKey, Long level, int score) {
-		
-		scoreService.insertScore(sessionKey,  new KingScore.Builder(level,score).build());
-		return "";
+		//Validates session is valid and 
+		String response="";
+		KingUser user= loginService.renewLastLogin(sessionKey);
+		scoreService.insertScore(sessionKey,  new KingScore.Builder(level,score,user.getKingUserId().get()).build());
+		return response;
 	}
-	
+	@Override
+	public String getHighScoreByLevel(String sessionKey, Long level ) {
+		String response="";
+		loginService.renewLastLogin(sessionKey);
+		return  MapUtils.returnCsvFromMap( scoreService.getHighScoreList(level) );
+	}
 	private SimpleScoreController(Builder builder) {
 	    this.scoreService = builder.scoreService;
 	    this.loginService =builder.loginService;
@@ -82,4 +86,6 @@ public final class SimpleScoreController implements ScoreController {
 	    	return new SimpleScoreController(this); 
 	    }
 }
+
+
 }
