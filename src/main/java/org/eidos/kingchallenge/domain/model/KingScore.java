@@ -13,15 +13,15 @@ public class KingScore implements Serializable {
 	 */
 	private static final long serialVersionUID = 5652221039613378809L;
 
-	private final int points;
+
 	private final Long kingUserId;
+	private final int points;
 	private KingScore() {
 		throw new UnsupportedOperationException();
 	}
 	private  KingScore(Builder builder) {
 		this.points=builder.points;
-		
-		this.kingUserId=builder.userId;;
+			this.kingUserId=builder.userId;;
 		
 	}
 	// GETTERS
@@ -75,9 +75,10 @@ public class KingScore implements Serializable {
 
 
 
+
 	@Override
 	public String toString() {
-		return "KingScore [points=" + points + ", kingUserId=" + kingUserId
+		return "KingScore [kingUserId=" + kingUserId + ", points=" + points
 				+ "]";
 	}
 	@Override

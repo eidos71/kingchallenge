@@ -28,7 +28,7 @@ public final class PersistanceBag implements Serializable {
 	private static final long serialVersionUID = 7041243246192738570L;
 	
 	private final LoginPersistanceMap<Long, String, KingUser> loginPersistance;
-	private final ScorePersistance scorePersistance;
+	private final ScorePersistance scorePersistance ;
 	
 	/**
 	 * Bag where we store all persistance related
@@ -49,7 +49,7 @@ public final class PersistanceBag implements Serializable {
 	public LoginPersistanceMap<Long, String, KingUser> getLoginPersistance() {
 		return loginPersistance;
 	}
-	public ScorePersistance getScorePersistance() {
+	public ScorePersistance getScorePersistance () {
 		return scorePersistance;
 	}
 	

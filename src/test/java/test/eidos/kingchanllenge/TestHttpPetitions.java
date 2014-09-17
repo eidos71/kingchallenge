@@ -30,7 +30,7 @@ public class TestHttpPetitions {
 	 public void setup() {
 			Accessor a;
 			
-			for (int i=0; i<10000; i++) {
+			for (int i=0; i<100000; i++) {
 				a= new Accessor();
 				listAccesor.add(a);
 			}

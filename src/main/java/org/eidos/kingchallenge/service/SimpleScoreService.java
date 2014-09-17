@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class SimpleScoreService implements ScoreService {
+
 	static final Logger LOG = LoggerFactory.getLogger(SimpleScoreService.class);
 	private ScoreRepository scoreRepository= new EmptyScoreRepository();
 	private LoginRepository loginRepository = new SimpleLoginRepository();
