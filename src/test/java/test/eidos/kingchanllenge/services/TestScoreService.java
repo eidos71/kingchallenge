@@ -1,11 +1,7 @@
 package test.eidos.kingchanllenge.services;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
@@ -17,7 +13,6 @@ import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
 import org.eidos.kingchallenge.repository.LoginRepository;
 import org.eidos.kingchallenge.repository.ScoreRepository;
 import org.eidos.kingchallenge.service.SimpleScoreService;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

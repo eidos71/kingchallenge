@@ -48,10 +48,6 @@ public class TestSkipSet {
 			LOG.debug(" {}",elem);
 		}
 
-/*		assertArrayEquals(new int[] { 1, 2, 3 }, new int[] { 1, 2, 3 });
-
-		assertArrayEquals(new String[] { "a", "c", "e", "b", "d" },
-				set.toArray(new String[] {}));*/
 
 	}
 	

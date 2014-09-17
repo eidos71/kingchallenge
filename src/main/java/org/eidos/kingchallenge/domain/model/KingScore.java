@@ -1,34 +1,26 @@
-package org.eidos.kingchallenge.domain.dto;
+package org.eidos.kingchallenge.domain.model;
 
 import java.io.Serializable;
-
-import javax.annotation.concurrent.Immutable;
 
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.utils.Validator;
-/**
- * Model 
- * @author eidos71
- *
- */
-@Immutable
-public final class KingScoreDTO  implements Serializable {
+
+public class KingScore implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5652221039613378809L;
-	private final Long level;
-	private final int points;
 
+	private final int points;
 	private final Long kingUserId;
-	private KingScoreDTO() {
+	private KingScore() {
 		throw new UnsupportedOperationException();
 	}
-	private  KingScoreDTO(Builder builder) {
+	private  KingScore(Builder builder) {
 		this.points=builder.points;
-		this.level=builder.level;
+		
 		this.kingUserId=builder.userId;;
 		
 	}
@@ -40,15 +32,7 @@ public final class KingScoreDTO  implements Serializable {
 	public Integer getPoints() {
 		return points;
 	}
-	public Long getLevel() {
-		return level;
-	}
-	
-	@Override
-	public String toString() {
-		return "KingScoreDTO [points=" + points + ", level=" + level
-				+ ", kingUserId=" + kingUserId + "]";
-	}
+
 
 
 	/**
@@ -58,23 +42,21 @@ public final class KingScoreDTO  implements Serializable {
 	 */
 	public static class Builder {
 		private int points;
-		private Long level;
+
 		private Long userId;
 		/**
 		 * 
 		 * @param points 
-		 * @param level
+
 		 * @param UserID
 		 */
-		public Builder ( Long pLevel,int pPoints, Long pUserId ) {
+		public Builder ( int pPoints, Long pUserId ) {
 			if (!Validator.isValidPositiveInt(pPoints) )
 				throw new LogicKingChallengeException(LogicKingError.INVALID_SCORE);
-			if (!Validator.isValidUnsignedInt(pLevel))
-				throw new LogicKingChallengeException(LogicKingError.INVALID_LEVEL);
+
 			if (!Validator.isValidUnsignedInt(pUserId))
 				throw new LogicKingChallengeException(LogicKingError.INVALID_TOKEN);
 			this.points=pPoints;
-			this.level=pLevel;
 			this.userId=pUserId;
 		}
 		/**
@@ -82,18 +64,22 @@ public final class KingScoreDTO  implements Serializable {
 		 * 
 		 * @return a KingScore
 		 */
-		public KingScoreDTO build() {
-			return new KingScoreDTO(this);
+		public KingScore build() {
+			return new KingScore(this);
 		}
 
 
 
 		
 	}
-	
 
 
 
+	@Override
+	public String toString() {
+		return "KingScore [points=" + points + ", kingUserId=" + kingUserId
+				+ "]";
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -111,7 +97,7 @@ public final class KingScoreDTO  implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		KingScoreDTO other = (KingScoreDTO) obj;
+		KingScore other = (KingScore) obj;
 		if (kingUserId == null) {
 			if (other.kingUserId != null)
 				return false;
@@ -121,10 +107,10 @@ public final class KingScoreDTO  implements Serializable {
 			return false;
 		return true;
 	}
-
-
-
+	
+	
+	
+}
 	
 
 
-}
