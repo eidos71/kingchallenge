@@ -9,72 +9,62 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
+import org.eidos.kingchallenge.domain.model.KingScore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class TestSkipSet {
 	static final Logger LOG = LoggerFactory.getLogger(TestSkipSet.class);
-	Comparator<KingScoreDTO> insertionOrderComparator = new Comparator<KingScoreDTO>() {
-		private final ConcurrentHashMap<KingScoreDTO, Integer> order = new ConcurrentHashMap<KingScoreDTO, Integer>();
-		@Override
-		public int compare(KingScoreDTO o1, KingScoreDTO o2) {
-			if (!order.contains(o2))
-				order.put(o2, 0);
-			if (order.containsKey(o1))
-				return order.get(o1).compareTo(order.get(o2));
-			order.put(o1, order.size());
-			return 1;
-		}
-	};
+
 
 	@Test
 	public void testComparableList() {
 		;
-		ConcurrentSkipListSet<KingScoreDTO> setKingScore = new ConcurrentSkipListSet<KingScoreDTO>(
+		ConcurrentSkipListSet<KingScore> setKingScore = new ConcurrentSkipListSet<KingScore>(
 				new KingScoreChainedComparator(new KingScoreUserIdComparator(),  new KingScoreByScore() )	);
-		setKingScore.add(	new KingScoreDTO.Builder(1L, 3, 132L).build());
+		setKingScore.add(	new KingScore.Builder( 3, 132L).build());
 
-		setKingScore.add(	new KingScoreDTO.Builder(1L, 1, 131L).build());
-		setKingScore.add(	new KingScoreDTO.Builder(1L, 1, 132L).build());
+		setKingScore.add(	new KingScore.Builder( 1, 131L).build());
+		setKingScore.add(	new KingScore.Builder( 1, 132L).build());
 		
-		setKingScore.add(	new KingScoreDTO.Builder(1L, 3, 131L).build());
+		setKingScore.add(	new KingScore.Builder( 3, 131L).build());
 
-		setKingScore.add(	new KingScoreDTO.Builder(1L, 6, 131L).build());
-		setKingScore.add(	new KingScoreDTO.Builder(1L, 6, 135L).build());
+		setKingScore.add(	new KingScore.Builder( 6, 131L).build());
+		setKingScore.add(	new KingScore.Builder( 6, 135L).build());
 		
 		
-		for ( KingScoreDTO elem : setKingScore ){
+		for ( KingScore elem : setKingScore ){
 			LOG.debug(" {}",elem);
 		}
 
 
 	}
 	
-	 class KingScoreUserIdComparator implements Comparator<KingScoreDTO> {
+	 class KingScoreUserIdComparator implements Comparator<KingScore> {
 		 
 	    @Override
-	    public int compare(KingScoreDTO 	o1 , KingScoreDTO o2) {
+	    public int compare(KingScore 	o1 , KingScore o2) {
 	        return  o1.getKingUserId().compareTo( o2.getKingUserId() );
 	    }
 	}
-	 class KingScoreByScore implements Comparator<KingScoreDTO> {
+	 class KingScoreByScore implements Comparator<KingScore> {
 		 
 		    @Override
-		    public int compare(KingScoreDTO 	o1 , KingScoreDTO o2) {
+		    public int compare(KingScore 	o1 , KingScore o2) {
 		        return  o1.getPoints().compareTo( o2.getPoints() );
 		    }
 		}
-	 class KingScoreChainedComparator implements Comparator<KingScoreDTO> {
+	 class KingScoreChainedComparator implements Comparator<KingScore> {
 
-		    private List<Comparator<KingScoreDTO>> listComparators;
+		    private List<Comparator<KingScore>> listComparators;
 			@SafeVarargs
-		    public KingScoreChainedComparator(Comparator<KingScoreDTO>... comparators) {
+		    public KingScoreChainedComparator(Comparator<KingScore>... comparators) {
 		        this.listComparators = Arrays.asList(comparators);
 		    }
 		@Override
-		public int compare(KingScoreDTO o1, KingScoreDTO o2) {
-			 for (Comparator<KingScoreDTO> comparator : listComparators) {
+		public int compare(KingScore o1, KingScore o2) {
+			 for (Comparator<KingScore> comparator : listComparators) {
 		            int result = comparator.compare(o1, o2);
 		            if (result != 0) {
 		                return result;
