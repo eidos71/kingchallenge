@@ -22,8 +22,6 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import test.eidos.kingchanllenge.persistance.TestLoginPersistance;
-
 /**
  * 
  * @author ernestpetit
@@ -64,14 +62,14 @@ public class TestCheckLoginService extends EasyMockSupport {
 	}
 	@Test
 	public void testRenewLastLogin(){
-		KingUser sessionUser=loginService.renewLastLogin(OKUSER);
-//		assertThat("", sessionKey, equalTo(OKUSER));
-//		LOG.debug("{}",loginService.sessionCheckBySessionKey(sessionKey).getDateLogin());
+		 KingUser sessionUser = loginService.renewLastLogin(OKUSER);
+	assertThat("", sessionUser.getSessionKey(), equalTo(OKUSER));
+	LOG.debug("{}", sessionUser);
 //		//We find if the value exists.
-//		 assertThat("", loginService.sessionCheckBySessionKey(sessionKey).getDateLogin() ,
-//				 Matchers.greaterThan (fiveMinutesDate));
-/*		 assertThat("",twntyMinutesAgo ,
-				 Matchers.greaterThan ( loginService.sessionCheckBySessionKey(sessionKey).getDateLogin()));*/
+		 assertThat("", loginService.sessionCheckBySessionKey(sessionUser.getSessionKey() ).getDateLogin() ,
+				 Matchers.greaterThan (fiveMinutesDate));
+		 assertThat("", loginService.sessionCheckBySessionKey(sessionUser.getSessionKey() ).getDateLogin() ,
+				 Matchers.greaterThan (fiveMinutesDate ));
 	}
 	@Test(expected=KingInvalidSessionException.class)
 	public void testRenewBadUser(){
