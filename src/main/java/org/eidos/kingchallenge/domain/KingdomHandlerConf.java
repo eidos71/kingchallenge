@@ -1,4 +1,4 @@
-package org.eidos.kingchallenge.model;
+package org.eidos.kingchallenge.domain;
 
 import java.io.Serializable;
 import javax.annotation.concurrent.Immutable;

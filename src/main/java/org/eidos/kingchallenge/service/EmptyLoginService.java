@@ -2,7 +2,7 @@ package org.eidos.kingchallenge.service;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.eidos.kingchallenge.model.KingUser;
+import org.eidos.kingchallenge.domain.model.KingUser;
 
 /**
  * An LoginService that does nothing!

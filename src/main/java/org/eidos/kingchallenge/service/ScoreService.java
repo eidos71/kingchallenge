@@ -2,7 +2,7 @@ package org.eidos.kingchallenge.service;
 
 import java.util.Map;
 
-import org.eidos.kingchallenge.model.KingScore;
+import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
 
 /**
  * Score Service
@@ -15,8 +15,8 @@ public interface ScoreService {
 	 * @param level 
 	 * 
 	 */
-	public Map<Long ,KingScore > getHighScoreList(Long level) ;
+	public Map<Long ,KingScoreDTO > getHighScoreList(Long level) ;
 
-	public Boolean insertScore(String sessionKey, KingScore score);
+	public Boolean insertScore(String sessionKey, KingScoreDTO score);
 ;
 }

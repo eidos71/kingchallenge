@@ -3,11 +3,11 @@ package org.eidos.kingchallenge.service;
 import java.util.Collections;
 import java.util.Map;
 
+import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
+import org.eidos.kingchallenge.domain.model.KingUser;
 import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
-import org.eidos.kingchallenge.model.KingScore;
-import org.eidos.kingchallenge.model.KingUser;
 import org.eidos.kingchallenge.repository.EmptyScoreRepository;
 import org.eidos.kingchallenge.repository.LoginRepository;
 import org.eidos.kingchallenge.repository.ScoreRepository;
@@ -22,7 +22,7 @@ public final class SimpleScoreService implements ScoreService {
 
 
 	@Override
-	public Boolean insertScore(String sessionKey, KingScore score) {
+	public Boolean insertScore(String sessionKey, KingScoreDTO score) {
 		if (sessionKey==null  || "".equals(sessionKey) )
 			throw new KingInvalidSessionException("Invalid sessionKey");
 		KingUser kinguser= this.loginRepository.findBySessionId(sessionKey);
@@ -50,10 +50,10 @@ public final class SimpleScoreService implements ScoreService {
 		
 	}
 	@Override
-	public Map<Long, KingScore> getHighScoreList(Long level) {
+	public Map<Long, KingScoreDTO> getHighScoreList(Long level) {
 		// TODO Auto-generated method stub
 		
-		Map<Long, KingScore>map= Collections.emptyMap();
+		Map<Long, KingScoreDTO>map= Collections.emptyMap();
 		return map;
 	}
 

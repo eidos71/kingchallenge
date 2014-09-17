@@ -1,4 +1,4 @@
-package org.eidos.kingchallenge.model;
+package org.eidos.kingchallenge.domain.model;
 
 import java.io.Serializable;
 import java.util.Date;

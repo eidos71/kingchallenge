@@ -7,9 +7,9 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
+import org.eidos.kingchallenge.domain.model.KingUser;
 import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
-import org.eidos.kingchallenge.model.KingUser;
 import org.eidos.kingchallenge.persistance.KingdomConfManager;
 import org.eidos.kingchallenge.persistance.LoginPersistanceMap;
 import org.eidos.kingchallenge.repository.LoginRepository;

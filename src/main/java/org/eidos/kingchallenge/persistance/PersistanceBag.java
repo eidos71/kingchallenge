@@ -7,7 +7,8 @@ import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.eidos.kingchallenge.controller.SimpleLoginController;
-import org.eidos.kingchallenge.model.KingUser;
+import org.eidos.kingchallenge.domain.model.KingUser;
+
 
 /**
  *  Holds the Bag of different persistances Elements that

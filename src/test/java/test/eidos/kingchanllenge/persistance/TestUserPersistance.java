@@ -7,9 +7,9 @@ import java.util.concurrent.Executors;
 
 import org.easymock.EasyMockRunner;
 import org.easymock.EasyMockSupport;
+import org.eidos.kingchallenge.domain.model.KingUser;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
-import org.eidos.kingchallenge.model.KingUser;
 import org.eidos.kingchallenge.persistance.LoginPersistanceMap;
 import org.eidos.kingchallenge.persistance.SimpleLoginPersistanceMap;
 import org.junit.After;

@@ -7,10 +7,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
+import org.eidos.kingchallenge.domain.model.KingUser;
 import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
-import org.eidos.kingchallenge.model.KingUser;
 import org.eidos.kingchallenge.utils.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

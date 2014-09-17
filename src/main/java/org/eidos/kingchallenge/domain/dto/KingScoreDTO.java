@@ -1,4 +1,4 @@
-package org.eidos.kingchallenge.model;
+package org.eidos.kingchallenge.domain.dto;
 
 import java.io.Serializable;
 
@@ -13,20 +13,20 @@ import org.eidos.kingchallenge.utils.Validator;
  *
  */
 @Immutable
-public final class KingScore  implements Serializable{
+public final class KingScoreDTO  implements Serializable,  Comparable{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5652221039613378809L;
-
-	private final int points;
 	private final Long level;
+	private final int points;
+
 	private final Long kingUserId;
-	private KingScore() {
+	private KingScoreDTO() {
 		throw new UnsupportedOperationException();
 	}
-	private  KingScore(Builder builder) {
+	private  KingScoreDTO(Builder builder) {
 		this.points=builder.points;
 		this.level=builder.level;
 		this.kingUserId=builder.userId;;
@@ -37,7 +37,7 @@ public final class KingScore  implements Serializable{
 		return kingUserId;
 	}
 
-	public int getPoints() {
+	public Integer getPoints() {
 		return points;
 	}
 	public Long getLevel() {
@@ -48,39 +48,6 @@ public final class KingScore  implements Serializable{
 	public String toString() {
 		return "KingScore [points=" + points + ", level=" + level
 				+ ", kingUserId=" + kingUserId + "]";
-	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((kingUserId == null) ? 0 : kingUserId.hashCode());
-		result = prime * result + ((level == null) ? 0 : level.hashCode());
-		result = prime * result + points;
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		KingScore other = (KingScore) obj;
-		if (kingUserId == null) {
-			if (other.kingUserId != null)
-				return false;
-		} else if (!kingUserId.equals(other.kingUserId))
-			return false;
-		if (level == null) {
-			if (other.level != null)
-				return false;
-		} else if (!level.equals(other.level))
-			return false;
-		if (points != other.points)
-			return false;
-		return true;
 	}
 
 
@@ -97,6 +64,7 @@ public final class KingScore  implements Serializable{
 		 * 
 		 * @param points 
 		 * @param level
+		 * @param UserID
 		 */
 		public Builder ( Long pLevel,int pPoints, Long pUserId ) {
 			if (!Validator.isValidPositiveInt(pPoints) )
@@ -114,9 +82,51 @@ public final class KingScore  implements Serializable{
 		 * 
 		 * @return a KingScore
 		 */
-		public KingScore build() {
-			return new KingScore(this);
+		public KingScoreDTO build() {
+			return new KingScoreDTO(this);
 		}
+
+
+
+		
+	}
+	
+
+
+	@Override
+	public int compareTo(Object anotherKingScore) {
+		   if (!(anotherKingScore instanceof KingScoreDTO))
+			      throw new ClassCastException("A Person object expected.");
+		   		
+			    int anotherUserScorepoints = ((KingScoreDTO) anotherKingScore).getPoints();  
+			    return this.points - anotherUserScorepoints;    
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((kingUserId == null) ? 0 : kingUserId.hashCode());
+		result = prime * result + points;
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		KingScoreDTO other = (KingScoreDTO) obj;
+		if (kingUserId == null) {
+			if (other.kingUserId != null)
+				return false;
+		} else if (!kingUserId.equals(other.kingUserId))
+			return false;
+		if (points != other.points)
+			return false;
+		return true;
 	}
 
 

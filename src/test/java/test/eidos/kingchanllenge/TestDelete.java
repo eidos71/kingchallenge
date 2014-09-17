@@ -1,13 +1,17 @@
 package test.eidos.kingchanllenge;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.Random;
 import java.util.Set;
+import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import junit.framework.Assert;
@@ -17,8 +21,8 @@ import static org.hamcrest.Matchers.equalTo;
 
 import org.easymock.EasyMockRunner;
 import org.easymock.EasyMockSupport;
+import org.eidos.kingchallenge.domain.KingdomHandlerConf;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
-import org.eidos.kingchallenge.model.KingdomHandlerConf;
 import org.eidos.kingchallenge.persistance.KingdomConfManager;
 import org.eidos.kingchallenge.utils.UtilsEnum.Mode;
 import org.eidos.kingchallenge.utils.Validator;
@@ -42,22 +46,27 @@ public class TestDelete extends EasyMockSupport {
 		}
 	}
 	@Test
+	public void testTreeSet(){
+	    Set<Object> weakHashSet = Collections.newSetFromMap(
+	            new WeakHashMap<Object, Boolean>());
+	}
+	@Test
 	public void testNavigableMap() {
-		NavigableMap<Integer ,String> navmap=new ConcurrentSkipListMap<Integer, String>();
 
-	    navmap.put(1, "Sunday");  
+		NavigableMap<Long ,String> navmap=new ConcurrentSkipListMap<Long, String>();
 
-	    navmap.put(2, "Monday");
+	    navmap.put(1L, "Sunday");  
 
-	    navmap.put(3, "Tuesday");
+	    navmap.put(2L, "Monday");
 
-	    navmap.put(4, "Wednesday");
+	    navmap.put(3L, "Tuesday");
 
-	    navmap.put(5, "Thursday");
+	    navmap.put(4L, "Wednesday");
 
-	    navmap.put(6, "Friday");
+	    navmap.put(5L, "Thursday");
 
-	    navmap.put(7, "Saturday");
+	    navmap.put(6L, "Friday");
+
 	    LOG.debug("Data in the navigable map:{} " , navmap.descendingMap() );
 
 	  //Retrieving first data
@@ -70,15 +79,15 @@ public class TestDelete extends EasyMockSupport {
 
 	      //Retrieving the nearest less than or equal to the given key
 
-	      LOG.debug("Nearest less than or equal to the given key:  {}  ", navmap.floorEntry(5) );
+	      LOG.debug("Nearest less than or equal to the given key:  {}  ", navmap.floorEntry(5L) );
 
 	      //Retrieving the greatest key strictly less than the given key
 
-	      LOG.debug("Retrieving the greatest key strictly less than  the given key:  {}  " , navmap.lowerEntry(3));
+	      LOG.debug("Retrieving the greatest key strictly less than  the given key:  {}  " , navmap.lowerEntry(3L));
 
 	      //Retrieving a key-value associated with the least key strictly greater than the given key
 
-	      LOG.debug("Retriving data from navigable map greater than the given key: {}   " , navmap.higherEntry(5) );
+	      LOG.debug("Retriving data from navigable map greater than the given key: {}   " , navmap.higherEntry(5L) );
 
 	      //Removing first
 
@@ -142,4 +151,9 @@ public class TestDelete extends EasyMockSupport {
 		Set<KingdomHandlerConf> map = KingdomConfManager.getInstance().getHandlerConfList();
 		 assertThat("", map.size(), equalTo(2));
 	}
+	
+	
+	 
+	
+	
 }

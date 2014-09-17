@@ -10,10 +10,10 @@ import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.eidos.kingchallenge.KingConfigConstants;
+import org.eidos.kingchallenge.domain.model.KingUser;
 import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
-import org.eidos.kingchallenge.model.KingUser;
 import org.eidos.kingchallenge.repository.LoginRepository;
 import org.eidos.kingchallenge.repository.SimpleLoginRepository;
 import org.eidos.kingchallenge.utils.Validator;

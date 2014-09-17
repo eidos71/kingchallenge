@@ -16,8 +16,8 @@ import org.eidos.kingchallenge.controller.LoginController;
 import org.eidos.kingchallenge.controller.ScoreController;
 import org.eidos.kingchallenge.controller.SimpleLoginController;
 import org.eidos.kingchallenge.controller.SimpleScoreController;
+import org.eidos.kingchallenge.domain.KingdomHandlerConf;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
-import org.eidos.kingchallenge.model.KingdomHandlerConf;
 import org.eidos.kingchallenge.utils.FilReaderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class KingdomConfManager {
 	@GuardedBy("lock")
 	private static volatile KingdomConfManager instance = null;
 	private final static Object lock = new Object();
-	final private Set<KingdomHandlerConf> handlerConfSet;
+	final private Set<org.eidos.kingchallenge.domain.KingdomHandlerConf> handlerConfSet;
 
 	final private PersistanceBag persistanceBag;
 

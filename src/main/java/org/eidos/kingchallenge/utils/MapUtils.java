@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.eidos.kingchallenge.model.KingScore;
+import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
 
 public class MapUtils {
 
@@ -13,10 +13,10 @@ public class MapUtils {
 	 * @param highScoreList Map to transform
 	 * @return CSV string,
 	 */
-	public static String returnCsvFromMap(Map<Long, KingScore> highScoreMap) {
+	public static String returnCsvFromMap(Map<Long, KingScoreDTO> highScoreMap) {
 		if (highScoreMap==null) return "";
 		StringBuilder builder= new StringBuilder();
-		for (Entry<Long, KingScore> entry:highScoreMap.entrySet() ) {
+		for (Entry<Long, KingScoreDTO> entry:highScoreMap.entrySet() ) {
 			
 		}
 		

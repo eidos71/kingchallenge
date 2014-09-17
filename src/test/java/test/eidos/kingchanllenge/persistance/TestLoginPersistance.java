@@ -8,8 +8,8 @@ import java.util.Map.Entry;
 
 import org.easymock.EasyMockRunner;
 import org.easymock.EasyMockSupport;
+import org.eidos.kingchallenge.domain.model.KingUser;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
-import org.eidos.kingchallenge.model.KingUser;
 import org.eidos.kingchallenge.persistance.LoginPersistanceMap;
 import org.eidos.kingchallenge.persistance.SimpleLoginPersistanceMap;
 import org.hamcrest.Matchers;

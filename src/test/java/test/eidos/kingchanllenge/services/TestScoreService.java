@@ -11,9 +11,9 @@ import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
+import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
+import org.eidos.kingchallenge.domain.model.KingUser;
 import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
-import org.eidos.kingchallenge.model.KingScore;
-import org.eidos.kingchallenge.model.KingUser;
 import org.eidos.kingchallenge.repository.LoginRepository;
 import org.eidos.kingchallenge.repository.ScoreRepository;
 import org.eidos.kingchallenge.service.SimpleScoreService;
@@ -48,7 +48,7 @@ public class TestScoreService extends EasyMock{
 		replay(scoreRepository);
 		scoreService.setLoginRepository(loginRepository);
 		scoreService.setScoreRepository(scoreRepository);
-		KingScore score= new KingScore.Builder(1L, 15350,3150L).build();
+		KingScoreDTO score= new KingScoreDTO.Builder(1L, 15350,3150L).build();
 		assertThat("", scoreService.insertScore("MOCK", score), equalTo(true));
 	}
 	@Test(expected=KingInvalidSessionException.class)
@@ -56,7 +56,7 @@ public class TestScoreService extends EasyMock{
 		expect(loginRepository.findBySessionId("MOCK") ).andReturn(null
 				);
 		replay(loginRepository);
-		KingScore score= new KingScore.Builder(1L, 15350,3150L).build();
+		KingScoreDTO score= new KingScoreDTO.Builder(1L, 15350,3150L).build();
 		assertThat("", scoreService.insertScore("MOCK", score), equalTo(true));
 	}
 	@Test(expected=KingInvalidSessionException.class)
@@ -64,7 +64,7 @@ public class TestScoreService extends EasyMock{
 		expect(loginRepository.findBySessionId("MOCK") ).andReturn(null
 				);
 		replay(loginRepository);
-		KingScore score= new KingScore.Builder(1L, 15350,3150L).build();
+		KingScoreDTO score= new KingScoreDTO.Builder(1L, 15350,3150L).build();
 		assertThat("", scoreService.insertScore(null, score), equalTo(true));
 	}
 }

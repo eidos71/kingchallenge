@@ -2,8 +2,8 @@ package org.eidos.kingchallenge.controller;
 
 import javax.annotation.concurrent.Immutable;
 
-import org.eidos.kingchallenge.model.KingScore;
-import org.eidos.kingchallenge.model.KingUser;
+import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
+import org.eidos.kingchallenge.domain.model.KingUser;
 import org.eidos.kingchallenge.repository.SimpleLoginRepository;
 import org.eidos.kingchallenge.service.EmptyLoginService;
 import org.eidos.kingchallenge.service.EmptyScoreService;
@@ -26,7 +26,7 @@ public final class SimpleScoreController implements ScoreController {
 		//Validates session is valid and 
 		String response="";
 		KingUser user= loginService.renewLastLogin(sessionKey);
-		scoreService.insertScore(sessionKey,  new KingScore.Builder(level,score,user.getKingUserId().get()).build());
+		scoreService.insertScore(sessionKey,  new KingScoreDTO.Builder(level,score,user.getKingUserId().get()).build());
 		return response;
 	}
 	@Override

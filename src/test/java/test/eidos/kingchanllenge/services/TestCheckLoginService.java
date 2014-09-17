@@ -9,8 +9,8 @@ import java.util.Date;
 
 import org.easymock.EasyMockRunner;
 import org.easymock.EasyMockSupport;
+import org.eidos.kingchallenge.domain.model.KingUser;
 import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
-import org.eidos.kingchallenge.model.KingUser;
 import org.eidos.kingchallenge.persistance.KingdomConfManager;
 import org.eidos.kingchallenge.persistance.LoginPersistanceMap;
 import org.eidos.kingchallenge.service.LoginService;
