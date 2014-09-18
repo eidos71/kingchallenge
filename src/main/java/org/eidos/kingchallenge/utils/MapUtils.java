@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
+import org.eidos.kingchallenge.domain.model.KingScore;
 
 public class MapUtils {
 
@@ -22,7 +23,7 @@ public class MapUtils {
 		
 		return "";
 	}
-	public static String returnCsvFromCollection(Collection<String> highScoreCollection) {
+	public static String returnCsvFromCollection(Collection<KingScore> highScoreCollection) {
 		return "";
 	}
 

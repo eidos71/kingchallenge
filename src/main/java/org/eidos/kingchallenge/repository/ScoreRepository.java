@@ -1,9 +1,11 @@
 package org.eidos.kingchallenge.repository;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
+import org.eidos.kingchallenge.domain.model.KingScore;
 
 /**
  * 
@@ -19,11 +21,11 @@ public interface ScoreRepository {
 	 * @param score
 	 * @return
 	 */
-	Boolean insertScore(String sessionKey, Long gameLevel, int score) ;
+	Boolean insertScore(KingScoreDTO kingScore) ;
 	/**
 	 * 
 	 * @param levelValue
 	 * @return 
 	 */
-	Map<Long, KingScoreDTO> getTopScoresForLevel(Long levelValue);
+	Set<KingScore> getTopScoresForLevel(Long levelValue);
 }

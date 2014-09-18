@@ -12,6 +12,7 @@ import org.eidos.kingchallenge.repository.EmptyScoreRepository;
 import org.eidos.kingchallenge.repository.LoginRepository;
 import org.eidos.kingchallenge.repository.ScoreRepository;
 import org.eidos.kingchallenge.repository.SimpleLoginRepository;
+import org.eidos.kingchallenge.utils.MapUtils;
 import org.eidos.kingchallenge.utils.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,8 @@ public final class SimpleScoreService implements ScoreService {
 		if (score==null)
 			throw new LogicKingChallengeException(LogicKingError.PROCESSING_ERROR);
 		LOG.debug("{}", score);
-		return this.scoreRepository.insertScore(sessionKey, score.getLevel(), score.getPoints()); 
+		
+		return this.scoreRepository.insertScore(score); 
 	}
 	/**
 	 * This setter hs not to be used outside a TEST environment.
@@ -52,7 +54,7 @@ public final class SimpleScoreService implements ScoreService {
 		
 	}
 	@Override
-	public Map<Long, KingScoreDTO> getHighScoreList(String sessionKey, Long levelValue) {
+	public String getHighScoreList(String sessionKey, Long levelValue) {
 		if (sessionKey==null  || "".equals(sessionKey) )
 			throw new KingInvalidSessionException("Invalid sessionKey");
 		KingUser kinguser= this.loginRepository.findBySessionId(sessionKey);
@@ -60,9 +62,9 @@ public final class SimpleScoreService implements ScoreService {
 			throw new KingInvalidSessionException("Invalid sessionKey: " + sessionKey);
 		if ( ! Validator.isValidUnsignedInt(levelValue) )
 			throw new LogicKingChallengeException(LogicKingError.INVALID_LEVEL);
-		Map<Long, KingScoreDTO>map =scoreRepository.getTopScoresForLevel(levelValue);
+	; 
 		
-		return map;
+		return 	MapUtils.returnCsvFromCollection(scoreRepository.getTopScoresForLevel(levelValue));
 		
 	}
 	@Override

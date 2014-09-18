@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 public class TestScorePersistance extends EasyMock {
 	static final Logger LOG = LoggerFactory.getLogger(TestScorePersistance.class);
 	// 1 MILLION PUTS
-	private static final int PUTS = 1000000;
+	private static final int PUTS = 500000;
 	// 20 DIFFERENT LEVELS
 	private static final int LEVEL=20;
 	//MAXSCORE
@@ -187,7 +187,7 @@ public class TestScorePersistance extends EasyMock {
 				LOG.debug("inserting--> {}",pollResult);
 				kingSetScore.add(	pollResult );
 			}
-		
+	
 		}
 	
 		LOG.debug("size-{}",resultSet.size() );
@@ -212,13 +212,32 @@ public class TestScorePersistance extends EasyMock {
 		Long userId;
 
 		for (int i=0; i<PUTS; i++){
+			
 			 level=new Long(random.nextInt(LEVEL )+1);
 			 userId= new Long(100+random.nextInt(DIFFERENTUSERS ));
 			 score=  random.nextInt(SCORE );
-				 //LOG.debug("level-{}, points-{}, score- {}",level,points,score);
-			listKingScore.add( new KingScoreDTO.Builder(level,  score, userId ).build()  );
+
+			sp.put(1, transformDTO(craeteKingScoreDTO(level, score, userId)));
+			}
+		SortedSet<KingScore> resultSet = sp.getScoresByLevel(1);
+		ConcurrentSkipListSet<KingScore> resultAnotherKingScores= new ConcurrentSkipListSet<KingScore>(
+				new KingScoreChainedComparator( new KingScoreReverseOrderByScore(),new KingScoreReverseUserIdComparator()  ));
+		resultAnotherKingScores.addAll(resultSet);
+		Set<KingScore> kingSetScore= new TreeSet<KingScore>(new KingScoreReverseUserIdComparator());
+		int _maxNumElemsn=5;
+		KingScore pollResult;
+		while (kingSetScore.size()<_maxNumElemsn && resultAnotherKingScores.size()>0){
+			 pollResult = resultAnotherKingScores.pollFirst();
+				LOG.debug("pollResult {}, {} ",pollResult);
+			if (!kingSetScore.contains(pollResult) ){
+				LOG.debug("inserting--> {}",pollResult);
+				kingSetScore.add(	pollResult );
+			}		
+		
 		}
-	}
+		LOG.debug("Set to return {}", kingSetScore);
+		}
+	
 	/**
 	 * 
 	 * @return

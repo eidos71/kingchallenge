@@ -22,10 +22,10 @@ public class EmptyScoreService implements ScoreService{
 	}
 
 	@Override
-	public Map<Long, KingScoreDTO> getHighScoreList(String sessionKey,
+	public String getHighScoreList(String sessionKey,
 			Long levelValue) {
-		Map<Long, KingScoreDTO>map= Collections.emptyMap();
-		return map;
+	
+		return "";
 	}
 
 }

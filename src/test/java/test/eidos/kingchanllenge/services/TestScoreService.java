@@ -35,15 +35,18 @@ public class TestScoreService extends EasyMock{
 	}
 	@Test
 	public void testScoreService() {
+		
+		KingScoreDTO score= new KingScoreDTO.Builder(1L, 15350,3150L).build();
 		//expect(loginService.loginToken(new AtomicLong(-1234L))).andThrow(new RuntimeException());
 		expect(loginRepository.findBySessionId("MOCK") ).andReturn(
 				new KingUser.Builder(3150).build() );
-		expect(scoreRepository.insertScore("MOCK", 1L, 15350) ).andReturn(true);
+		
+		expect(scoreRepository.insertScore( score) ).andReturn(true);
 		replay(loginRepository);
 		replay(scoreRepository);
 		scoreService.setLoginRepository(loginRepository);
 		scoreService.setScoreRepository(scoreRepository);
-		KingScoreDTO score= new KingScoreDTO.Builder(1L, 15350,3150L).build();
+		
 		assertThat("", scoreService.insertScore("MOCK", score), equalTo(true));
 	}
 	@Test(expected=KingInvalidSessionException.class)

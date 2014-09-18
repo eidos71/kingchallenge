@@ -2,7 +2,10 @@ package org.eidos.kingchallenge.repository;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
+
 import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
+import org.eidos.kingchallenge.domain.model.KingScore;
 /**
  * EmptyScore class repository
  * @author eidos71
@@ -10,18 +13,19 @@ import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
  */
 public class EmptyScoreRepository implements ScoreRepository {
 
-
 	@Override
-	public Boolean insertScore(String sessionKey, Long gameLevel, int score) {
+	public Boolean insertScore(KingScoreDTO kingScore) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
-	public Map<Long, KingScoreDTO> getTopScoresForLevel(Long levelValue) {
+	public Set<KingScore> getTopScoresForLevel(Long levelValue) {
 		// TODO Auto-generated method stub
-		 Map<Long, KingScoreDTO>map= Collections.emptyMap();
-		 return map;
+		return null;
 	}
+
+
+
 
 }
