@@ -67,7 +67,7 @@ public class TestScoreService extends EasyMock{
 		assertThat("", scoreService.insertScore(null, score), equalTo(true));
 	}
 	@Test
-	public void testGetHighScore(Long level){
-		scoreService.getHighScoreList(level);
+	public void testGetHighScore(){
+		scoreService.getHighScoreList(1L);
 	}
 }
