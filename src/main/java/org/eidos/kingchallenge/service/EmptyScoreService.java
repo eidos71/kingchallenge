@@ -1,5 +1,6 @@
 package org.eidos.kingchallenge.service;
 
+import java.util.Collections;
 import java.util.Map;
 
 import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
@@ -16,8 +17,15 @@ public class EmptyScoreService implements ScoreService{
 
 	@Override
 	public Map<Long, KingScoreDTO> getHighScoreList(Long level) {
-		// TODO Auto-generated method stub
-		return null;
+		Map<Long, KingScoreDTO>map= Collections.emptyMap();
+		return map;
+	}
+
+	@Override
+	public Map<Long, KingScoreDTO> getHighScoreList(String sessionKey,
+			Long levelValue) {
+		Map<Long, KingScoreDTO>map= Collections.emptyMap();
+		return map;
 	}
 
 }

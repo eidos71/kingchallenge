@@ -99,6 +99,7 @@ public class TestChekExpiration extends EasyMockSupport {
 
 		scheduledExecutorService.scheduleAtFixedRate(
 				new SessionWorkerManager(), 0, 5, TimeUnit.SECONDS);
+		//Wait two seconds before executing elements
 		Thread.sleep(2000);
 		for (Mutator mutator : mutatorList) {
 			// listFuture.add( executor.submit(mutator));
@@ -133,6 +134,7 @@ public class TestChekExpiration extends EasyMockSupport {
 		@Override
 		public void run() {
 			try {
+				//Randomly execut threads
 				Thread.sleep(500 + (mutatorRandom.nextInt(BAG_SIZE)*5));
 				long randomInt = mutatorRandom.nextInt(BAG_SIZE);
 				KingUser result = loginService

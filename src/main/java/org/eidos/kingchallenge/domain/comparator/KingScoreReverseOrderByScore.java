@@ -4,11 +4,10 @@ import java.util.Comparator;
 
 import org.eidos.kingchallenge.domain.model.KingScore;
 
-public class KingScoreUserIdComparator  implements Comparator<KingScore> { 
-	 
+public class KingScoreReverseOrderByScore  implements Comparator<KingScore>{
     @Override
     public int compare(KingScore 	o1 , KingScore o2) {
-   
-        return  o1.getKingUserId().compareTo( o2.getKingUserId() );
+    	
+        return  o2.getPoints().compareTo( o1.getPoints() );
     }
 }

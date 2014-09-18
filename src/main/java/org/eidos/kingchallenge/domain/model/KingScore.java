@@ -5,6 +5,8 @@ import java.io.Serializable;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.utils.Validator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class KingScore implements Serializable {
 
@@ -12,7 +14,8 @@ public class KingScore implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 5652221039613378809L;
-
+	static final Logger LOG = LoggerFactory
+			.getLogger(KingScore.class);
 
 	private final Long kingUserId;
 	private final int points;
@@ -20,8 +23,8 @@ public class KingScore implements Serializable {
 		throw new UnsupportedOperationException();
 	}
 	private  KingScore(Builder builder) {
-		this.points=builder.points;
-			this.kingUserId=builder.userId;;
+			this.points=builder.points;
+			this.kingUserId=builder.userId;
 		
 	}
 	// GETTERS
@@ -42,7 +45,6 @@ public class KingScore implements Serializable {
 	 */
 	public static class Builder {
 		private int points;
-
 		private Long userId;
 		/**
 		 * 

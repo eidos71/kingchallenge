@@ -12,6 +12,7 @@ import org.eidos.kingchallenge.repository.EmptyScoreRepository;
 import org.eidos.kingchallenge.repository.LoginRepository;
 import org.eidos.kingchallenge.repository.ScoreRepository;
 import org.eidos.kingchallenge.repository.SimpleLoginRepository;
+import org.eidos.kingchallenge.utils.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,9 +52,21 @@ public final class SimpleScoreService implements ScoreService {
 		
 	}
 	@Override
-	public Map<Long, KingScoreDTO> getHighScoreList(Long level) {
-		// TODO Auto-generated method stub
+	public Map<Long, KingScoreDTO> getHighScoreList(String sessionKey, Long levelValue) {
+		if (sessionKey==null  || "".equals(sessionKey) )
+			throw new KingInvalidSessionException("Invalid sessionKey");
+		KingUser kinguser= this.loginRepository.findBySessionId(sessionKey);
+		if (kinguser==null )
+			throw new KingInvalidSessionException("Invalid sessionKey: " + sessionKey);
+		if ( ! Validator.isValidUnsignedInt(levelValue) )
+			throw new LogicKingChallengeException(LogicKingError.INVALID_LEVEL);
+		Map<Long, KingScoreDTO>map =scoreRepository.getTopScoresForLevel(levelValue);
 		
+		return map;
+		
+	}
+	@Override
+	public Map<Long, KingScoreDTO> getHighScoreList(Long level) {
 		Map<Long, KingScoreDTO>map= Collections.emptyMap();
 		return map;
 	}

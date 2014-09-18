@@ -13,7 +13,7 @@ import org.eidos.kingchallenge.utils.Validator;
  *
  */
 @Immutable
-public final class KingScoreDTO  implements Serializable {
+public final class KingScoreDTO  implements Serializable{
 
 	/**
 	 * 
@@ -60,13 +60,15 @@ public final class KingScoreDTO  implements Serializable {
 		private int points;
 		private Long level;
 		private Long userId;
+
 		/**
 		 * 
-		 * @param points 
-		 * @param level
-		 * @param UserID
+		 * @param pLevel
+		 * @param pPoints
+		 * @param pUserId
 		 */
 		public Builder ( Long pLevel,int pPoints, Long pUserId ) {
+		
 			if (!Validator.isValidPositiveInt(pPoints) )
 				throw new LogicKingChallengeException(LogicKingError.INVALID_SCORE);
 			if (!Validator.isValidUnsignedInt(pLevel))

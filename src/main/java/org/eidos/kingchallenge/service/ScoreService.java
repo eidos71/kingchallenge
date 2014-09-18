@@ -18,5 +18,7 @@ public interface ScoreService {
 	public Map<Long ,KingScoreDTO > getHighScoreList(Long level) ;
 
 	public Boolean insertScore(String sessionKey, KingScoreDTO score);
+
+	Map<Long, KingScoreDTO> getHighScoreList(String sessionKey, Long levelValue);
 ;
 }

@@ -54,6 +54,7 @@ public class TestScoreService extends EasyMock{
 		KingScoreDTO score= new KingScoreDTO.Builder(1L, 15350,3150L).build();
 		assertThat("", scoreService.insertScore("MOCK", score), equalTo(true));
 	}
+	
 	@Test(expected=KingInvalidSessionException.class)
 	public void testInvalidSessionKey() {
 		expect(loginRepository.findBySessionId("MOCK") ).andReturn(null
@@ -61,5 +62,9 @@ public class TestScoreService extends EasyMock{
 		replay(loginRepository);
 		KingScoreDTO score= new KingScoreDTO.Builder(1L, 15350,3150L).build();
 		assertThat("", scoreService.insertScore(null, score), equalTo(true));
+	}
+	@Test
+	public void testGetHighScore(Long level){
+		scoreService.getHighScoreList(level);
 	}
 }

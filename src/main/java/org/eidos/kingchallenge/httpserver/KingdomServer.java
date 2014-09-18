@@ -18,7 +18,6 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
 import org.eidos.kingchallenge.controller.KingControllerManager;
-
 import org.eidos.kingchallenge.httpserver.handlers.GenericPageHandler;
 import org.eidos.kingchallenge.persistance.KingdomConfManager;
 import org.slf4j.Logger;
@@ -117,6 +116,7 @@ public class KingdomServer {
 	/**
 	 * Initalizates all the createContexts
 	 */
+	@SuppressWarnings("unchecked")
 	protected void createContext() {
 		for (org.eidos.kingchallenge.domain.KingdomHandlerConf confHandler : KingdomConfManager
 				.getInstance().getHandlerConfList()) {
