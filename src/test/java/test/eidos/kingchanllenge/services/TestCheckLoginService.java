@@ -64,8 +64,8 @@ public class TestCheckLoginService extends EasyMock {
 	@Test
 	public void testRenewLastLogin(){
 		 KingUser sessionUser = loginService.renewLastLogin(OKUSER);
-	assertThat("", sessionUser.getSessionKey(), equalTo(OKUSER));
-	LOG.debug("{}", sessionUser);
+		 assertThat("", sessionUser.getSessionKey(), equalTo(OKUSER));
+		 LOG.debug("{}", sessionUser);
 //		//We find if the value exists.
 		 assertThat("", loginService.sessionCheckBySessionKey(sessionUser.getSessionKey() ).getDateLogin() ,
 				 Matchers.greaterThan (fiveMinutesDate));

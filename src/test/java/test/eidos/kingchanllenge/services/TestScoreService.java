@@ -79,7 +79,7 @@ public class TestScoreService extends EasyMock{
 	@Test
 	public void testGetHighScoreAllOk(){
 
-		
+		String expectedResult="5=34, 4=34, 3=34, 2=34, 1=34";
 		
 		Set<KingScore> setScore= new TreeSet<KingScore>(
 				new KingScoreChainedComparator( new KingScoreReverseOrderByScore(),new KingScoreReverseUserIdComparator()  )	);
@@ -104,7 +104,7 @@ public class TestScoreService extends EasyMock{
 		
 		replay(loginRepository);
 		replay(scoreRepository);		
-		assertThat("", scoreService.getHighScoreList(sessionKey, 1L), equalTo(""));
+		assertThat("", scoreService.getHighScoreList(sessionKey, 1L), equalTo(expectedResult));
 		
 	}
 	@Test(expected=KingInvalidSessionException.class)

@@ -4,7 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.TreeSet;
 
 import org.easymock.EasyMock;
