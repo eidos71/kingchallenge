@@ -2,7 +2,9 @@ package test.eidos.kingchanllenge.utils;
 
 import junit.framework.Assert;
 
+import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
+import org.easymock.EasyMockSupport;
 import org.eidos.kingchallenge.utils.Validator;
 import org.eidos.kingchallenge.utils.UtilsEnum.Mode;
 import org.junit.Test;
@@ -10,7 +12,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 @RunWith(EasyMockRunner.class)
-public class TestSessionValidators {
+public class TestSessionValidators extends EasyMock{
 	static final Logger LOG = LoggerFactory
 			.getLogger(TestSessionValidators.class);
 	@Test

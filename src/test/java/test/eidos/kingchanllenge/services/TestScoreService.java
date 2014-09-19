@@ -10,6 +10,11 @@ import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
+import org.eidos.kingchallenge.domain.comparator.KingScoreChainedComparator;
+import org.eidos.kingchallenge.domain.comparator.KingScoreOrderByScore;
+import org.eidos.kingchallenge.domain.comparator.KingScoreReverseOrderByScore;
+import org.eidos.kingchallenge.domain.comparator.KingScoreReverseUserIdComparator;
+import org.eidos.kingchallenge.domain.comparator.KingScoreUserIdComparator;
 import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
 import org.eidos.kingchallenge.domain.model.KingScore;
 import org.eidos.kingchallenge.domain.model.KingUser;
@@ -73,11 +78,33 @@ public class TestScoreService extends EasyMock{
 	}
 	@Test
 	public void testGetHighScoreAllOk(){
+
+		
+		
+		Set<KingScore> setScore= new TreeSet<KingScore>(
+				new KingScoreChainedComparator( new KingScoreReverseOrderByScore(),new KingScoreReverseUserIdComparator()  )	);
+		//User 1
+		setScore.add(  transformDTO(craeteKingScoreDTO(1L, 34, 1L)) 	 );
+		//User 2
+		setScore.add(  transformDTO(craeteKingScoreDTO(1L, 34, 2L)) );	
+		//User 3
+		setScore.add(  transformDTO(craeteKingScoreDTO(1L, 34, 3L))  );	
+		//User 4
+		setScore.add(  transformDTO(craeteKingScoreDTO(1L, 34, 4L))  );	
+		//User5
+		setScore.add(  transformDTO(craeteKingScoreDTO(1L, 34, 5L))  );	
 		String sessionKey= "MOCK";
-		scoreService.getHighScoreList(sessionKey, 1L);
+	
 		//expect(loginService.loginToken(new AtomicLong(-1234L))).andThrow(new RuntimeException());
-		expect(loginRepository.findBySessionId("MOCK") ).andReturn(
+	
+
+		expect(loginRepository.findBySessionId(sessionKey) ).andReturn(
 				new KingUser.Builder(3150).build() );
+		expect(scoreRepository.getTopScoresForLevel(1L) ).andReturn(setScore);	
+		
+		replay(loginRepository);
+		replay(scoreRepository);		
+		assertThat("", scoreService.getHighScoreList(sessionKey, 1L), equalTo(""));
 		
 	}
 	@Test(expected=KingInvalidSessionException.class)
@@ -116,5 +143,16 @@ public class TestScoreService extends EasyMock{
 	public void testgetHighScorewithSessionCaducated() {
 		assertThat("", scoreService.getHighScoreList(null, 31L), equalTo(""));
 		
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	private  KingScoreDTO  craeteKingScoreDTO(Long lvl, Integer score, Long userId){
+		return new KingScoreDTO.Builder(lvl, score, userId).build();
+		
+	}
+	private KingScore transformDTO(KingScoreDTO dto){
+		return new KingScore.Builder(  dto.getPoints(), dto.getKingUserId() ).build() ;
 	}
 }

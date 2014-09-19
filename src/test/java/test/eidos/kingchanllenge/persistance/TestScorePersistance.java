@@ -242,7 +242,7 @@ public class TestScorePersistance extends EasyMock {
 	 * 
 	 * @return
 	 */
-	private KingScoreDTO  craeteKingScoreDTO(Long lvl, Integer score, Long userId){
+	private  KingScoreDTO  craeteKingScoreDTO(Long lvl, Integer score, Long userId){
 		return new KingScoreDTO.Builder(lvl, score, userId).build();
 		
 	}

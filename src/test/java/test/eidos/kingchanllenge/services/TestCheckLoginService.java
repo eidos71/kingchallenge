@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 import java.util.Date;
 
+import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.EasyMockSupport;
 import org.eidos.kingchallenge.domain.model.KingUser;
@@ -28,7 +29,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 @RunWith(EasyMockRunner.class)
-public class TestCheckLoginService extends EasyMockSupport {
+public class TestCheckLoginService extends EasyMock {
 	private static final String EXPIREDUSER = "EXPIREDUSER";
 	private static final String OKUSER = "OKUSER";
 	private static final Logger LOG = LoggerFactory
