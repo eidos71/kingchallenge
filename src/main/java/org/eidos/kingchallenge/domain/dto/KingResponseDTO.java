@@ -2,6 +2,8 @@ package org.eidos.kingchallenge.domain.dto;
 
 import java.io.Serializable;
 
+import org.eidos.kingchallenge.httpserver.utils.MediaContentTypeEnum;
+
 public class KingResponseDTO implements Serializable {
 
 	/**
@@ -9,7 +11,7 @@ public class KingResponseDTO implements Serializable {
 	 */
 	private static final long serialVersionUID = -5261474761826994048L;
 	
-	private final String contentType;
+	private final MediaContentTypeEnum contentType;
 
 	private final String contentBody;
 	
@@ -23,7 +25,7 @@ public class KingResponseDTO implements Serializable {
 	
 	
 	
-	public String getContentType() {
+	public MediaContentTypeEnum getContentType() {
 		return contentType;
 	}
 	public String getContentBody() {
@@ -41,13 +43,13 @@ public class KingResponseDTO implements Serializable {
 
 
 	public static class Builder{
-		private String contentType;
+		private MediaContentTypeEnum contentType;
 		private String contentBody;
 		public Builder() {
 			
 		}
-		public Builder putContentType (String pContentType){
-			if (pContentType==null) this.contentType="text/plain";
+		public Builder putContentType (MediaContentTypeEnum pContentType){
+			if (pContentType==null) this.contentType=MediaContentTypeEnum.TEXT_PLAIN;
 			this.contentType=pContentType;
 			return this;
 			
@@ -59,7 +61,7 @@ public class KingResponseDTO implements Serializable {
 			
 		}
 		public KingResponseDTO build(){
-			if (this.contentType==null) this.contentType="text/plain";
+			if (this.contentType==null) this.contentType=MediaContentTypeEnum.TEXT_PLAIN;
 			if (this.contentBody==null) this.contentBody="";
 			return new KingResponseDTO(this);
 		}
