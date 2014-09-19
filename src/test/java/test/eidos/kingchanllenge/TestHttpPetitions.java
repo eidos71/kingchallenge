@@ -16,11 +16,13 @@ import java.util.concurrent.Future;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class TestHttpPetitions {
+	private static final int _NUMPETITIONS = 100000;
 	static final Logger LOG = LoggerFactory.getLogger(TestHttpPetitions.class);
 	private final ExecutorService executor = Executors.newCachedThreadPool();
 	protected static final String _HERALD = "http://localhost:8000/herald";
@@ -30,12 +32,13 @@ public class TestHttpPetitions {
 	 public void setup() {
 			Accessor a;
 			
-			for (int i=0; i<100000; i++) {
+			for (int i=0; i<_NUMPETITIONS; i++) {
 				a= new Accessor();
 				listAccesor.add(a);
 			}
 	 }
-	@Test
+	 @Ignore("This test is not meant to be run on a suite of test, only run it to test the server component") 
+	 @Test
 	public void test() throws IOException {
 		
 		for (Accessor a: listAccesor) {

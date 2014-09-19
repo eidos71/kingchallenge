@@ -14,6 +14,7 @@ import org.eidos.kingchallenge.persistance.LoginPersistanceMap;
 import org.eidos.kingchallenge.persistance.SimpleLoginPersistanceMap;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -41,7 +42,7 @@ public class TestUserPersistance extends EasyMockSupport {
 	public void after() throws InterruptedException {
 		Thread.sleep(30000);
 	}
-
+	 @Ignore("This test is not meant to be run on a suite of test, only run it to test a specific component on a very stresfful conditions") 
 	@Test
 	public void testAsyncExecStable() {
 		// Threads reading from the persistance bag

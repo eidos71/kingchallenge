@@ -171,7 +171,7 @@ public class TestChekExpiration extends EasyMockSupport {
 		public void run() {
 			try {
 				Boolean result = loginService.sessionCheck();
-				LOG.warn("loginService {}", result);
+				LOG.warn("loginService a false result means no session was removed --> {}", result);
 			} catch (Exception e) {
 				LOG.warn("{}", e);
 			}
