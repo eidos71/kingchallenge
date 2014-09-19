@@ -11,6 +11,7 @@ import org.eidos.kingchallenge.KingConfigConstants;
 import org.eidos.kingchallenge.controller.KingControllerManager;
 import org.eidos.kingchallenge.controller.LoginController;
 import org.eidos.kingchallenge.controller.ScoreController;
+import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
 import org.eidos.kingchallenge.exceptions.KingRunTimeIOException;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
@@ -83,24 +84,33 @@ public final class SimplePageHandler implements HttpHandler {
 					: response.length());
 			os = tlEx.get().getResponseBody();
 			os.write(response.toString().getBytes());
+		}catch (KingInvalidSessionException ex) {
+			LOG.info("{}",ex);
+			tlEx.get().sendResponseHeaders(HttpURLConnection.HTTP_FORBIDDEN, (response == null) ? 0
+					: response.length());
+			response=ex.getMessage();
+			os = tlEx.get().getResponseBody();
+			os.write(response.toString().getBytes());
 		}catch (KingRunTimeIOException ex) {
+			LOG.info("{}",ex);
 			tlEx.get().sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, (response == null) ? 0
 					: response.length());
 			response=ex.getMessage();
 			os = tlEx.get().getResponseBody();
 			os.write(response.toString().getBytes());
 		}catch (LogicKingChallengeException ex) {
-
+			LOG.info("{}",ex);
 			tlEx.get().sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, (response == null) ? 0
 					: response.length());
 			response=ex.getMessage();
 			os = tlEx.get().getResponseBody();
 			os.write(response.toString().getBytes());
 		}catch(Exception ex) {
-			LOG.error(" big boom {}", ex);
+			LOG.info("{}",ex);
 			tlEx.get().sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, (response == null) ? 0
 					: response.length());
-
+			os = tlEx.get().getResponseBody();
+			os.write(response.toString().getBytes());
 		} finally {
 			os.close();
 			tlExInfo.remove();
@@ -120,17 +130,26 @@ public final class SimplePageHandler implements HttpHandler {
 		case HIGHSCORELIST:
 			LOG.debug("HIGHSCORELIST");
 			if (scoreController==null) 	throw new  LogicKingChallengeException(LogicKingError.PROCESSING_ERROR);
-			requestParamMap.get("levelid");
-			
+			String sessionKey=(String)requestParamMap.get("sessionkey");
+			Long level=Long.parseLong((String) requestParamMap.get("levelid"));
+			scoreController.getHighScoreByLevel(sessionKey, Long.parseLong((String) requestParamMap.get("levelid")));
 			break;
 		case LOGIN:
 			LOG.debug("LOGIN");
 			if (loginController==null) 	throw new  LogicKingChallengeException(LogicKingError.PROCESSING_ERROR);
+			
 			response = loginController.loginService(Long.parseLong((String)requestParamMap.get("userid") ) );
 			break;
 		case SCORE:
 			LOG.debug("SCORE");
 			if (scoreController==null) 	throw new  LogicKingChallengeException(LogicKingError.PROCESSING_ERROR);
+			int size= requestParamMap.size();
+			int pos=0;
+			for (Entry<String, Object> elem :requestParamMap.entrySet() ) {
+				LOG.debug("******{} " , elem.getKey(),pos++);
+				
+			}
+			scoreController.putHighScore((String)requestParamMap.get("sessionkey"), Long.parseLong((String) requestParamMap.get("levelid")), 15);
 			break;
 		case UNKNOWN:
 			LOG.debug("UNKNOWN");

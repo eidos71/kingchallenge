@@ -31,7 +31,9 @@ public final class SimpleLoginService implements LoginService {
 	
 	@Override
 	public String loginToken(AtomicLong token) {
-		throw new UnsupportedOperationException();
+		if (token== null) throw new LogicKingChallengeException(
+				LogicKingError.INVALID_SESSION);
+		return loginRepository.addKingUser(new KingUser.Builder(token.get()).build() );
 	}
 	@Override
 	public KingUser sessionCheckByLoginId(AtomicLong loginId) {

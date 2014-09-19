@@ -13,7 +13,7 @@ public class TestScoreRespository  extends EasyMock {
 			.getLogger(TestScoreRespository.class);
 
 	@Test
-	public void testElemt() {
+	public void  testScoreRepo() {
 		
 	}
 }

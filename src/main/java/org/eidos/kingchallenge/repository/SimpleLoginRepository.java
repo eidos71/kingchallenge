@@ -53,9 +53,10 @@ public final class SimpleLoginRepository implements LoginRepository {
 		synchronized (loginPersistance) {
 			boolean exists = getAllKingdomByLogin().containsKey(
 					user.getKingUserId().get());
-			if (exists)
-				throw new LogicKingChallengeException(
-						LogicKingError.USER_EXISTS);
+			if (exists) {
+				this.loginPersistance.removeByLogin(user.getKingUserId().get());
+			}
+				//throw new LogicKingChallengeException(LogicKingError.USER_EXISTS);
 			this.loginPersistance.put(user.getKingUserId().get(),
 					user.getSessionKey(), user);
 		}

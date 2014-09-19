@@ -69,9 +69,13 @@ public final class SimpleScoreService implements ScoreService {
 		
 	}
 	@Override
-	public Map<Long, KingScoreDTO> getHighScoreList(Long level) {
-		Map<Long, KingScoreDTO>map= Collections.emptyMap();
-		return map;
+	public String getHighScoreList(Long levelValue) {
+		if (levelValue==null)
+			throw new LogicKingChallengeException(LogicKingError.INVALID_LEVEL);
+
+		if ( ! Validator.isValidUnsignedInt(levelValue) )
+			throw new LogicKingChallengeException(LogicKingError.INVALID_LEVEL);
+		return 	CollectionsChallengeUtils.returnCsvFromCollection(scoreRepository.getTopScoresForLevel(levelValue));
 	}
 
 

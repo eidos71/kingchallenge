@@ -34,11 +34,9 @@ public final class SimpleScoreController implements ScoreController {
 	}
 	@Override
 	public String getHighScoreByLevel(String sessionKey, Long level ) {
-		final String defensiveSessionKey=sessionKey;
 		final Long  defensiveLevel=level;
 		String response="";
-		KingUser user=loginService.renewLastLogin(defensiveSessionKey);
-		 	return  scoreService.getHighScoreList(user.getSessionKey(), defensiveLevel);
+			 	return  scoreService.getHighScoreList( defensiveLevel);
 	//	return  CollectionsChallengeUtils.returnCsvFromCollection( );
 	}
 	private SimpleScoreController(Builder builder) {

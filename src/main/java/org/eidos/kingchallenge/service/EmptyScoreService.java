@@ -16,9 +16,9 @@ public class EmptyScoreService implements ScoreService{
 	}
 
 	@Override
-	public Map<Long, KingScoreDTO> getHighScoreList(Long level) {
+	public String getHighScoreList(Long level) {
 		Map<Long, KingScoreDTO>map= Collections.emptyMap();
-		return map;
+		return "";
 	}
 
 	@Override

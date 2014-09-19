@@ -24,6 +24,15 @@ import org.slf4j.LoggerFactory;
 
 @ThreadSafe
 final public class SimpleScorePersistance implements ScorePersistance {
+	private static final NavigableSet<KingScore> EMPTY_SET;
+	static {
+		EMPTY_SET=  new ConcurrentSkipListSet<KingScore>(
+				new KingScoreChainedComparator(
+						new KingScoreOrderByScore() ,		
+						new KingScoreUserIdComparator()
+
+						));
+	};
 	static final Logger LOG = LoggerFactory
 			.getLogger(SimpleScorePersistance.class);
 	@GuardedBy("navmapScore")
@@ -59,7 +68,12 @@ final public class SimpleScorePersistance implements ScorePersistance {
 
 	@Override
 	public  SortedSet<KingScore> getScoresByLevel(Integer level) {
-		return Collections.synchronizedSortedSet(navmapScore.get(level));
+		if (level==null || navmapScore==null) {
+			return null;
+		}
+		NavigableSet<KingScore> levelNavMap = navmapScore.get(level);
+		if (levelNavMap==null) return EMPTY_SET;
+		return Collections.synchronizedSortedSet(levelNavMap);
 		
 	}
 
