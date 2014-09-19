@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
 import org.eidos.kingchallenge.domain.model.KingScore;
 
-public class MapUtils {
+public class CollectionsChallengeUtils {
 
 	/**
 	 * Use- converts map into a CSV

@@ -8,11 +8,11 @@ import org.eidos.kingchallenge.domain.model.KingUser;
 import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
-import org.eidos.kingchallenge.repository.EmptyScoreRepository;
 import org.eidos.kingchallenge.repository.LoginRepository;
 import org.eidos.kingchallenge.repository.ScoreRepository;
 import org.eidos.kingchallenge.repository.SimpleLoginRepository;
-import org.eidos.kingchallenge.utils.MapUtils;
+import org.eidos.kingchallenge.repository.SimpleScoreRepository;
+import org.eidos.kingchallenge.utils.CollectionsChallengeUtils;
 import org.eidos.kingchallenge.utils.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 public final class SimpleScoreService implements ScoreService {
 
 	static final Logger LOG = LoggerFactory.getLogger(SimpleScoreService.class);
-	private ScoreRepository scoreRepository= new EmptyScoreRepository();
+	private ScoreRepository scoreRepository= new SimpleScoreRepository();
 	private LoginRepository loginRepository = new SimpleLoginRepository();
 
 
@@ -60,11 +60,14 @@ public final class SimpleScoreService implements ScoreService {
 		KingUser kinguser= this.loginRepository.findBySessionId(sessionKey);
 		if (kinguser==null )
 			throw new KingInvalidSessionException("Invalid sessionKey: " + sessionKey);
+		if (levelValue==null)
+			throw new LogicKingChallengeException(LogicKingError.INVALID_LEVEL);
+
 		if ( ! Validator.isValidUnsignedInt(levelValue) )
 			throw new LogicKingChallengeException(LogicKingError.INVALID_LEVEL);
 	; 
 		
-		return 	MapUtils.returnCsvFromCollection(scoreRepository.getTopScoresForLevel(levelValue));
+		return 	CollectionsChallengeUtils.returnCsvFromCollection(scoreRepository.getTopScoresForLevel(levelValue));
 		
 	}
 	@Override

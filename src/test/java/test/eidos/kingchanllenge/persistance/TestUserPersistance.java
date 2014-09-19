@@ -19,15 +19,13 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-
 @RunWith(EasyMockRunner.class)
-public class TestUserPersistance  extends EasyMockSupport  {
+public class TestUserPersistance extends EasyMockSupport {
 	static final Logger LOG = LoggerFactory
 			.getLogger(TestUserPersistance.class);
 	private final ExecutorService executor = Executors.newCachedThreadPool();
 	private static final LoginPersistanceMap<Long, String, KingUser> bag = new SimpleLoginPersistanceMap();
-	private final static int BAG_SIZE = 40000; //10
+	private final static int BAG_SIZE = 40000; // 10
 
 	@Before
 	public void setup() {
@@ -38,18 +36,20 @@ public class TestUserPersistance  extends EasyMockSupport  {
 			bag.put(user.getKingUserId().get(), user.getSessionKey(), user);
 		}
 	}
+
 	@After
 	public void after() throws InterruptedException {
 		Thread.sleep(30000);
 	}
+
 	@Test
 	public void testAsyncExecStable() {
-		//Threads reading from the persistance bag
+		// Threads reading from the persistance bag
 		Accessor a1 = new Accessor(bag);
 		Accessor a2 = new Accessor(bag);
 		Accessor a3 = new Accessor(bag);
-		//Threads modifying the persistance bag
-		Mutator m1= new Mutator(bag);
+		// Threads modifying the persistance bag
+		Mutator m1 = new Mutator(bag);
 		Mutator m2 = new Mutator(bag);
 
 		executor.execute(a1);
@@ -68,15 +68,14 @@ public class TestUserPersistance  extends EasyMockSupport  {
 	private final class Accessor implements Runnable {
 		private final LoginPersistanceMap<Long, String, KingUser> theBag;
 
-		public Accessor(
-				LoginPersistanceMap<Long, String, KingUser> abag) {
+		public Accessor(LoginPersistanceMap<Long, String, KingUser> abag) {
 			this.theBag = abag;
 		}
 
 		@Override
 		public void run() {
-			for (Entry<Long, KingUser> entry : this.theBag
-					.getMapByLogin().entrySet()) {
+			for (Entry<Long, KingUser> entry : this.theBag.getMapByLogin()
+					.entrySet()) {
 				LOG.debug("Key- {}, Value {}", entry.getKey(), entry.getValue());
 			}
 		}
@@ -99,16 +98,20 @@ public class TestUserPersistance  extends EasyMockSupport  {
 					long randomInt = random.nextInt(BAG_SIZE);
 					LOG.debug("element GOING to be deleted-> {}", randomInt);
 					this.theBag.removeByLogin(randomInt);
-					user = new KingUser.Builder(randomInt ).build();
-					bag.put(user.getKingUserId().get(), user.getSessionKey(), user);
-					LOG.debug("element modified-> {}", randomInt);		
-				}catch (LogicKingChallengeException exception) {
-					//if the LogicKingChallengeException is of type INVALID_TOKEN
-					if (LogicKingError.INVALID_TOKEN.equals(exception.getLogicError()) ){
+					user = new KingUser.Builder(randomInt).build();
+					bag.put(user.getKingUserId().get(), user.getSessionKey(),
+							user);
+					LOG.debug("element modified-> {}", randomInt);
+				} catch (LogicKingChallengeException exception) {
+					// if the LogicKingChallengeException is of type
+					// INVALID_TOKEN
+					if (LogicKingError.INVALID_TOKEN.equals(exception
+							.getLogicError())) {
 						LOG.info("0 is not a valid sessionID, yet for this test this error is catched");
-						//Just an invalid token was sent, we can properly ignore it.
-					}else {
-						//Its an error so we just throw it.
+						// Just an invalid token was sent, we can properly
+						// ignore it.
+					} else {
+						// Its an error so we just throw it.
 						throw exception;
 					}
 				}

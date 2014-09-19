@@ -18,7 +18,7 @@ import org.eidos.kingchallenge.controller.SimpleLoginController;
 import org.eidos.kingchallenge.controller.SimpleScoreController;
 import org.eidos.kingchallenge.domain.KingdomHandlerConf;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
-import org.eidos.kingchallenge.utils.FilReaderUtils;
+import org.eidos.kingchallenge.utils.FileReaderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,7 +67,7 @@ public class KingdomConfManager {
 		 InputStream inputStream = 
 	    		   getClass().getClassLoader().getResourceAsStream(HANDLER_PROPERTIES);
 		
-		Map<String, String> handlerMap = FilReaderUtils.returnEnumList(inputStream);
+		Map<String, String> handlerMap = FileReaderUtils.returnEnumList(inputStream);
 		 Iterator<Entry<String, String>> it = handlerMap.entrySet().iterator();
 		 synchronized(lock) {
 				while (it.hasNext()) {

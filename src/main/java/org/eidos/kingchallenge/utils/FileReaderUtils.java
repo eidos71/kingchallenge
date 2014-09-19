@@ -13,7 +13,7 @@ import javax.annotation.concurrent.GuardedBy;
 
 import org.eidos.kingchallenge.exceptions.KingRunTimeIOException;
 
-public class FilReaderUtils {
+public class FileReaderUtils {
 	private static Object lock = new Object();
 
 	/**

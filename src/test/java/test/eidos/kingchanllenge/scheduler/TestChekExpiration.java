@@ -1,4 +1,4 @@
-package test.eidos.kingchanllenge.services;
+package test.eidos.kingchanllenge.scheduler;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.MINUTES;

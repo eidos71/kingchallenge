@@ -3,13 +3,18 @@ package test.eidos.kingchanllenge.services;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
+import org.eidos.kingchallenge.domain.model.KingScore;
 import org.eidos.kingchallenge.domain.model.KingUser;
 import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
+import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.repository.LoginRepository;
 import org.eidos.kingchallenge.repository.ScoreRepository;
 import org.eidos.kingchallenge.service.SimpleScoreService;
@@ -67,7 +72,49 @@ public class TestScoreService extends EasyMock{
 		assertThat("", scoreService.insertScore(null, score), equalTo(true));
 	}
 	@Test
-	public void testGetHighScore(){
-		scoreService.getHighScoreList(1L);
+	public void testGetHighScoreAllOk(){
+		String sessionKey= "MOCK";
+		scoreService.getHighScoreList(sessionKey, 1L);
+		//expect(loginService.loginToken(new AtomicLong(-1234L))).andThrow(new RuntimeException());
+		expect(loginRepository.findBySessionId("MOCK") ).andReturn(
+				new KingUser.Builder(3150).build() );
+		
+	}
+	@Test(expected=KingInvalidSessionException.class)
+	public void testGetHighScoreSessionInvalid() {
+		expect(loginRepository.findBySessionId("MOCK") )
+			.andThrow(new KingInvalidSessionException());
+		replay(loginRepository);		
+		scoreService.getHighScoreList("MOCK",1L);
+	}
+	@Test
+	public void testGetHighEmptyHighScoreForLevel() {
+		Set<KingScore> setScore= new TreeSet<KingScore>();
+		String sessionKey= "MOCK";
+		//expect(loginService.loginToken(new AtomicLong(-1234L))).andThrow(new RuntimeException());
+		expect(loginRepository.findBySessionId("MOCK") ).andReturn(
+				new KingUser.Builder(3150).build() );
+		expect(scoreRepository.getTopScoresForLevel(1L) ).andReturn(setScore);	
+		replay(loginRepository);
+		replay(scoreRepository);
+		assertThat("", scoreService.getHighScoreList(sessionKey, 1L), equalTo(""));
+	}
+	@Test(expected=LogicKingChallengeException.class)
+	public void testGetHighScoreWithNoLevelSet() {
+		Set<KingScore> setScore= new TreeSet<KingScore>();
+		String sessionKey= "MOCK";
+		//expect(loginService.loginToken(new AtomicLong(-1234L))).andThrow(new RuntimeException());
+		expect(loginRepository.findBySessionId("MOCK") ).andReturn(
+				new KingUser.Builder(3150).build() );
+		expect(scoreRepository.getTopScoresForLevel(1L) ).andReturn(setScore);	
+		replay(loginRepository);
+		replay(scoreRepository);
+		assertThat("", scoreService.getHighScoreList(sessionKey, null), equalTo(""));
+		
+	}
+	@Test(expected=KingInvalidSessionException.class)
+	public void testgetHighScorewithSessionCaducated() {
+		assertThat("", scoreService.getHighScoreList(null, 31L), equalTo(""));
+		
 	}
 }

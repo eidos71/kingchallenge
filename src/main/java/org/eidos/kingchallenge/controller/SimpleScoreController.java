@@ -11,7 +11,7 @@ import org.eidos.kingchallenge.service.LoginService;
 import org.eidos.kingchallenge.service.ScoreService;
 import org.eidos.kingchallenge.service.SimpleLoginService;
 import org.eidos.kingchallenge.service.SimpleScoreService;
-import org.eidos.kingchallenge.utils.MapUtils;
+import org.eidos.kingchallenge.utils.CollectionsChallengeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +33,7 @@ public final class SimpleScoreController implements ScoreController {
 	public String getHighScoreByLevel(String sessionKey, Long level ) {
 		String response="";
 		loginService.renewLastLogin(sessionKey);
-		return  MapUtils.returnCsvFromMap( scoreService.getHighScoreList(level) );
+		return  CollectionsChallengeUtils.returnCsvFromMap( scoreService.getHighScoreList(level) );
 	}
 	private SimpleScoreController(Builder builder) {
 	    this.scoreService = builder.scoreService;
