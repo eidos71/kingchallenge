@@ -77,12 +77,16 @@ public class KingScore implements Serializable {
 
 
 
-
 	@Override
+	public String toString(){
+		return  kingUserId + "=" + points;
+				
+	}
+/*	@Override
 	public String toString() {
 		return "KingScore [kingUserId=" + kingUserId + ", points=" + points
 				+ "]";
-	}
+	}*/
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -32,8 +32,9 @@ public final class SimpleScoreController implements ScoreController {
 	@Override
 	public String getHighScoreByLevel(String sessionKey, Long level ) {
 		String response="";
-		loginService.renewLastLogin(sessionKey);
-		return  CollectionsChallengeUtils.returnCsvFromMap( scoreService.getHighScoreList(level) );
+		 	//loginService.renewLastLogin(sessionKey);
+		 	return  scoreService.getHighScoreList(sessionKey, level);
+	//	return  CollectionsChallengeUtils.returnCsvFromCollection( );
 	}
 	private SimpleScoreController(Builder builder) {
 	    this.scoreService = builder.scoreService;

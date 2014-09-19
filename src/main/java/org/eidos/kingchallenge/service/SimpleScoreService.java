@@ -65,8 +65,6 @@ public final class SimpleScoreService implements ScoreService {
 
 		if ( ! Validator.isValidUnsignedInt(levelValue) )
 			throw new LogicKingChallengeException(LogicKingError.INVALID_LEVEL);
-	; 
-		
 		return 	CollectionsChallengeUtils.returnCsvFromCollection(scoreRepository.getTopScoresForLevel(levelValue));
 		
 	}
