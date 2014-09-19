@@ -8,9 +8,9 @@ import org.eidos.kingchallenge.domain.model.KingScore;
 public class EmptyScorePersistance implements ScorePersistance {
 
 	@Override
-	public void put(Integer login, KingScore kingscore) {
-	
-		
+	public boolean put(Integer login, KingScore kingscore) {
+		return false;
+
 	}
 
 	@Override

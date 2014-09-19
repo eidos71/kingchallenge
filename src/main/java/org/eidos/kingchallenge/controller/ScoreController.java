@@ -17,9 +17,10 @@ public interface ScoreController {
 	/**
 	 * Returns the high score list on a map
 	 * separated by , and with a top of 15 elements.
-	 * @param sessionKey
+
 	 * @param level
 	 * @return
 	 */
-	String getHighScoreByLevel(String sessionKey, Long level);
+
+	String getHighScoreByLevel(Long level);
 }

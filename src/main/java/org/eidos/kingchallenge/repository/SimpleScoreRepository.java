@@ -12,6 +12,8 @@ import org.eidos.kingchallenge.domain.comparator.KingScoreReverseOrderByScore;
 import org.eidos.kingchallenge.domain.comparator.KingScoreReverseUserIdComparator;
 import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
 import org.eidos.kingchallenge.domain.model.KingScore;
+import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
+import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.persistance.ScorePersistance;
 import org.eidos.kingchallenge.persistance.SimpleScorePersistance;
 import org.eidos.kingchallenge.service.SimpleLoginService;
@@ -26,9 +28,10 @@ public class SimpleScoreRepository implements ScoreRepository{
 		this.scorePersistance=new SimpleScorePersistance();
 	}
 	@Override
-	public Boolean insertScore(KingScoreDTO kingScore) {
-		
-		return null;
+	public Boolean insertScore(KingScoreDTO kngDto) {
+		if (kngDto==null)
+			throw new LogicKingChallengeException(LogicKingError.INVALID_TOKEN);
+		return scorePersistance.put(kngDto.getLevel().intValue(), new KingScore.Builder(kngDto.getPoints(), kngDto.getKingUserId()).build());
 	}
 
 	@Override

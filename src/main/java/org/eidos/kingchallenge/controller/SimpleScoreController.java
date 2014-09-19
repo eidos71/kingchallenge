@@ -4,14 +4,10 @@ import javax.annotation.concurrent.Immutable;
 
 import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
 import org.eidos.kingchallenge.domain.model.KingUser;
-import org.eidos.kingchallenge.repository.SimpleLoginRepository;
-import org.eidos.kingchallenge.service.EmptyLoginService;
-import org.eidos.kingchallenge.service.EmptyScoreService;
 import org.eidos.kingchallenge.service.LoginService;
 import org.eidos.kingchallenge.service.ScoreService;
 import org.eidos.kingchallenge.service.SimpleLoginService;
 import org.eidos.kingchallenge.service.SimpleScoreService;
-import org.eidos.kingchallenge.utils.CollectionsChallengeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,11 +29,10 @@ public final class SimpleScoreController implements ScoreController {
 		return response;
 	}
 	@Override
-	public String getHighScoreByLevel(String sessionKey, Long level ) {
+	public String getHighScoreByLevel(Long level ) {
 		final Long  defensiveLevel=level;
-		String response="";
-			 	return  scoreService.getHighScoreList( defensiveLevel);
-	//	return  CollectionsChallengeUtils.returnCsvFromCollection( );
+		return  scoreService.getHighScoreList( defensiveLevel);
+			
 	}
 	private SimpleScoreController(Builder builder) {
 	    this.scoreService = builder.scoreService;

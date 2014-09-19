@@ -7,7 +7,7 @@ import org.eidos.kingchallenge.domain.model.KingScore;
 
 public interface ScorePersistance {
 
-	void put(Integer login, KingScore kingscore);
+	boolean put(Integer login, KingScore kingscore);
 
 	 SortedSet<KingScore> getScoresByLevel(Integer level);
 	/***

@@ -1,8 +1,5 @@
 package org.eidos.kingchallenge.service;
 
-import java.util.Collections;
-import java.util.Map;
-
 import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
 import org.eidos.kingchallenge.domain.model.KingUser;
 import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
@@ -72,7 +69,6 @@ public final class SimpleScoreService implements ScoreService {
 	public String getHighScoreList(Long levelValue) {
 		if (levelValue==null)
 			throw new LogicKingChallengeException(LogicKingError.INVALID_LEVEL);
-
 		if ( ! Validator.isValidUnsignedInt(levelValue) )
 			throw new LogicKingChallengeException(LogicKingError.INVALID_LEVEL);
 		return 	CollectionsChallengeUtils.returnCsvFromCollection(scoreRepository.getTopScoresForLevel(levelValue));

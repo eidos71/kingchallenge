@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
  * @author eidos71
  *
  */
+@SuppressWarnings("restriction")
 public class KingdomServer {
 
 	static final Logger LOG = LoggerFactory.getLogger(KingdomServer.class);
@@ -39,6 +40,7 @@ public class KingdomServer {
 	final int serverPort = Integer.getInteger("serverPort", 8000);
 	final int shutdownPort = Integer.getInteger("shutdownPort", 8009);
 	static Socket clientSocket;
+	
 	HttpServer server;
 	private ExecutorService serverExecutor;
 	/**
@@ -55,6 +57,7 @@ public class KingdomServer {
 		requestShutdown();
 
 	}
+
 
 	protected void initServer() throws IOException {
 		LOG.info("Sarting server on {} :  Shutdown port on:{} ", serverPort,

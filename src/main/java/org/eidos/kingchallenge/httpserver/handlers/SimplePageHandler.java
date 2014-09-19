@@ -25,90 +25,106 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 /**
- * Simple page handler
- * It implements the default page for the KingChallenge
+ * Simple page handler It implements the default page for the KingChallenge
+ * 
  * @author eidos71
  *
  */
+@SuppressWarnings("restriction")
 public final class SimplePageHandler implements HttpHandler {
-	//Theard Local Exchange and Info storage
-	 private static ThreadLocal <HttpExchange> tlEx = new ThreadLocal<HttpExchange>();
-	 private static ThreadLocal <HttpExchangeInfo> tlExInfo= new ThreadLocal<HttpExchangeInfo>(); 
-
+	// Theard Local Exchange and Info storage
+	private static ThreadLocal<HttpExchange> tlEx = new ThreadLocal<HttpExchange>();
+	private static ThreadLocal<HttpExchangeInfo> tlExInfo = new ThreadLocal<HttpExchangeInfo>();
 
 	static final Logger LOG = LoggerFactory.getLogger(SimplePageHandler.class);
 	private final LoginController loginController;
 	private final ScoreController scoreController;
+
 	public SimplePageHandler() {
-		this.loginController=KingControllerManager.getInstance().getLoginController();
-		this.scoreController=KingControllerManager.getInstance().getScoreController();
-		
+		this.loginController = KingControllerManager.getInstance()
+				.getLoginController();
+		this.scoreController = KingControllerManager.getInstance()
+				.getScoreController();
+
 	}
 
+	@SuppressWarnings({  "resource" })
 	@Override
 	public void handle(HttpExchange httpExchange) throws IOException {
-	
+
 		tlEx.set(httpExchange);
-		tlExInfo.set( new HttpExchangeInfo() );
-		
+		tlExInfo.set(new HttpExchangeInfo());
+
 		String response = null;
 		OutputStream os = null;
 		int httpStatusCode = HttpURLConnection.HTTP_INTERNAL_ERROR;
 		try {
-		
-		if (tlExInfo.get()==null) LOG.info("null tlExinfo");
-		if (tlEx.get()==null) LOG.info("null tlEx");
-	
-		LOG.debug("{}", tlExInfo.get().getPath(tlEx.get()));
-		tlExInfo.get().parseGetParameters(tlEx.get());
-		tlExInfo.get().parsePostParameters(tlEx.get());
-		// Specific to this handler class.
-		parseUrlEncodedParameters(tlEx.get());
-		//
-		@SuppressWarnings("unchecked")
-		Map<String, Object> params = (Map<String, Object>) tlEx.get()
-				.getAttribute(KingConfigConstants.KING_REQUEST_PARAM);
-		if (LOG.isDebugEnabled()) {
-			for (Entry<String, Object> value : params.entrySet()) 
-				LOG.debug("String-{}  Value-{}", value.getKey(),
-						value.getValue());
-		}		
-		Headers responseHeaders = tlEx.get().getResponseHeaders();
-		responseHeaders.set("Content-Type", MediaContentTypeEnum.TEXT_PLAIN.code());
 
+			if (tlExInfo.get() == null)
+				LOG.info("null tlExinfo");
+			if (tlEx.get() == null)
+				LOG.info("null tlEx");
+
+			LOG.debug("{}", tlExInfo.get().getPath(tlEx.get()));
+			tlExInfo.get().parseGetParameters(tlEx.get());
+			tlExInfo.get().parsePostParameters(tlEx.get());
+			// Specific to this handler class.
+			parseUrlEncodedParameters(tlEx.get());
+			//
+			@SuppressWarnings("unchecked")
+			Map<String, Object> params = (Map<String, Object>) tlEx.get()
+					.getAttribute(KingConfigConstants.KING_REQUEST_PARAM);
+			if (LOG.isDebugEnabled()) {
+				for (Entry<String, Object> value : params.entrySet())
+					LOG.debug("String-{}  Value-{}", value.getKey(),
+							value.getValue());
+			}
+			Headers responseHeaders = tlEx.get().getResponseHeaders();
+			responseHeaders.set("Content-Type",
+					MediaContentTypeEnum.TEXT_PLAIN.code());
 
 			// we send to the bussiness Logic and return the response
-			response=prepareResponse(params);
-			//Prepare response
-			tlEx.get().sendResponseHeaders(HttpURLConnection.HTTP_OK, (response == null) ? 0
-					: response.length());
+			response = prepareResponse(params);
+			LOG.debug("response {}", response);
+			// Prepare response
+			tlEx.get().sendResponseHeaders(HttpURLConnection.HTTP_OK,
+					(response == null) ? 0 : response.length());
 			os = tlEx.get().getResponseBody();
 			os.write(response.toString().getBytes());
-		}catch (KingInvalidSessionException ex) {
-			LOG.info("{}",ex);
-			tlEx.get().sendResponseHeaders(HttpURLConnection.HTTP_FORBIDDEN, (response == null) ? 0
-					: response.length());
-			response=ex.getMessage();
+		} catch (KingInvalidSessionException ex) {
+			LOG.info("{}", ex);
+			tlEx.get().sendResponseHeaders(HttpURLConnection.HTTP_FORBIDDEN,
+					(response == null) ? 0 : response.length());
+			response = ex.getMessage();
 			os = tlEx.get().getResponseBody();
 			os.write(response.toString().getBytes());
-		}catch (KingRunTimeIOException ex) {
-			LOG.info("{}",ex);
-			tlEx.get().sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, (response == null) ? 0
-					: response.length());
-			response=ex.getMessage();
+		} catch (KingRunTimeIOException ex) {
+			LOG.info("{}", ex);
+			tlEx.get().sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST,
+					(response == null) ? 0 : response.length());
+			response = ex.getMessage();
 			os = tlEx.get().getResponseBody();
 			os.write(response.toString().getBytes());
-		}catch (LogicKingChallengeException ex) {
-			LOG.info("{}",ex);
-			tlEx.get().sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, (response == null) ? 0
-					: response.length());
-			response=ex.getMessage();
+		} catch (LogicKingChallengeException ex) {
+			LOG.info("{}", ex);
+			tlEx.get().sendResponseHeaders(
+					HttpURLConnection.HTTP_INTERNAL_ERROR,
+					(response == null) ? 0 : response.length());
+			response = ex.getMessage();
 			os = tlEx.get().getResponseBody();
 			os.write(response.toString().getBytes());
-		}catch(Exception ex) {
-			LOG.info("{}",ex);
-			tlEx.get().sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, (response == null) ? 0
-					: response.length());
+		} catch (Exception ex) {
+			LOG.info("{}", ex);
+			tlEx.get().sendResponseHeaders(
+					HttpURLConnection.HTTP_INTERNAL_ERROR,
+					(response == null) ? 0 : response.length());
+			os = tlEx.get().getResponseBody();
+			os.write(response.toString().getBytes());
+		}catch (Throwable ex) {
+			LOG.info("{}", ex);
+			tlEx.get().sendResponseHeaders(
+					HttpURLConnection.HTTP_INTERNAL_ERROR,
+					(response == null) ? 0 : response.length());
 			os = tlEx.get().getResponseBody();
 			os.write(response.toString().getBytes());
 		} finally {
@@ -117,60 +133,73 @@ public final class SimplePageHandler implements HttpHandler {
 			tlEx.remove();
 		}
 	}
+
 	/**
 	 * 
 	 * @param params
 	 * @param controller
-	 * @param httpExchange 
+	 * @param httpExchange
 	 * @return
 	 */
-	protected String prepareResponse(Map<String, Object> requestParamMap   ) {
-		String response ="";
-	switch (tlExInfo.get().defineController(tlEx.get())  ) {
+	protected String prepareResponse(Map<String, Object> requestParamMap) {
+		String response = "";
+		switch (tlExInfo.get().defineController(tlEx.get())) {
 		case HIGHSCORELIST:
 			LOG.debug("HIGHSCORELIST");
-			if (scoreController==null) 	throw new  LogicKingChallengeException(LogicKingError.PROCESSING_ERROR);
-			String sessionKey=(String)requestParamMap.get("sessionkey");
-			Long level=Long.parseLong((String) requestParamMap.get("levelid"));
-			scoreController.getHighScoreByLevel(sessionKey, Long.parseLong((String) requestParamMap.get("levelid")));
+			if (scoreController == null)
+				throw new LogicKingChallengeException(
+						LogicKingError.PROCESSING_ERROR);
+
+			response = scoreController.getHighScoreByLevel(Long
+					.parseLong((String) requestParamMap.get("levelid")));
 			break;
 		case LOGIN:
 			LOG.debug("LOGIN");
-			if (loginController==null) 	throw new  LogicKingChallengeException(LogicKingError.PROCESSING_ERROR);
-			
-			response = loginController.loginService(Long.parseLong((String)requestParamMap.get("userid") ) );
+			if (loginController == null)
+				throw new LogicKingChallengeException(
+						LogicKingError.PROCESSING_ERROR);
+
+			response = loginController.loginService(Long
+					.parseLong((String) requestParamMap.get("userid")));
 			break;
 		case SCORE:
 			LOG.debug("SCORE");
-			if (scoreController==null) 	throw new  LogicKingChallengeException(LogicKingError.PROCESSING_ERROR);
-			int size= requestParamMap.size();
-			int pos=0;
-			for (Entry<String, Object> elem :requestParamMap.entrySet() ) {
-				LOG.debug("******{} " , elem.getKey(),pos++);
-				
+			if (scoreController == null)
+				throw new LogicKingChallengeException(
+						LogicKingError.PROCESSING_ERROR);
+			int size = requestParamMap.size();
+			int pos = 0;
+			for (Entry<String, Object> elem : requestParamMap.entrySet()) {
+				LOG.debug("******{} ", elem.getKey(), pos++);
+
 			}
-			scoreController.putHighScore((String)requestParamMap.get("sessionkey"), Long.parseLong((String) requestParamMap.get("levelid")), 15);
+			response = scoreController
+					.putHighScore((String) requestParamMap.get("sessionkey"),
+							Long.parseLong((String) requestParamMap
+									.get("levelid")), 15);
 			break;
 		case UNKNOWN:
 			LOG.debug("UNKNOWN");
-			throw new  KingRunTimeIOException("HTTP_BAD_REQUEST");
-	
+			throw new KingRunTimeIOException("HTTP_BAD_REQUEST");
+
 		default:
 			LOG.debug("UNKNOWN");
-			throw new  KingRunTimeIOException("HTTP_BAD_REQUEST");
-			
+			throw new KingRunTimeIOException("HTTP_BAD_REQUEST");
+
 		}
 		return response;
-		
+
 	}
 
 	/**
-	 * Specific parsing of the incoming request, based on the Handler
-	 * Due the way the URL pettions are set, is needed to reorder the different
+	 * Specific parsing of the incoming request, based on the Handler Due the
+	 * way the URL pettions are set, is needed to reorder the different
 	 * parameters and define what are they needed for.
+	 * 
 	 * @param exchange
 	 * @throws UnsupportedEncodingException
 	 */
+
 	private void parseUrlEncodedParameters(HttpExchange exchange)
 			throws UnsupportedEncodingException {
 
@@ -182,12 +211,13 @@ public final class SimplePageHandler implements HttpHandler {
 		String[] tokens = uri.split("[/?=]");
 
 		if (tokens.length > 2) {
-		
-			if (KingControllerEnum.SCORE.controller().equals(tokens[2])   
-					|| KingControllerEnum.HIGHSCORELIST.controller().equals(tokens[2])  ) {
+
+			if (KingControllerEnum.SCORE.controller().equals(tokens[2])
+					|| KingControllerEnum.HIGHSCORELIST.controller().equals(
+							tokens[2])) {
 				requestParamsMap.put("levelid", tokens[1]);
 				requestParamsMap.put("request", tokens[2]);
-			}else if (KingControllerEnum.LOGIN.controller().equals(tokens[2]) ) {
+			} else if (KingControllerEnum.LOGIN.controller().equals(tokens[2])) {
 				requestParamsMap.put("userid", tokens[1]);
 				requestParamsMap.put("request", tokens[2]);
 			} else {

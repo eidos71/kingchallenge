@@ -1,15 +1,11 @@
 package org.eidos.kingchallenge.utils;
 
 import java.util.Collection;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
 import org.eidos.kingchallenge.domain.model.KingScore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import test.eidos.kingchanllenge.services.TestScoreService;
+
 
 public class CollectionsChallengeUtils {
 	private static final String ARRAY_START = "{";
@@ -21,7 +17,7 @@ public class CollectionsChallengeUtils {
 
 	private static final String DEFAULT_EMTPYCOLLECTION = "";
 	private static final Logger LOG = LoggerFactory
-			.getLogger(TestScoreService.class);
+			.getLogger(CollectionsChallengeUtils.class);
 
 
 	public static String returnCsvFromCollection(

@@ -43,11 +43,11 @@ final public class SimpleScorePersistance implements ScorePersistance {
 	}
 
 	@Override
-	public void put(Integer level, KingScore kingScore) {
+	public boolean put(Integer level, KingScore kingScore) {
 		if (!Validator.isValidUnsignedInt(level))
-			return;
+			return false;
 		if (kingScore == null)
-			return;
+			return false;
 		// If Level is not Set
 		if (navmapScore.get(level) == null) {
 			// We create a new SkipListSet
@@ -64,6 +64,7 @@ final public class SimpleScorePersistance implements ScorePersistance {
 
 			existLevelMap.add(kingScore);
 		}
+		return true;
 	}
 
 	@Override
