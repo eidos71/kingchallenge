@@ -24,16 +24,21 @@ public final class SimpleScoreController implements ScoreController {
 	@Override
 	public String putHighScore(String sessionKey, Long level, int score) {
 		//Validates session is valid and 
+		final String  defensiveSessionKey=sessionKey;
+		final Long defensiveLevel= level;
+		final int defensiveScore=score;
 		String response="";
-		KingUser user= loginService.renewLastLogin(sessionKey);
-		scoreService.insertScore(sessionKey,  new KingScoreDTO.Builder(level,score,user.getKingUserId().get()).build());
+		KingUser user= loginService.renewLastLogin(defensiveSessionKey);
+		scoreService.insertScore(defensiveSessionKey,  new KingScoreDTO.Builder(defensiveLevel,defensiveScore,user.getKingUserId().get()).build());
 		return response;
 	}
 	@Override
 	public String getHighScoreByLevel(String sessionKey, Long level ) {
+		final String defensiveSessionKey=sessionKey;
+		final Long  defensiveLevel=level;
 		String response="";
-		 	//loginService.renewLastLogin(sessionKey);
-		 	return  scoreService.getHighScoreList(sessionKey, level);
+		KingUser user=loginService.renewLastLogin(defensiveSessionKey);
+		 	return  scoreService.getHighScoreList(user.getSessionKey(), defensiveLevel);
 	//	return  CollectionsChallengeUtils.returnCsvFromCollection( );
 	}
 	private SimpleScoreController(Builder builder) {

@@ -21,6 +21,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @RunWith(EasyMockRunner.class)
+/**
+ * This Testclass  is mean to replicate the component of sessionmanagement timeout
+ * that will  periodically remove all users invalitaed., with the component that tests if a userr has
+ * a sessiontimeout.
+ * 
+ * @author ernestpetit
+ *
+ */
 public class TestUserPersistance extends EasyMockSupport {
 	static final Logger LOG = LoggerFactory
 			.getLogger(TestUserPersistance.class);

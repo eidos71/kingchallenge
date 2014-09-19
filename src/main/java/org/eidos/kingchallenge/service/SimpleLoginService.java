@@ -43,8 +43,10 @@ public final class SimpleLoginService implements LoginService {
 	}
 	@Override
 	public KingUser sessionCheckBySessionKey(String sessionKey) {
+		
 		if (sessionKey == null || "".equals(sessionKey) )
 			throw new KingInvalidSessionException();
+		
 		KingUser kingUser=loginRepository.findBySessionId(sessionKey);	
 		if (kingUser==null) throw	new KingInvalidSessionException("Not found sessionKey");
 		//We check if it is still a valid Session
@@ -102,7 +104,7 @@ public final class SimpleLoginService implements LoginService {
 		LOG.debug("loginToken  {} ", sessionKey);
 		if (sessionKey==null || "".equals(sessionKey) )
 			throw new KingInvalidSessionException();
-	
+		//
 		KingUser toUpdateUser= sessionCheckBySessionKey(sessionKey);
 		LOG.debug("user to Update: {}",toUpdateUser);
 		toUpdateUser= new KingUser.Builder(toUpdateUser.getKingUserId().get()).setSessionKey(toUpdateUser.getSessionKey()).build();

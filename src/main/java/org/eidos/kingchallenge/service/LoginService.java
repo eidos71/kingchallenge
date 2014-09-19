@@ -31,7 +31,11 @@ public interface LoginService {
 
 	public Boolean sessionCheck();
 
-
+	/**
+	 * Checks if a session is valid and store in the persistance
+	 * @param sessionKey session to be validated on the persistance
+	 * @return the @KingUser found
+	 */
 	KingUser sessionCheckBySessionKey(String sessionKey);
 
 	KingUser sessionCheckByLoginId(AtomicLong loginId);
