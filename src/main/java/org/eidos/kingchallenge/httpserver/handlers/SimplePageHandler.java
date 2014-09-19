@@ -15,6 +15,7 @@ import org.eidos.kingchallenge.exceptions.KingRunTimeIOException;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.httpserver.enums.KingControllerEnum;
+import org.eidos.kingchallenge.httpserver.utils.MediaContentTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +73,7 @@ public final class SimplePageHandler implements HttpHandler {
 						value.getValue());
 		}		
 		Headers responseHeaders = tlEx.get().getResponseHeaders();
-		responseHeaders.set("Content-Type", "text/plain");
+		responseHeaders.set("Content-Type", MediaContentTypeEnum.TEXT_PLAIN.code());
 
 
 			// we send to the bussiness Logic and return the response
@@ -118,6 +119,9 @@ public final class SimplePageHandler implements HttpHandler {
 	switch (tlExInfo.get().defineController(tlEx.get())  ) {
 		case HIGHSCORELIST:
 			LOG.debug("HIGHSCORELIST");
+			if (scoreController==null) 	throw new  LogicKingChallengeException(LogicKingError.PROCESSING_ERROR);
+			requestParamMap.get("levelid");
+			
 			break;
 		case LOGIN:
 			LOG.debug("LOGIN");
@@ -126,6 +130,7 @@ public final class SimplePageHandler implements HttpHandler {
 			break;
 		case SCORE:
 			LOG.debug("SCORE");
+			if (scoreController==null) 	throw new  LogicKingChallengeException(LogicKingError.PROCESSING_ERROR);
 			break;
 		case UNKNOWN:
 			LOG.debug("UNKNOWN");
