@@ -4,6 +4,9 @@ import org.eidos.kingchallenge.controller.LoginController;
 import org.eidos.kingchallenge.controller.ScoreController;
 import org.eidos.kingchallenge.controller.SimpleLoginController;
 import org.eidos.kingchallenge.controller.SimpleScoreController;
+import org.eidos.kingchallenge.persistance.KingPersistance;
+import org.eidos.kingchallenge.persistance.LoginPersistanceMap;
+import org.eidos.kingchallenge.persistance.ScorePersistance;
 import org.eidos.kingchallenge.repository.KingdomRepo;
 import org.eidos.kingchallenge.repository.LoginRepository;
 import org.eidos.kingchallenge.repository.ScoreRepository;
@@ -13,6 +16,7 @@ import org.eidos.kingchallenge.service.ScoreService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("rawtypes")
 public class KingConfigStaticProperties {
 	// Used to store
 	static final Logger LOG = LoggerFactory
@@ -30,6 +34,9 @@ public class KingConfigStaticProperties {
 	public static final ScoreService SCORESERVICE;
 	public static final LoginController LOGINCONTROLLER;
 	public static final ScoreController SCORECONTROLLER; 
+
+	public static final LoginPersistanceMap LOGINPERSISTANCE;
+	public static final ScorePersistance SCOREPERSISTANCE;
 
 	static {
 		LOG.debug("static:init*");
@@ -49,8 +56,11 @@ public class KingConfigStaticProperties {
 		PERSISTANCE_SCORE_MAX_ELEMS_PER_LVL = (getProperty("PERSISTANCE_SCORE_MAX_ELEMS_PER_LVL") != null) ? Integer
 				.parseInt(getProperty("PERSISTANCE_SCORE_MAX_ELEMS_PER_LVL"))
 				: 100000;
-				SCOREREPO = (ScoreRepository) getRepo("SCOREREPO");
-				LOGINREPO = (LoginRepository) getRepo("LOGINREPO");				
+	
+		LOGINPERSISTANCE=(LoginPersistanceMap)getPersistance("LOGINPERSISTANCE");
+		SCOREPERSISTANCE=(ScorePersistance) getPersistance("SCOREPERSISTANCE");
+		SCOREREPO = (ScoreRepository) getRepo("SCOREREPO");
+		LOGINREPO = (LoginRepository) getRepo("LOGINREPO");				
 		LOGINSERVICE = (LoginService) getService("LOGINSERVICE");
 		SCORESERVICE = (ScoreService) getService("SCORESERVICE");
 		LOGINCONTROLLER= new SimpleLoginController.Builder().build();
@@ -59,15 +69,19 @@ public class KingConfigStaticProperties {
 	}
 
 	private static KingService getService(String key) {
-		KingService result = KingInit.getInstance().getService(key);
-		LOG.debug("{}", result.getClass());
-		return result;
+		return   KingInit.getInstance().getService(key);
+	
+	
+	}
+
+	private static KingPersistance getPersistance(String key) {
+		return KingInit.getInstance().getPersistStorage(key);
+		
 	}
 
 	private static KingdomRepo getRepo(String key) {
-		KingdomRepo result = KingInit.getInstance().getRepo(key);
-		LOG.debug("{}", result.getClass());
-		return result;
+	
+		return KingInit.getInstance().getRepo(key);
 	}
 
 	private static String getProperty(String key) {

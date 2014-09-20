@@ -6,6 +6,7 @@ import java.util.Properties;
 
 import javax.annotation.concurrent.GuardedBy;
 
+import org.eidos.kingchallenge.persistance.KingPersistance;
 import org.eidos.kingchallenge.persistance.KingdomConfManager;
 import org.eidos.kingchallenge.repository.KingdomRepo;
 import org.eidos.kingchallenge.service.KingService;
@@ -81,6 +82,22 @@ public class KingInit {
 			try {
 				clazz = Class.forName(classToInstance);
 				return (KingdomRepo) clazz.newInstance();
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+				LOG.debug("error, {}", e);
+				return null;
+			}
+
+	}
+	public KingPersistance getPersistStorage(String key) {
+		LOG.debug("Key, {}", key);
+		String classToInstance= prop.getProperty(key);
+		LOG.debug("classToInstance, {}", classToInstance);
+		if (classToInstance==null  || "".equals(classToInstance) ) {
+			return null ;}
+			Class<?> clazz;
+			try {
+				clazz = Class.forName(classToInstance);
+				return (KingPersistance) clazz.newInstance();
 			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
 				LOG.debug("error, {}", e);
 				return null;

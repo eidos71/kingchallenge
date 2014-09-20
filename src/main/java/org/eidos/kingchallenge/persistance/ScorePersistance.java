@@ -5,7 +5,7 @@ import java.util.SortedSet;
 
 import org.eidos.kingchallenge.domain.model.KingScore;
 
-public interface ScorePersistance {
+public interface ScorePersistance  extends KingPersistance{
 
 	boolean put(Integer login, KingScore kingscore);
 

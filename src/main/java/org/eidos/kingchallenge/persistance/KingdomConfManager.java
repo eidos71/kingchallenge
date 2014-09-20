@@ -12,6 +12,7 @@ import java.util.Set;
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
+import org.eidos.kingchallenge.KingConfigStaticProperties;
 import org.eidos.kingchallenge.controller.LoginController;
 import org.eidos.kingchallenge.controller.ScoreController;
 import org.eidos.kingchallenge.controller.SimpleLoginController;
@@ -49,8 +50,8 @@ public class KingdomConfManager {
 	 */
 	private KingdomConfManager()  {
 		persistanceBag = new PersistanceBag.Builder()
-			.setLoginImp(new SimpleLoginPersistanceMap())
-			.setScorePersistance(new EmptyScorePersistance())
+			.setLoginImp(KingConfigStaticProperties.LOGINPERSISTANCE)
+			.setScorePersistance(KingConfigStaticProperties.SCOREPERSISTANCE)
 			.build();
 		handlerConfSet= new HashSet<KingdomHandlerConf> ();
 

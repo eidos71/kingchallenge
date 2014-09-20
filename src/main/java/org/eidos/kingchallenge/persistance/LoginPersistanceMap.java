@@ -4,7 +4,7 @@ import java.util.Map;
 
 
 @SuppressWarnings("hiding")
-public interface LoginPersistanceMap <Long, String, KingUser>{
+public interface LoginPersistanceMap <Long, String, KingUser> extends KingPersistance{
 
 	Map<Long, KingUser> getMapByLogin();
 

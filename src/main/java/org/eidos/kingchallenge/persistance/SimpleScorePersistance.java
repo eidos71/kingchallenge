@@ -37,6 +37,7 @@ final public class SimpleScorePersistance implements ScorePersistance {
 	private static final NavigableSet<KingScore> EMPTY_SET;
 
 	static {
+
 		EMPTY_SET=  new ConcurrentSkipListSet<KingScore>(
 				new KingScoreChainedComparator(
 						new KingScoreOrderByScore() ,		
@@ -86,7 +87,7 @@ final public class SimpleScorePersistance implements ScorePersistance {
 	@Override
 	public  SortedSet<KingScore> getScoresByLevel(Integer level) {
 		if (level==null || navmapScore==null) {
-			return null;
+			return EMPTY_SET ;
 		}
 		NavigableSet<KingScore> levelNavMap = navmapScore.get(level);
 		if (levelNavMap==null) return EMPTY_SET;

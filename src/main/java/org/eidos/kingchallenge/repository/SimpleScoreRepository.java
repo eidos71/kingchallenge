@@ -1,5 +1,6 @@
 package org.eidos.kingchallenge.repository;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -35,6 +36,9 @@ public class SimpleScoreRepository implements ScoreRepository{
 	@Override
 	public Set<KingScore> getTopScoresForLevel(Long levelValue) {
 		SortedSet<KingScore> resultSet = scorePersistance.getScoresByLevel(levelValue.intValue());
+		if (resultSet==null || resultSet.size()==0) {
+			return Collections.emptySet();
+		}
 		ConcurrentSkipListSet<KingScore> resultAnotherKingScores= new ConcurrentSkipListSet<KingScore>(
 				new KingScoreChainedComparator( new KingScoreReverseOrderByScore(),new KingScoreReverseUserIdComparator()  ));
 		resultAnotherKingScores.addAll(resultSet);
