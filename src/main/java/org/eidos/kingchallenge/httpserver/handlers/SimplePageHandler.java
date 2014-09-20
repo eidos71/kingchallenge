@@ -17,6 +17,8 @@ import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.httpserver.enums.KingControllerEnum;
 import org.eidos.kingchallenge.httpserver.utils.MediaContentTypeEnum;
+import org.eidos.kingchallenge.utils.UtilsEnum.Mode;
+import org.eidos.kingchallenge.utils.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -167,16 +169,20 @@ public final class SimplePageHandler implements HttpHandler {
 			if (scoreController == null)
 				throw new LogicKingChallengeException(
 						LogicKingError.PROCESSING_ERROR);
-			int size = requestParamMap.size();
-			int pos = 0;
+			Integer score =null;
 			for (Entry<String, Object> elem : requestParamMap.entrySet()) {
-				LOG.debug("******{} ", elem.getKey(), pos++);
-
+					LOG.debug("****** {}", elem.getKey()  );
+					//If the key is a number, it is the Post parameter
+					if (Validator.isValidString(elem.getKey(), Mode.NUMERIC)) {
+						score= new Integer(elem.getKey());
+						break;
+					}
+		
 			}
 			response = scoreController
 					.putHighScore((String) requestParamMap.get("sessionkey"),
 							Long.parseLong((String) requestParamMap
-									.get("levelid")), 15);
+									.get("levelid")), score);
 			break;
 		case UNKNOWN:
 			LOG.debug("UNKNOWN");

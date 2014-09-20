@@ -4,24 +4,26 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
+import org.eidos.kingchallenge.KingConfigConstants;
 import org.eidos.kingchallenge.controller.KingControllerManager;
+import org.eidos.kingchallenge.controller.SessionWorkerManager;
 import org.eidos.kingchallenge.httpserver.handlers.GenericPageHandler;
 import org.eidos.kingchallenge.persistance.KingdomConfManager;
+import org.eidos.kingchallenge.service.SimpleLoginService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+
 
 /**
  * Basic KingDom Server
@@ -60,6 +62,11 @@ public class KingdomServer {
 
 
 	protected void initServer() throws IOException {
+
+		ScheduledExecutorService scheduledExecutorService = Executors
+				.newScheduledThreadPool(1);
+		scheduledExecutorService.scheduleAtFixedRate(
+				new SessionWorkerManager(new SimpleLoginService() ), 0, KingConfigConstants._WORK_SCHEDULETIME, TimeUnit.SECONDS);
 		LOG.info("Sarting server on {} :  Shutdown port on:{} ", serverPort,
 				shutdownPort);
 		server = HttpServer.create(new InetSocketAddress(serverPort),
@@ -67,6 +74,7 @@ public class KingdomServer {
 
 		createContext();
 		initControllers();
+		startSessionManager();
 		serverExecutor = new ThreadPoolExecutor(HTTP_POOL_CONNECTIONS,
 				HTTP_MAX_CONNECTIONS, DELAY_FOR_TERMINATION,
 				TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(
@@ -75,6 +83,13 @@ public class KingdomServer {
 		server.start();
 	}
 
+	private void startSessionManager() {
+		ScheduledExecutorService scheduledExecutorService = Executors
+				.newScheduledThreadPool(1);
+		scheduledExecutorService.scheduleAtFixedRate(
+				new SessionWorkerManager(new SimpleLoginService() ), 0, 5, TimeUnit.MINUTES);
+		
+	}
 	private void initControllers() {
 		KingControllerManager
 		.getInstance();
