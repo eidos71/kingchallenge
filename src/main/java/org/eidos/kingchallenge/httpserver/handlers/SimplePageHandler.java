@@ -36,7 +36,7 @@ import com.sun.net.httpserver.HttpHandler;
 public final class SimplePageHandler implements HttpHandler {
 	// Theard Local Exchange and Info storage
 	private static ThreadLocal<HttpExchange> tlEx = new ThreadLocal<HttpExchange>();
-	private static ThreadLocal<HttpExchangeInfo> tlExInfo = new ThreadLocal<HttpExchangeInfo>();
+	private static ThreadLocal<HttpKingExchangeHelper> tlExInfo = new ThreadLocal<HttpKingExchangeHelper>();
 
 	static final Logger LOG = LoggerFactory.getLogger(SimplePageHandler.class);
 	private final LoginController loginController;
@@ -55,7 +55,7 @@ public final class SimplePageHandler implements HttpHandler {
 	public void handle(HttpExchange httpExchange) throws IOException {
 
 		tlEx.set(httpExchange);
-		tlExInfo.set(new HttpExchangeInfo());
+		tlExInfo.set(new HttpKingExchangeHelper());
 
 		String response = null;
 		OutputStream os = null;

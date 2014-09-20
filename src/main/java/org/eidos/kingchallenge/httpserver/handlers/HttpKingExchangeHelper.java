@@ -1,10 +1,7 @@
 package org.eidos.kingchallenge.httpserver.handlers;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -12,28 +9,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eidos.kingchallenge.KingConfigConstants;
-import org.eidos.kingchallenge.exceptions.KingRunTimeIOException;
-import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
-import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.httpserver.enums.KingControllerEnum;
 import org.eidos.kingchallenge.utils.HttpExchangeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sun.net.httpserver.HttpExchange;
-
-public class HttpExchangeInfo {
+@SuppressWarnings("restriction")
+public class HttpKingExchangeHelper {
 	private static final String UTF_8 = "utf-8";
 
-	static final Logger LOG = LoggerFactory.getLogger(HttpExchangeInfo.class);
+	static final Logger LOG = LoggerFactory.getLogger(HttpKingExchangeHelper.class);
 
 
 
-	public HttpExchangeInfo() {
+	public HttpKingExchangeHelper() {
 	
 	}
 
-	public String getRemoteHostName(HttpExchange httpExchange) {
+	public String getRemoteHostName( HttpExchange httpExchange) {
 		return httpExchange.getRemoteAddress().getHostName();
 	}
 
