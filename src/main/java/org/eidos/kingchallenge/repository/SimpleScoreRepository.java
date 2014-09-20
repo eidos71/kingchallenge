@@ -46,18 +46,21 @@ public class SimpleScoreRepository implements ScoreRepository{
 				new KingScoreChainedComparator(
 						new KingScoreReverseOrderByScore(),
 						new KingScoreReverseUserIdComparator()));
+		Set<KingScore> kingUserUnique = new TreeSet<KingScore>(
+				new KingScoreReverseUserIdComparator());
 
 		KingScore pollResult;
 		while (kingSetScore.size()<KingConfigStaticProperties.TOPLISTSCORE && resultAnotherKingScores.size()>0){
 			 pollResult = resultAnotherKingScores.pollFirst();
 			
-			if (!kingSetScore.contains(pollResult) ){
-				LOG.trace("inserting--> {}",pollResult);
+			if (!kingSetScore.contains(pollResult) && !kingUserUnique.contains(pollResult) ){
+				LOG.trace("inserting {}",pollResult);
 				kingSetScore.add(	pollResult );
+				kingUserUnique.add(pollResult);
 			}		
 		
 		}
-		LOG.debug("Set to return {}", kingSetScore);
+		LOG.trace("Set to return {}", kingSetScore);
 		return kingSetScore;
 		}
 	}

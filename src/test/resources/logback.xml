@@ -7,7 +7,7 @@
 </encoder>
   </appender>
 
-  <logger name="org.eidos.kingchanllenge" level="WARN" />
+  <logger name="org.eidos.kingchanllenge" level="DEBUG" />
 
  <logger name="test.eidos.kingchanllenge" level="DEBUG" />
  

@@ -161,7 +161,7 @@ public class TestScorePersistance extends EasyMock {
 
 		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 32, 4L)));
 		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 33, 4L)));
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 31, 4L)));
+		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 2999, 4L)));
 		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 3000, 4L)));		
 		//User 5
 		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 30, 5L)));
@@ -177,15 +177,19 @@ public class TestScorePersistance extends EasyMock {
 				new KingScoreChainedComparator( new KingScoreReverseOrderByScore(),new KingScoreReverseUserIdComparator()  ));
 		resultAnotherKingScores.addAll(resultSet);
 		Set<KingScore> kingSetScore= new TreeSet<KingScore>(new KingScoreChainedComparator( new KingScoreReverseOrderByScore(),new KingScoreReverseUserIdComparator()  ));
-
+		Set<KingScore>kingUserUnique= new TreeSet<KingScore>(new KingScoreReverseUserIdComparator()  ); 
 		int _maxNumElemsn=5;
 		KingScore pollResult;
 		while (kingSetScore.size()<_maxNumElemsn && resultAnotherKingScores.size()>0){
 			 pollResult = resultAnotherKingScores.pollFirst();
 				LOG.debug("pollResult {}, {} ",pollResult);
 			if (!kingSetScore.contains(pollResult) ){
-				LOG.debug("inserting--> {}",pollResult);
-				kingSetScore.add(	pollResult );
+				if (!kingUserUnique.contains(pollResult)) {
+					LOG.debug("inserting--> {}",pollResult);
+					kingSetScore.add(pollResult);
+					kingUserUnique.add(	pollResult );
+				}
+			
 			}
 	
 		}
