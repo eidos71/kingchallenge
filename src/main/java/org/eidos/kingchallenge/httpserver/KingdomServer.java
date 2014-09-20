@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
-import org.eidos.kingchallenge.KingConfigConstants;
+import org.eidos.kingchallenge.KingConfigStaticProperties;
 import org.eidos.kingchallenge.controller.KingControllerManager;
 import org.eidos.kingchallenge.controller.SessionWorkerManager;
 import org.eidos.kingchallenge.httpserver.handlers.GenericPageHandler;
@@ -30,11 +30,11 @@ import org.slf4j.LoggerFactory;
 public class KingdomServer {
 
 	static final Logger LOG = LoggerFactory.getLogger(KingdomServer.class);
-	private static final int HTTP_POOL_CONNECTIONS = KingConfigConstants.HTTP_POOL_CONNECTIONS;
+	private static final int HTTP_POOL_CONNECTIONS = KingConfigStaticProperties.HTTP_POOL_CONNECTIONS;
 	private static final int HTTP_MAX_CONNECTIONS = HTTP_POOL_CONNECTIONS * 2;
 	private static final int HTTP_QUEUE_MAX_ITEMS = HTTP_POOL_CONNECTIONS * 4;
 	private static final int DELAY_FOR_TERMINATION = 0;
-	final int serverPort = Integer.getInteger("serverPort",  KingConfigConstants.BINDING_PORT);
+	final int serverPort = Integer.getInteger("serverPort",  KingConfigStaticProperties.BINDING_PORT);
 
 	//static Socket clientSocket;
 	
@@ -80,7 +80,7 @@ public class KingdomServer {
 		ScheduledExecutorService scheduledExecutorService = Executors
 				.newScheduledThreadPool(1);
 		scheduledExecutorService.scheduleAtFixedRate(
-				new SessionWorkerManager(KingConfigConstants.LOGINSERVICE ), 0, KingConfigConstants.WORKMAN_SCHEDULE_INSECONDS, TimeUnit.SECONDS);
+				new SessionWorkerManager(KingConfigStaticProperties.LOGINSERVICE ), 0, KingConfigStaticProperties.WORKMAN_SCHEDULE_INSECONDS, TimeUnit.SECONDS);
 		
 	}
 	private void initControllers() {

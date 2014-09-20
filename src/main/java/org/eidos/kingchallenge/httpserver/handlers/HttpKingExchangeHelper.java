@@ -8,7 +8,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eidos.kingchallenge.KingConfigConstants;
+import org.eidos.kingchallenge.KingConfigStaticProperties;
 import org.eidos.kingchallenge.httpserver.enums.KingControllerEnum;
 import org.eidos.kingchallenge.utils.HttpExchangeUtils;
 import org.slf4j.Logger;
@@ -53,7 +53,7 @@ public class HttpKingExchangeHelper {
 		String query = requestedUri.getRawQuery();
 		HttpExchangeUtils.parseQuery(query, parameters);
 
-		exchange.setAttribute(KingConfigConstants.KING_REQUEST_PARAM, parameters);
+		exchange.setAttribute(KingConfigStaticProperties.KING_REQUEST_PARAM, parameters);
 	}
 	/**
 	 * Parses parameters coming from a POST
@@ -66,7 +66,7 @@ public class HttpKingExchangeHelper {
 		if ("post".equalsIgnoreCase(exchange.getRequestMethod())) {
 			@SuppressWarnings("unchecked")
 			Map<String, Object> parameters = (Map<String, Object>) exchange
-					.getAttribute(KingConfigConstants.KING_REQUEST_PARAM);
+					.getAttribute(KingConfigStaticProperties.KING_REQUEST_PARAM);
 			InputStreamReader isr = new InputStreamReader(
 					exchange.getRequestBody(), UTF_8);
 			BufferedReader br = new BufferedReader(isr);

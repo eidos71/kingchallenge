@@ -1,15 +1,9 @@
 package org.eidos.kingchallenge;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
 import org.eidos.kingchallenge.controller.LoginController;
 import org.eidos.kingchallenge.controller.ScoreController;
 import org.eidos.kingchallenge.controller.SimpleLoginController;
 import org.eidos.kingchallenge.controller.SimpleScoreController;
-import org.eidos.kingchallenge.httpserver.KingdomServer;
 import org.eidos.kingchallenge.repository.KingdomRepo;
 import org.eidos.kingchallenge.repository.LoginRepository;
 import org.eidos.kingchallenge.repository.ScoreRepository;
@@ -19,10 +13,10 @@ import org.eidos.kingchallenge.service.ScoreService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KingConfigConstants {
+public class KingConfigStaticProperties {
 	// Used to store
 	static final Logger LOG = LoggerFactory
-			.getLogger(KingConfigConstants.class);
+			.getLogger(KingConfigStaticProperties.class);
 	public static final String KING_REQUEST_PARAM;
 	public static final int BINDING_PORT;
 	public static final int HTTP_POOL_CONNECTIONS;

@@ -2,7 +2,7 @@ package org.eidos.kingchallenge.controller;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.eidos.kingchallenge.KingConfigConstants;
+import org.eidos.kingchallenge.KingConfigStaticProperties;
 import org.eidos.kingchallenge.domain.dto.KingResponseDTO;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
@@ -63,7 +63,7 @@ public static class Builder{
 
 	    public SimpleLoginController build() {
 	    	if (loginService==null)
-	    		this.loginService= KingConfigConstants.LOGINSERVICE;
+	    		this.loginService= KingConfigStaticProperties.LOGINSERVICE;
 	    	return new SimpleLoginController(this);
 	    }
 }

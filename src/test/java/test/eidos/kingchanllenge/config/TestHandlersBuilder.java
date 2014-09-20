@@ -12,7 +12,6 @@ import static org.hamcrest.Matchers.equalTo;
 
 import org.easymock.EasyMockRunner;
 import org.easymock.EasyMockSupport;
-import org.eidos.kingchallenge.controller.KingControllerManager;
 import org.eidos.kingchallenge.domain.KingdomHandlerConf;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.persistance.KingdomConfManager;

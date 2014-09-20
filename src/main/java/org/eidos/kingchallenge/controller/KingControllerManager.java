@@ -3,7 +3,7 @@ package org.eidos.kingchallenge.controller;
 
 import javax.annotation.concurrent.GuardedBy;
 
-import org.eidos.kingchallenge.KingConfigConstants;
+import org.eidos.kingchallenge.KingConfigStaticProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +46,7 @@ public class KingControllerManager {
 		return scoreController;
 	}
 	private KingControllerManager() {
-		loginController=KingConfigConstants.LOGINCONTROLLER;
-		scoreController=KingConfigConstants.SCORECONTROLLER;
+		loginController=KingConfigStaticProperties.LOGINCONTROLLER;
+		scoreController=KingConfigStaticProperties.SCORECONTROLLER;
 	}
 }

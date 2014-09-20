@@ -2,7 +2,7 @@ package org.eidos.kingchallenge.controller;
 
 import javax.annotation.concurrent.Immutable;
 
-import org.eidos.kingchallenge.KingConfigConstants;
+import org.eidos.kingchallenge.KingConfigStaticProperties;
 import org.eidos.kingchallenge.domain.dto.KingResponseDTO;
 import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
 import org.eidos.kingchallenge.domain.model.KingUser;
@@ -85,11 +85,11 @@ public final class SimpleScoreController implements ScoreController {
 	    public SimpleScoreController build() {
 
 	    	if (this.scoreService==null){
-	    		this.scoreService=KingConfigConstants.SCORESERVICE;
+	    		this.scoreService=KingConfigStaticProperties.SCORESERVICE;
 	    	
 	    	}
 	    	if (this.loginService == null) {
-	    		this.loginService=KingConfigConstants.LOGINSERVICE;
+	    		this.loginService=KingConfigStaticProperties.LOGINSERVICE;
 	    	
 	    	}
 	    	return new SimpleScoreController(this); 

@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import javax.annotation.concurrent.ThreadSafe;
 
-import org.eidos.kingchallenge.KingConfigConstants;
+import org.eidos.kingchallenge.KingConfigStaticProperties;
 import org.eidos.kingchallenge.domain.model.KingUser;
 import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
@@ -25,7 +25,7 @@ public final class SimpleLoginService implements LoginService {
 	private  final LoginRepository loginRepository ;
 
 	public SimpleLoginService(){
-		loginRepository=KingConfigConstants.LOGINREPO;
+		loginRepository=KingConfigStaticProperties.LOGINREPO;
 	}
 	
 	@Override
@@ -90,7 +90,7 @@ public final class SimpleLoginService implements LoginService {
 		}
 		boolean isValid=true;	
 		long SESSION_EXPIRATION = MILLISECONDS.convert(
-				KingConfigConstants.SESSION_EXPIRATION_MINUTES, MINUTES);
+				KingConfigStaticProperties.SESSION_EXPIRATION_MINUTES, MINUTES);
 		if (Validator.validateSessionExpired(lastLoginDate, SESSION_EXPIRATION)) {
 			LOG.debug("expiration is expired for {} with lastLoginDate {}", sessionId, lastLoginDate);
 			// we have to remove this user

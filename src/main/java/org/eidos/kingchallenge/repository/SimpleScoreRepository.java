@@ -5,7 +5,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentSkipListSet;
 
-import org.eidos.kingchallenge.KingConfigConstants;
+import org.eidos.kingchallenge.KingConfigStaticProperties;
 import org.eidos.kingchallenge.domain.comparator.KingScoreChainedComparator;
 import org.eidos.kingchallenge.domain.comparator.KingScoreReverseOrderByScore;
 import org.eidos.kingchallenge.domain.comparator.KingScoreReverseUserIdComparator;
@@ -41,7 +41,7 @@ public class SimpleScoreRepository implements ScoreRepository{
 		Set<KingScore> kingSetScore= new TreeSet<KingScore>(new KingScoreReverseUserIdComparator());
 		
 		KingScore pollResult;
-		while (kingSetScore.size()<KingConfigConstants.TOPLISTSCORE && resultAnotherKingScores.size()>0){
+		while (kingSetScore.size()<KingConfigStaticProperties.TOPLISTSCORE && resultAnotherKingScores.size()>0){
 			 pollResult = resultAnotherKingScores.pollFirst();
 			
 			if (!kingSetScore.contains(pollResult) ){

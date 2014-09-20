@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
-import org.eidos.kingchallenge.KingConfigConstants;
+import org.eidos.kingchallenge.KingConfigStaticProperties;
 import org.eidos.kingchallenge.domain.KingSizeLimitedScore;
 import org.eidos.kingchallenge.domain.comparator.KingScoreOrderByScore;
 import org.eidos.kingchallenge.domain.comparator.KingScoreChainedComparator;
@@ -65,7 +65,7 @@ final public class SimpleScorePersistance implements ScorePersistance {
 			// We create a new SkipListSet
 			synchronized(navmapScore) {
 			NavigableSet<KingScore> setKingScore = new KingSizeLimitedScore<KingScore>(level,
-					KingConfigConstants.PERSISTANCE_SCORE_MAX_ELEMS_PER_LVL, 
+					KingConfigStaticProperties.PERSISTANCE_SCORE_MAX_ELEMS_PER_LVL, 
 					new KingScoreChainedComparator(
 							new KingScoreOrderByScore(),
 							new KingScoreUserIdComparator()

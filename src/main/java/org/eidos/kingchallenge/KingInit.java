@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 public class KingInit {
 	private static final String CONFIGURATION_PROPERTIES = "configuration.properties";
-	static final Logger LOG = LoggerFactory.getLogger(KingConfigConstants.class);
+	static final Logger LOG = LoggerFactory.getLogger(KingConfigStaticProperties.class);
 	private  final Properties prop;
 	@GuardedBy("lock")
 	private static volatile KingInit instance = null;

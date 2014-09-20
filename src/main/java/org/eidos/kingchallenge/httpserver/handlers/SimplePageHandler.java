@@ -7,7 +7,7 @@ import java.net.HttpURLConnection;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.eidos.kingchallenge.KingConfigConstants;
+import org.eidos.kingchallenge.KingConfigStaticProperties;
 import org.eidos.kingchallenge.controller.KingControllerManager;
 import org.eidos.kingchallenge.controller.LoginController;
 import org.eidos.kingchallenge.controller.ScoreController;
@@ -74,7 +74,7 @@ public final class SimplePageHandler implements HttpHandler {
 			//
 			@SuppressWarnings("unchecked")
 			Map<String, Object> params = (Map<String, Object>) tlEx.get()
-					.getAttribute(KingConfigConstants.KING_REQUEST_PARAM);
+					.getAttribute(KingConfigStaticProperties.KING_REQUEST_PARAM);
 			if (LOG.isDebugEnabled()) {
 				for (Entry<String, Object> value : params.entrySet())
 					LOG.debug("String-{}  Value-{}", value.getKey(),
@@ -194,7 +194,7 @@ public final class SimplePageHandler implements HttpHandler {
 
 		@SuppressWarnings("unchecked")
 		Map<String, Object> requestParamsMap = (Map<String, Object>) exchange
-				.getAttribute(KingConfigConstants.KING_REQUEST_PARAM);
+				.getAttribute(KingConfigStaticProperties.KING_REQUEST_PARAM);
 
 		String uri = exchange.getRequestURI().toString();
 		String[] tokens = uri.split("[/?=]");

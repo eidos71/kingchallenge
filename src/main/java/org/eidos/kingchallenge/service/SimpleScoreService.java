@@ -1,6 +1,6 @@
 package org.eidos.kingchallenge.service;
 
-import org.eidos.kingchallenge.KingConfigConstants;
+import org.eidos.kingchallenge.KingConfigStaticProperties;
 import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
 import org.eidos.kingchallenge.domain.model.KingUser;
 import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
 public final class SimpleScoreService implements ScoreService {
 
 	static final Logger LOG = LoggerFactory.getLogger(SimpleScoreService.class);
-	private ScoreRepository scoreRepository= KingConfigConstants.SCOREREPO;
-	private LoginRepository loginRepository = KingConfigConstants.LOGINREPO;
+	private ScoreRepository scoreRepository= KingConfigStaticProperties.SCOREREPO;
+	private LoginRepository loginRepository = KingConfigStaticProperties.LOGINREPO;
 
 
 	@Override
