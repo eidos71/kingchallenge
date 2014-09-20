@@ -35,12 +35,12 @@ import org.slf4j.LoggerFactory;
 public class KingdomServer {
 
 	static final Logger LOG = LoggerFactory.getLogger(KingdomServer.class);
-	private static final int HTTP_POOL_CONNECTIONS = 50;
+	private static final int HTTP_POOL_CONNECTIONS = 15;
 	private static final int HTTP_MAX_CONNECTIONS = HTTP_POOL_CONNECTIONS * 2;
 	private static final int HTTP_QUEUE_MAX_ITEMS = HTTP_POOL_CONNECTIONS * 4;
 	private static final int DELAY_FOR_TERMINATION = 0;
 	final int serverPort = Integer.getInteger("serverPort", 8000);
-	final int shutdownPort = Integer.getInteger("shutdownPort", 8009);
+
 	static Socket clientSocket;
 	
 	HttpServer server;
@@ -55,20 +55,12 @@ public class KingdomServer {
 	}
 	protected void start() throws Exception {
 		initServer();
-		new ServerSocket(shutdownPort).accept();
-		requestShutdown();
-
-	}
+		}
 
 
 	protected void initServer() throws IOException {
 
-		ScheduledExecutorService scheduledExecutorService = Executors
-				.newScheduledThreadPool(1);
-		scheduledExecutorService.scheduleAtFixedRate(
-				new SessionWorkerManager(new SimpleLoginService() ), 0, KingConfigConstants._WORK_SCHEDULETIME, TimeUnit.SECONDS);
-		LOG.info("Sarting server on {} :  Shutdown port on:{} ", serverPort,
-				shutdownPort);
+		LOG.info("Sarting server on {} :  Shutdown port on:{} ", serverPort);
 		server = HttpServer.create(new InetSocketAddress(serverPort),
 				HTTP_POOL_CONNECTIONS);
 
@@ -82,12 +74,17 @@ public class KingdomServer {
 		server.setExecutor(serverExecutor);
 		server.start();
 	}
-
+	/**
+	 * Starts the SessionManager
+	 * Its Scheduled to find for timeout sessiones and remove them periodcally
+	 * 
+	 */
 	private void startSessionManager() {
+
 		ScheduledExecutorService scheduledExecutorService = Executors
 				.newScheduledThreadPool(1);
 		scheduledExecutorService.scheduleAtFixedRate(
-				new SessionWorkerManager(new SimpleLoginService() ), 0, 5, TimeUnit.MINUTES);
+				new SessionWorkerManager(new SimpleLoginService() ), 0, KingConfigConstants.WORK_SCHEDULETIME, TimeUnit.SECONDS);
 		
 	}
 	private void initControllers() {

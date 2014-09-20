@@ -9,10 +9,13 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
+import org.eidos.kingchallenge.KingConfigConstants;
+import org.eidos.kingchallenge.domain.KingSizeLimitedScore;
 import org.eidos.kingchallenge.domain.comparator.KingScoreOrderByScore;
 import org.eidos.kingchallenge.domain.comparator.KingScoreChainedComparator;
 import org.eidos.kingchallenge.domain.comparator.KingScoreUserIdComparator;
@@ -23,8 +26,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ThreadSafe
+/**
+ * Simple Persistance Layer
+ * It stores the Scoring in a  @NavigableMap , inside a @ConcurrentSkipListSet will store
+ * the Score, set by a ChainedComparator
+ * @author eidos71
+ *
+ */
 final public class SimpleScorePersistance implements ScorePersistance {
 	private static final NavigableSet<KingScore> EMPTY_SET;
+
 	static {
 		EMPTY_SET=  new ConcurrentSkipListSet<KingScore>(
 				new KingScoreChainedComparator(
@@ -35,6 +46,7 @@ final public class SimpleScorePersistance implements ScorePersistance {
 	};
 	static final Logger LOG = LoggerFactory
 			.getLogger(SimpleScorePersistance.class);
+	private static final int MAXSIZE = 10000000;
 	@GuardedBy("navmapScore")
 	private final NavigableMap<Integer, NavigableSet<KingScore>> navmapScore;
 
@@ -49,20 +61,24 @@ final public class SimpleScorePersistance implements ScorePersistance {
 		if (kingScore == null)
 			return false;
 		// If Level is not Set
-		if (navmapScore.get(level) == null) {
+		if (navmapScore.get(level) == null) { 
 			// We create a new SkipListSet
-			NavigableSet<KingScore> setKingScore = new ConcurrentSkipListSet<KingScore>(
+			synchronized(navmapScore) {
+			NavigableSet<KingScore> setKingScore = new KingSizeLimitedScore<KingScore>(level,
+					KingConfigConstants.PERSISTANCE_SCORE_MAX_ELEMS, 
 					new KingScoreChainedComparator(
-							new KingScoreOrderByScore() ,		
+							new KingScoreOrderByScore(),
 							new KingScoreUserIdComparator()
 
-							));
+					));
 			setKingScore.add(kingScore);
 			navmapScore.put(level, setKingScore);
+			}
 		} else {
 			NavigableSet<KingScore> existLevelMap = navmapScore.get(level);
 
-			existLevelMap.add(kingScore);
+			existLevelMap.add(kingScore) ;
+			
 		}
 		return true;
 	}
@@ -79,22 +95,30 @@ final public class SimpleScorePersistance implements ScorePersistance {
 	}
 
 	@Override
+	/**
+	 * 
+	 */
 	public String toString() {
 	
-		StringBuilder sf= new StringBuilder();
+		StringBuilder sf= new StringBuilder("navmapScore:");
 		
 		for (Entry<Integer, NavigableSet<KingScore>> anEntry: navmapScore.entrySet()){
 			
-			LOG.debug(" Level:[{}", anEntry.getKey() );
+			LOG.trace(" Level:[{}", anEntry.getKey() );
+			sf.append("Level["+anEntry.getKey() );
 			for (KingScore setElem: anEntry.getValue() ) {
-				LOG.debug("{}", setElem);
+				LOG.trace("{}", setElem);
+				sf.append("["+setElem.toString()+"],");
 			}
-			LOG.debug("]");
+			sf.append("]" );
+			LOG.trace("]");
+			
 		}
 		
-		return "SimpleScorePersistance [navmapScore=" + navmapScore + "]";
+		return sf.toString();
 	}
 
+	
 	@Override
 	public boolean dumpPersistance() {
 		boolean result=false;

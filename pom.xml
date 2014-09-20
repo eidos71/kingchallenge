@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.eidos</groupId>
 	<artifactId>kingchallenge</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.5.1-SNAPSHOT</version>
 	<name>King challenge</name>
 	<description>King challenge, 4</description>
 	<properties>

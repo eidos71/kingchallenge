@@ -198,7 +198,7 @@ public class TestScorePersistance extends EasyMock {
 		LOG.debug("Set to return {}", kingSetScore);
 		
 	
-	}
+	} 
 	
 	@Test
 	public void testAutomaticBagPersisatnce() throws Exception{
@@ -217,7 +217,7 @@ public class TestScorePersistance extends EasyMock {
 			 userId= new Long(100+random.nextInt(DIFFERENTUSERS ));
 			 score=  random.nextInt(SCORE );
 
-			sp.put(1, transformDTO(craeteKingScoreDTO(level, score, userId)));
+			sp.put(level.intValue(), transformDTO(craeteKingScoreDTO(level, score, userId)));
 			}
 		SortedSet<KingScore> resultSet = sp.getScoresByLevel(1);
 		ConcurrentSkipListSet<KingScore> resultAnotherKingScores= new ConcurrentSkipListSet<KingScore>(

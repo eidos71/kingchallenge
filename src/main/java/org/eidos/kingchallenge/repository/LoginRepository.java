@@ -50,12 +50,13 @@ public interface LoginRepository {
 	 * 
 	 * @param loginId
 	 */
-	void removeKingUserByLogin(AtomicLong loginId);
+	boolean removeKingUserByLogin(AtomicLong loginId);
 	/**
 	 * 
 	 * @param sessionId
+	 * @return 
 	 */
-	void removeKingUserBySession(String sessionId);
+	boolean removeKingUserBySession(String sessionId);
 	
 	/**
 	 * 

@@ -55,11 +55,13 @@ public class TestLoginRepository extends EasyMock {
 				.size(), equalTo(BAG_SIZE +1));
 	}
 
-	@Test(expected = LogicKingChallengeException.class)
-	public void testExistingInsertElement() {
+	@Test
+	public void testDelteByLogin() {
 
 		KingUser kingUser = new KingUser.Builder(3).build();
 		loginRepository.addKingUser(kingUser);
+	
+		assertThat(" ", loginRepository.removeKingUserByLogin(kingUser.getKingUserId()), equalTo(true));
 	}
 
 	@Test

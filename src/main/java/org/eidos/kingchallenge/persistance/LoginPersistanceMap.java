@@ -17,10 +17,10 @@ public interface LoginPersistanceMap <Long, String, KingUser>{
 
 
 
-	void removeByLogin(Long loginKey);
+	boolean removeByLogin(Long loginKey);
 
 
-	void removeBySession(String sessionKey);
+	boolean removeBySession(String sessionKey);
 
 	/**
 	 * Cleans the Repository

@@ -38,7 +38,7 @@ public final class KingdomHandlerConf   implements Serializable{
 	}
 
 	public Class gethandlerType() {
-		// TODO Auto-generated method stub
+		
 		return handlerClass;
 	}
 	

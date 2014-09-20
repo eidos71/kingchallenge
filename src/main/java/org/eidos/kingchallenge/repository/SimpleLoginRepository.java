@@ -41,7 +41,9 @@ public final class SimpleLoginRepository implements LoginRepository {
 
 	@Override
 	public Map<String, KingUser> getAllKingdomBySession() {
+	
 		Map<String, KingUser> result = loginPersistance.getMapBySession();
+	
 		if (result == null)
 			return Collections.emptyMap();
 		return result;
@@ -65,24 +67,24 @@ public final class SimpleLoginRepository implements LoginRepository {
 	}
 
 	@Override
-	public void removeKingUserByLogin(AtomicLong loginKey) {
+	public boolean removeKingUserByLogin(AtomicLong loginKey) {
 		if (loginKey == null || loginKey.get() == 0)
 			throw new LogicKingChallengeException(LogicKingError.INVALID_TOKEN);
 		boolean missing = !getAllKingdomByLogin().containsKey(loginKey.get());
 		if (missing)
 			throw new LogicKingChallengeException(LogicKingError.USER_NOT_FOUND);
-		this.loginPersistance.removeByLogin(loginKey.get());
+		return this.loginPersistance.removeByLogin(loginKey.get());
 	}
 
 	@Override
-	public void removeKingUserBySession(String sessionId) {
+	public boolean removeKingUserBySession(String sessionId) {
 		if (sessionId == null || "".equals(sessionId))
 			throw new  KingInvalidSessionException();
 		LOG.debug("We want to remove user by sessionId" + sessionId);
 		boolean missing = !getAllKingdomBySession().containsKey(sessionId);
 		if (missing)
 			throw new LogicKingChallengeException(LogicKingError.USER_NOT_FOUND);
-		this.loginPersistance.removeBySession(sessionId);
+		return this.loginPersistance.removeBySession(sessionId);
 	}
 
 	@Override

@@ -10,6 +10,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.eidos.kingchallenge.controller.SimpleLoginController;
+import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
+import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.service.LoginService;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,11 +27,11 @@ public class TestInit extends EasyMockSupport {
 	/**
 	 * -Test an Invalid character
 	 */
-	@Test(expected = RuntimeException.class)
+	@Test(expected = LogicKingChallengeException.class)
 	public void testInvalidNegativeLogin() {
 		//
-		expect(loginService.loginToken(new AtomicLong(-1234L))).andThrow(new RuntimeException());
+		expect(loginService.loginToken(new AtomicLong(-1234L))).andThrow(new LogicKingChallengeException(LogicKingError.INVALID_TOKEN));
 		replay(loginService);
-		loginController.loginService(1234L );
+		loginController.loginService(-1234L );
 	}
 }
