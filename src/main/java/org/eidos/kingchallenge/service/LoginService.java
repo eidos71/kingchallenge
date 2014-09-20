@@ -12,7 +12,7 @@ import org.eidos.kingchallenge.repository.LoginRepository;
  * @author eidos71
  *
  */
-public interface LoginService {
+public interface LoginService  extends KingService{
 
 	/**
 	 * 

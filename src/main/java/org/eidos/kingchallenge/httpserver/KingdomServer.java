@@ -2,8 +2,6 @@ package org.eidos.kingchallenge.httpserver;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -19,11 +17,8 @@ import org.eidos.kingchallenge.controller.KingControllerManager;
 import org.eidos.kingchallenge.controller.SessionWorkerManager;
 import org.eidos.kingchallenge.httpserver.handlers.GenericPageHandler;
 import org.eidos.kingchallenge.persistance.KingdomConfManager;
-import org.eidos.kingchallenge.service.SimpleLoginService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-
 
 /**
  * Basic KingDom Server
@@ -35,13 +30,13 @@ import org.slf4j.LoggerFactory;
 public class KingdomServer {
 
 	static final Logger LOG = LoggerFactory.getLogger(KingdomServer.class);
-	private static final int HTTP_POOL_CONNECTIONS = 15;
+	private static final int HTTP_POOL_CONNECTIONS = KingConfigConstants.HTTP_POOL_CONNECTIONS;
 	private static final int HTTP_MAX_CONNECTIONS = HTTP_POOL_CONNECTIONS * 2;
 	private static final int HTTP_QUEUE_MAX_ITEMS = HTTP_POOL_CONNECTIONS * 4;
 	private static final int DELAY_FOR_TERMINATION = 0;
-	final int serverPort = Integer.getInteger("serverPort", 8000);
+	final int serverPort = Integer.getInteger("serverPort",  KingConfigConstants.BINDING_PORT);
 
-	static Socket clientSocket;
+	//static Socket clientSocket;
 	
 	HttpServer server;
 	private ExecutorService serverExecutor;
@@ -58,8 +53,11 @@ public class KingdomServer {
 		}
 
 
-	protected void initServer() throws IOException {
-
+	protected void initServer() throws IOException, InterruptedException {
+		while (!KingConfigConstants.INSTANCE_LOADED) {
+			LOG.debug("Loading configuration context");
+			Thread.sleep(1000);
+		}
 		LOG.info("Sarting server on {} :  Shutdown port on:{} ", serverPort);
 		server = HttpServer.create(new InetSocketAddress(serverPort),
 				HTTP_POOL_CONNECTIONS);
@@ -80,11 +78,12 @@ public class KingdomServer {
 	 * 
 	 */
 	private void startSessionManager() {
-
+		//Number of ScheudledThreadsPool to manage the session expiration
+		//watchdog. By default we only need 1.
 		ScheduledExecutorService scheduledExecutorService = Executors
 				.newScheduledThreadPool(1);
 		scheduledExecutorService.scheduleAtFixedRate(
-				new SessionWorkerManager(new SimpleLoginService() ), 0, KingConfigConstants.WORK_SCHEDULETIME, TimeUnit.SECONDS);
+				new SessionWorkerManager(KingConfigConstants.LOGINSERVICE ), 0, KingConfigConstants.WORKMAN_SCHEDULE_INSECONDS, TimeUnit.SECONDS);
 		
 	}
 	private void initControllers() {
@@ -94,7 +93,8 @@ public class KingdomServer {
 	}
 	/**
 	 * Stop the server.
-	 * 
+	 * It has been removed due time constraints
+	 * We left here what it was doing before.
 	 * @return
 	 */
 	public boolean stop() {

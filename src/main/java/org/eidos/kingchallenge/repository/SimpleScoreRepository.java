@@ -1,6 +1,5 @@
 package org.eidos.kingchallenge.repository;
 
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -14,9 +13,8 @@ import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
 import org.eidos.kingchallenge.domain.model.KingScore;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
+import org.eidos.kingchallenge.persistance.KingdomConfManager;
 import org.eidos.kingchallenge.persistance.ScorePersistance;
-import org.eidos.kingchallenge.persistance.SimpleScorePersistance;
-import org.eidos.kingchallenge.service.SimpleLoginService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +23,7 @@ public class SimpleScoreRepository implements ScoreRepository{
 	static final Logger LOG = LoggerFactory.getLogger(SimpleScoreRepository.class);
 	private ScorePersistance scorePersistance;
 	public SimpleScoreRepository() {
-		this.scorePersistance=new SimpleScorePersistance();
+		this.scorePersistance=KingdomConfManager.getInstance().getPersistanceBag().getScorePersistance();
 	}
 	@Override
 	public Boolean insertScore(KingScoreDTO kngDto) {

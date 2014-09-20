@@ -13,14 +13,12 @@ import org.slf4j.LoggerFactory;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
-
+@SuppressWarnings("restriction") 
 public class HeraldHandler implements HttpHandler {
 	static final Logger LOG = LoggerFactory.getLogger(HeraldHandler.class);
 
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		String requestMethod = exchange.getRequestMethod();
 		LOG.info("herald summoned");
 		 
 		Headers responseHeaders = exchange.getResponseHeaders();
@@ -32,7 +30,7 @@ public class HeraldHandler implements HttpHandler {
 		Iterator<String> iter = keySet.iterator();
 		while (iter.hasNext()) {
 			String key = iter.next();
-			List values = requestHeaders.get(key);
+			List<String> values = requestHeaders.get(key);
 			String s = key + " = " + values.toString() + "\n";
 			responseBody.write(s.getBytes());
 		}

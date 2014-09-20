@@ -48,7 +48,7 @@ public class TestInit extends EasyMockSupport {
 		assertThat("", KingControllerEnum.UNKNOWN.controller(), equalTo(""	) );
 
 		assertThat("", MediaContentTypeEnum.APPLICATION_XML.code(), equalTo("application/xmlcharset=UTF-8"	) );
-		assertThat("", MediaContentTypeEnum.TEXT_PLAIN.code(), equalTo("application/json; charset=UTF-8"	) );
+		assertThat("", MediaContentTypeEnum.TEXT_PLAIN.code(), equalTo("text/plain; charset=UTF-8"	) );
 
 		
 	}

@@ -65,7 +65,7 @@ final public class SimpleScorePersistance implements ScorePersistance {
 			// We create a new SkipListSet
 			synchronized(navmapScore) {
 			NavigableSet<KingScore> setKingScore = new KingSizeLimitedScore<KingScore>(level,
-					KingConfigConstants.PERSISTANCE_SCORE_MAX_ELEMS, 
+					KingConfigConstants.PERSISTANCE_SCORE_MAX_ELEMS_PER_LVL, 
 					new KingScoreChainedComparator(
 							new KingScoreOrderByScore(),
 							new KingScoreUserIdComparator()

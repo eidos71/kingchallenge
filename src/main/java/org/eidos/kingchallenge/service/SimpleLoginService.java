@@ -2,12 +2,12 @@ package org.eidos.kingchallenge.service;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.MINUTES;
-import static java.util.concurrent.TimeUnit.SECONDS;
-
 import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicLong;
+
+import javax.annotation.concurrent.ThreadSafe;
 
 import org.eidos.kingchallenge.KingConfigConstants;
 import org.eidos.kingchallenge.domain.model.KingUser;
@@ -15,18 +15,17 @@ import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.repository.LoginRepository;
-import org.eidos.kingchallenge.repository.SimpleLoginRepository;
 import org.eidos.kingchallenge.utils.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+@ThreadSafe
 public final class SimpleLoginService implements LoginService {
 	static final Logger LOG = LoggerFactory.getLogger(SimpleLoginService.class);
 
-	private  LoginRepository loginRepository = new SimpleLoginRepository();
+	private  final LoginRepository loginRepository ;
 
 	public SimpleLoginService(){
-		
+		loginRepository=KingConfigConstants.LOGINREPO;
 	}
 	
 	@Override
@@ -91,7 +90,7 @@ public final class SimpleLoginService implements LoginService {
 		}
 		boolean isValid=true;	
 		long SESSION_EXPIRATION = MILLISECONDS.convert(
-				KingConfigConstants._SESSION_EXPIRATION, MINUTES);
+				KingConfigConstants.SESSION_EXPIRATION_MINUTES, MINUTES);
 		if (Validator.validateSessionExpired(lastLoginDate, SESSION_EXPIRATION)) {
 			LOG.debug("expiration is expired for {} with lastLoginDate {}", sessionId, lastLoginDate);
 			// we have to remove this user

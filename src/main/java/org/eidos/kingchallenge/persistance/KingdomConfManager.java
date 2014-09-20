@@ -60,7 +60,7 @@ public class KingdomConfManager {
 	}
 	/**
 	 * Init load from the Handler
-	 * Comes for a properti files
+	 * Comes for a properties files
 	 */
 	private void init() {
 		

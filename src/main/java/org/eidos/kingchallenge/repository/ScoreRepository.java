@@ -12,7 +12,7 @@ import org.eidos.kingchallenge.domain.model.KingScore;
  * @author eidos71
  *
  */
-public interface ScoreRepository {
+public interface ScoreRepository  extends KingdomRepo{
 	
 	/**
 	 * 

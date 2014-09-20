@@ -14,7 +14,7 @@ import org.eidos.kingchallenge.domain.model.KingUser;
  * @author eidos71
  *
  */
-public interface LoginRepository {
+public interface LoginRepository  extends KingdomRepo{
 	/**
 	 * Adds a king User into the repository
 	 * @param user adds a king User

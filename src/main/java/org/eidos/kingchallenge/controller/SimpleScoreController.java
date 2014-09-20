@@ -1,17 +1,14 @@
 package org.eidos.kingchallenge.controller;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import javax.annotation.concurrent.Immutable;
 
+import org.eidos.kingchallenge.KingConfigConstants;
 import org.eidos.kingchallenge.domain.dto.KingResponseDTO;
 import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
 import org.eidos.kingchallenge.domain.model.KingUser;
 import org.eidos.kingchallenge.httpserver.utils.MediaContentTypeEnum;
 import org.eidos.kingchallenge.service.LoginService;
 import org.eidos.kingchallenge.service.ScoreService;
-import org.eidos.kingchallenge.service.SimpleLoginService;
-import org.eidos.kingchallenge.service.SimpleScoreService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,12 +83,13 @@ public final class SimpleScoreController implements ScoreController {
 		 * @return a new SimpleScoreController
 		 */
 	    public SimpleScoreController build() {
+
 	    	if (this.scoreService==null){
-	    		this.scoreService=new SimpleScoreService();
+	    		this.scoreService=KingConfigConstants.SCORESERVICE;
 	    	
 	    	}
 	    	if (this.loginService == null) {
-	    		this.loginService=new SimpleLoginService();
+	    		this.loginService=KingConfigConstants.LOGINSERVICE;
 	    	
 	    	}
 	    	return new SimpleScoreController(this); 

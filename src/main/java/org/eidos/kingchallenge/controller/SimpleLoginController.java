@@ -2,13 +2,12 @@ package org.eidos.kingchallenge.controller;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.eidos.kingchallenge.KingConfigConstants;
 import org.eidos.kingchallenge.domain.dto.KingResponseDTO;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.httpserver.utils.MediaContentTypeEnum;
-import org.eidos.kingchallenge.service.EmptyLoginService;
 import org.eidos.kingchallenge.service.LoginService;
-import org.eidos.kingchallenge.service.SimpleLoginService;
 import org.eidos.kingchallenge.utils.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +63,7 @@ public static class Builder{
 
 	    public SimpleLoginController build() {
 	    	if (loginService==null)
-	    		this.loginService=new SimpleLoginService();
+	    		this.loginService= KingConfigConstants.LOGINSERVICE;
 	    	return new SimpleLoginController(this);
 	    }
 }

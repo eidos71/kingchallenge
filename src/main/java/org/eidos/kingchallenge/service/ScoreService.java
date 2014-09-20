@@ -9,7 +9,7 @@ import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
  * @author eidos71
  *
  */
-public interface ScoreService {
+public interface ScoreService extends KingService{
 
 	/**
 	 * @param level 
