@@ -8,8 +8,8 @@ package org.eidos.kingchallenge.httpserver.utils;
  *
  */
 public enum MediaContentTypeEnum{
-
-	TEXT_PLAIN("application/json; charset=UTF-8"), APPLICATION_XML("application/xmlcharset=UTF-8");
+	
+	TEXT_PLAIN("text/plain; charset=UTF-8"), APPLICATION_JSON("application/json; charset=UTF-8"),APPLICATION_XML("application/xmlcharset=UTF-8");
 	private String contentType;
 	MediaContentTypeEnum(String media) {
 		this.contentType = media;

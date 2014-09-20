@@ -2,6 +2,8 @@ package org.eidos.kingchallenge.controller;
 
 import java.util.Map;
 
+import org.eidos.kingchallenge.domain.dto.KingResponseDTO;
+
 
 
 public interface ScoreController {
@@ -13,7 +15,7 @@ public interface ScoreController {
 	 * @param level
 	 * @param score
 	 */
-	public String putHighScore(String sessionKey, Long level, int score);
+	public KingResponseDTO putHighScore(String sessionKey, Long level, int score);
 	/**
 	 * Returns the high score list on a map
 	 * separated by , and with a top of 15 elements.
@@ -22,5 +24,5 @@ public interface ScoreController {
 	 * @return
 	 */
 
-	String getHighScoreByLevel(Long level);
+	KingResponseDTO getHighScoreByLevel(Long level);
 }

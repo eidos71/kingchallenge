@@ -11,6 +11,7 @@ import org.eidos.kingchallenge.KingConfigConstants;
 import org.eidos.kingchallenge.controller.KingControllerManager;
 import org.eidos.kingchallenge.controller.LoginController;
 import org.eidos.kingchallenge.controller.ScoreController;
+import org.eidos.kingchallenge.domain.dto.KingResponseDTO;
 import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
 import org.eidos.kingchallenge.exceptions.KingRunTimeIOException;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
@@ -57,15 +58,13 @@ public final class SimplePageHandler implements HttpHandler {
 		tlEx.set(httpExchange);
 		tlExInfo.set(new HttpKingExchangeHelper());
 
-		String response = null;
+		KingResponseDTO response = null;
 		OutputStream os = null;
-		int httpStatusCode = HttpURLConnection.HTTP_INTERNAL_ERROR;
+	
 		try {
 
-			if (tlExInfo.get() == null)
-				LOG.info("null tlExinfo");
-			if (tlEx.get() == null)
-				LOG.info("null tlEx");
+			if (tlExInfo.get() == null) LOG.info("null tlExinfo");
+			if (tlEx.get() == null) LOG.info("null tlEx");
 
 			LOG.debug("{}", tlExInfo.get().getPath(tlEx.get()));
 			tlExInfo.get().parseGetParameters(tlEx.get());
@@ -81,61 +80,45 @@ public final class SimplePageHandler implements HttpHandler {
 					LOG.debug("String-{}  Value-{}", value.getKey(),
 							value.getValue());
 			}
-			Headers responseHeaders = tlEx.get().getResponseHeaders();
-			responseHeaders.set("Content-Type",
-					MediaContentTypeEnum.TEXT_PLAIN.code());
-
-			// we send to the bussiness Logic and return the response
-			response = prepareResponse(params);
 			LOG.debug("response {}", response);
-			// Prepare response
-			tlEx.get().sendResponseHeaders(HttpURLConnection.HTTP_OK,
-					(response == null) ? 0 : response.length());
-			os = tlEx.get().getResponseBody();
-			os.write(response.toString().getBytes());
+			os= streamWriterToResponse(HttpURLConnection.HTTP_OK, prepareResponse(params));
 		} catch (KingInvalidSessionException ex) {
 			LOG.info("{}", ex);
-			tlEx.get().sendResponseHeaders(HttpURLConnection.HTTP_FORBIDDEN,
-					(response == null) ? 0 : response.length());
-			response = ex.getMessage();
-			os = tlEx.get().getResponseBody();
-			os.write(response.toString().getBytes());
-		} catch (KingRunTimeIOException ex) {
+			os= streamWriterToResponse(HttpURLConnection.HTTP_FORBIDDEN,
+					new KingResponseDTO.Builder().putContentBody(ex.getMessage()).build() );
+		} catch (KingRunTimeIOException | LogicKingChallengeException ex) {
 			LOG.info("{}", ex);
-			tlEx.get().sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST,
-					(response == null) ? 0 : response.length());
-			response = ex.getMessage();
-			os = tlEx.get().getResponseBody();
-			os.write(response.toString().getBytes());
-		} catch (LogicKingChallengeException ex) {
+			os= streamWriterToResponse(HttpURLConnection.HTTP_INTERNAL_ERROR,
+					new KingResponseDTO.Builder().putContentBody(ex.getMessage()).build() );
+		}catch (Exception ex) {
 			LOG.info("{}", ex);
-			tlEx.get().sendResponseHeaders(
-					HttpURLConnection.HTTP_INTERNAL_ERROR,
-					(response == null) ? 0 : response.length());
-			response = ex.getMessage();
-			os = tlEx.get().getResponseBody();
-			os.write(response.toString().getBytes());
-		} catch (Exception ex) {
-			LOG.info("{}", ex);
-			tlEx.get().sendResponseHeaders(
-					HttpURLConnection.HTTP_INTERNAL_ERROR,
-					(response == null) ? 0 : response.length());
-			os = tlEx.get().getResponseBody();
-			os.write(response.toString().getBytes());
+			os= streamWriterToResponse(HttpURLConnection.HTTP_INTERNAL_ERROR, null );
 		}catch (Throwable ex) {
 			LOG.info("{}", ex);
-			tlEx.get().sendResponseHeaders(
-					HttpURLConnection.HTTP_INTERNAL_ERROR,
-					(response == null) ? 0 : response.length());
-			os = tlEx.get().getResponseBody();
-			os.write(response.toString().getBytes());
+			os= streamWriterToResponse(HttpURLConnection.HTTP_INTERNAL_ERROR, null );
 		} finally {
 			os.close();
 			tlExInfo.remove();
 			tlEx.remove();
 		}
 	}
+	/**
+	 * 
+	 * @param httpCodeHeader
+	 * @param os
+	 * @throws IOException 
+	 */
+	private OutputStream  streamWriterToResponse(int httpCodeHeader, KingResponseDTO response ) throws IOException {
+		OutputStream os = null;
 
+		Headers responseHeaders = tlEx.get().getResponseHeaders();
+		responseHeaders.set("Content-Type", response.getContentType().code());
+		tlEx.get().sendResponseHeaders(HttpURLConnection.HTTP_OK,
+				(response == null) ? 0 : response.getContentBody().length());
+		os = tlEx.get().getResponseBody();
+		os.write(response.getContentBody().toString().getBytes());
+		return os;
+	}
 	/**
 	 * 
 	 * @param params
@@ -143,8 +126,8 @@ public final class SimplePageHandler implements HttpHandler {
 	 * @param httpExchange
 	 * @return
 	 */
-	protected String prepareResponse(Map<String, Object> requestParamMap) {
-		String response = "";
+	protected KingResponseDTO prepareResponse(Map<String, Object> requestParamMap) {
+		KingResponseDTO response;
 		switch (tlExInfo.get().defineController(tlEx.get())) {
 		case HIGHSCORELIST:
 			LOG.debug("HIGHSCORELIST");

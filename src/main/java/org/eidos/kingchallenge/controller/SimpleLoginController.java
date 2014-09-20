@@ -2,8 +2,10 @@ package org.eidos.kingchallenge.controller;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.eidos.kingchallenge.domain.dto.KingResponseDTO;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
+import org.eidos.kingchallenge.httpserver.utils.MediaContentTypeEnum;
 import org.eidos.kingchallenge.service.EmptyLoginService;
 import org.eidos.kingchallenge.service.LoginService;
 import org.eidos.kingchallenge.service.SimpleLoginService;
@@ -23,14 +25,18 @@ public final class SimpleLoginController  implements LoginController{
 private final LoginService  loginService;
 static final Logger LOG = LoggerFactory.getLogger(SimpleLoginController.class);
 @Override
-public String loginService(Long token)   {
+public KingResponseDTO loginService(Long token)   {
 	if (token==null ||  ! Validator.isValidUnsignedInt(token) ) {
 		throw new LogicKingChallengeException(LogicKingError.INVALID_TOKEN);
 	}
-	StringBuilder response= new StringBuilder();
-	
-	response.append(this.loginService.loginToken(new AtomicLong(token) ) );
-	return response.toString();
+
+	  KingResponseDTO httpReponseDTO =
+			  new KingResponseDTO.Builder()
+	  			.putContentBody(this.loginService.loginToken(new AtomicLong(token) ) )
+	  			.putContentType(MediaContentTypeEnum.TEXT_PLAIN)
+	  			.build();
+	 ;
+	 return  httpReponseDTO;
 }
 /**
  * We block the Login Controller public class

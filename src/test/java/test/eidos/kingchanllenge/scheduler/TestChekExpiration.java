@@ -24,6 +24,7 @@ import junit.framework.Assert;
 
 import org.easymock.EasyMockRunner;
 import org.easymock.EasyMockSupport;
+import org.eidos.kingchallenge.controller.SessionWorkerManager;
 import org.eidos.kingchallenge.domain.model.KingUser;
 import org.eidos.kingchallenge.persistance.KingdomConfManager;
 import org.eidos.kingchallenge.persistance.LoginPersistanceMap;
@@ -98,7 +99,7 @@ public class TestChekExpiration extends EasyMockSupport {
 				.newScheduledThreadPool(1);
 
 		scheduledExecutorService.scheduleAtFixedRate(
-				new SessionWorkerManager(), 0, 5, TimeUnit.SECONDS);
+				new SessionWorkerManager(loginService), 0, 5, TimeUnit.SECONDS);
 		//Wait two seconds before executing elements
 		Thread.sleep(2000);
 		for (Mutator mutator : mutatorList) {
@@ -160,22 +161,5 @@ public class TestChekExpiration extends EasyMockSupport {
 
 	}
 
-	/**
-	 * 
-	 * @author eidos71
-	 *
-	 */
-	private final class SessionWorkerManager implements Runnable {
 
-		@Override
-		public void run() {
-			try {
-				Boolean result = loginService.sessionCheck();
-				LOG.debug("loginService a false result means no session was removed --> {}", result);
-			} catch (Exception e) {
-				LOG.warn("{}", e);
-			}
-
-		}
-	}
 }

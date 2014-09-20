@@ -1,9 +1,13 @@
 package org.eidos.kingchallenge.controller;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import javax.annotation.concurrent.Immutable;
 
+import org.eidos.kingchallenge.domain.dto.KingResponseDTO;
 import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
 import org.eidos.kingchallenge.domain.model.KingUser;
+import org.eidos.kingchallenge.httpserver.utils.MediaContentTypeEnum;
 import org.eidos.kingchallenge.service.LoginService;
 import org.eidos.kingchallenge.service.ScoreService;
 import org.eidos.kingchallenge.service.SimpleLoginService;
@@ -18,20 +22,28 @@ public final class SimpleScoreController implements ScoreController {
 	static final Logger LOG = LoggerFactory.getLogger(SimpleScoreController.class);
 
 	@Override
-	public String putHighScore(String sessionKey, Long level, int score) {
+	public KingResponseDTO putHighScore(String sessionKey, Long level, int score) {
 		//Validates session is valid and 
 		final String  defensiveSessionKey=sessionKey;
 		final Long defensiveLevel= level;
 		final int defensiveScore=score;
-		String response="";
 		KingUser user= loginService.renewLastLogin(defensiveSessionKey);
 		scoreService.insertScore(defensiveSessionKey,  new KingScoreDTO.Builder(defensiveLevel,defensiveScore,user.getKingUserId().get()).build());
-		return response;
+		// Result is always an empty value
+		  KingResponseDTO httpReponseDTO =
+				  new KingResponseDTO.Builder()
+		  			.putContentBody("")
+		  			.putContentType(MediaContentTypeEnum.TEXT_PLAIN)
+		  			.build();
+		return httpReponseDTO;
 	}
 	@Override
-	public String getHighScoreByLevel(Long level ) {
+	public KingResponseDTO getHighScoreByLevel(Long level ) {
 		final Long  defensiveLevel=level;
-		return  scoreService.getHighScoreList( defensiveLevel);
+		return  new KingResponseDTO.Builder()
+		  			.putContentBody(scoreService.getHighScoreList( defensiveLevel))
+		  			.putContentType(MediaContentTypeEnum.TEXT_PLAIN)
+		  			.build();
 			
 	}
 	private SimpleScoreController(Builder builder) {

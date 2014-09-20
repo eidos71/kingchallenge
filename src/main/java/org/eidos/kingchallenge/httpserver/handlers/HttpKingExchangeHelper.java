@@ -83,9 +83,9 @@ public class HttpKingExchangeHelper {
 	 * @return @KingConfigConstants controller
 	 */
 	protected  KingControllerEnum defineController(HttpExchange httpExchange) {
-		@SuppressWarnings("unchecked")
-		Map<String, Object> requestParamsMap = (Map<String, Object>) httpExchange
-				.getAttribute(KingConfigConstants.KING_REQUEST_PARAM);
+		
+/*		Map<String, Object> requestParamsMap = (Map<String, Object>) httpExchange
+				.getAttribute(KingConfigConstants.KING_REQUEST_PARAM);*/
 
 		String uri = httpExchange.getRequestURI().toString();
 		String[] tokens = uri.split("[/?=]");
