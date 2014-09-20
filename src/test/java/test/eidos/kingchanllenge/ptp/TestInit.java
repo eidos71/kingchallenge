@@ -2,6 +2,7 @@ package test.eidos.kingchanllenge.ptp;
 
 import static org.easymock.EasyMock.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.easymock.*;
@@ -11,6 +12,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import org.eidos.kingchallenge.controller.KingControllerManager;
 import org.eidos.kingchallenge.controller.SimpleLoginController;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
@@ -52,4 +54,7 @@ public class TestInit extends EasyMockSupport {
 
 		
 	}
+	
+
+	
 }

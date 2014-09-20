@@ -54,10 +54,7 @@ public class KingdomServer {
 
 
 	protected void initServer() throws IOException, InterruptedException {
-		while (!KingConfigConstants.INSTANCE_LOADED) {
-			LOG.debug("Loading configuration context");
-			Thread.sleep(1000);
-		}
+
 		LOG.info("Sarting server on {} :  Shutdown port on:{} ", serverPort);
 		server = HttpServer.create(new InetSocketAddress(serverPort),
 				HTTP_POOL_CONNECTIONS);

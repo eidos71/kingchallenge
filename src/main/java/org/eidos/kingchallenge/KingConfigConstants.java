@@ -6,6 +6,9 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import org.eidos.kingchallenge.controller.LoginController;
+import org.eidos.kingchallenge.controller.ScoreController;
+import org.eidos.kingchallenge.controller.SimpleLoginController;
+import org.eidos.kingchallenge.controller.SimpleScoreController;
 import org.eidos.kingchallenge.httpserver.KingdomServer;
 import org.eidos.kingchallenge.repository.KingdomRepo;
 import org.eidos.kingchallenge.repository.LoginRepository;
@@ -31,8 +34,9 @@ public class KingConfigConstants {
 	public static final LoginRepository LOGINREPO;
 	public static final LoginService LOGINSERVICE;
 	public static final ScoreService SCORESERVICE;
+	public static final LoginController LOGINCONTROLLER;
+	public static final ScoreController SCORECONTROLLER; 
 
-	public static final boolean INSTANCE_LOADED;
 	static {
 		LOG.debug("static:init*");
 		KING_REQUEST_PARAM = (getProperty("KING_REQUEST_PARAM") != null) ? getProperty("KING_REQUEST_PARAM")
@@ -55,8 +59,8 @@ public class KingConfigConstants {
 				LOGINREPO = (LoginRepository) getRepo("LOGINREPO");				
 		LOGINSERVICE = (LoginService) getService("LOGINSERVICE");
 		SCORESERVICE = (ScoreService) getService("SCORESERVICE");
-
-		INSTANCE_LOADED = true;
+		LOGINCONTROLLER= new SimpleLoginController.Builder().build();
+		SCORECONTROLLER= new SimpleScoreController.Builder().build();
 		LOG.debug("*static:end {}, {} ", SCOREREPO, LOGINREPO);
 	}
 
