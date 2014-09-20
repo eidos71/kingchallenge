@@ -17,7 +17,6 @@ import org.eidos.kingchallenge.exceptions.KingRunTimeIOException;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.httpserver.enums.KingControllerEnum;
-import org.eidos.kingchallenge.httpserver.utils.MediaContentTypeEnum;
 import org.eidos.kingchallenge.utils.UtilsEnum.Mode;
 import org.eidos.kingchallenge.utils.Validator;
 import org.slf4j.Logger;
@@ -87,12 +86,12 @@ public final class SimplePageHandler implements HttpHandler {
 			os= streamWriterToResponse(HttpURLConnection.HTTP_FORBIDDEN,
 					new KingResponseDTO.Builder().putContentBody(ex.getMessage()).build() );
 		} catch (KingRunTimeIOException | LogicKingChallengeException ex) {
-			LOG.info("{}", ex);
+			LOG.info("KingRunTimeIOException or KingRunTimeIOException {}", ex);
 			os= streamWriterToResponse(HttpURLConnection.HTTP_INTERNAL_ERROR,
 					new KingResponseDTO.Builder().putContentBody(ex.getMessage()).build() );
 		}catch (Exception ex) {
-			LOG.info("{}", ex);
-			os= streamWriterToResponse(HttpURLConnection.HTTP_INTERNAL_ERROR, null );
+			LOG.info("Exception {}", ex);
+			os= streamWriterToResponse(HttpURLConnection.HTTP_INTERNAL_ERROR, new KingResponseDTO.Builder().putContentBody("").build() );
 		}catch (Throwable ex) {
 			LOG.info("{}", ex);
 			os= streamWriterToResponse(HttpURLConnection.HTTP_INTERNAL_ERROR, null );
@@ -113,7 +112,7 @@ public final class SimplePageHandler implements HttpHandler {
 
 		Headers responseHeaders = tlEx.get().getResponseHeaders();
 		responseHeaders.set("Content-Type", response.getContentType().code());
-		tlEx.get().sendResponseHeaders(HttpURLConnection.HTTP_OK,
+		tlEx.get().sendResponseHeaders(httpCodeHeader,
 				(response == null) ? 0 : response.getContentBody().length());
 		os = tlEx.get().getResponseBody();
 		os.write(response.getContentBody().toString().getBytes());
@@ -149,17 +148,23 @@ public final class SimplePageHandler implements HttpHandler {
 			break;
 		case SCORE:
 			LOG.debug("SCORE");
-			if (scoreController == null)
+			if (scoreController == null) 
 				throw new LogicKingChallengeException(
 						LogicKingError.PROCESSING_ERROR);
 			Integer score =null;
 			for (Entry<String, Object> elem : requestParamMap.entrySet()) {
 					LOG.debug("****** {}", elem.getKey()  );
 					//If the key is a number, it is the Post parameter
-					if (Validator.isValidString(elem.getKey(), Mode.NUMERIC)) {
-						score= new Integer(elem.getKey());
-						break;
+					try {
+						if (Validator.isValidString(elem.getKey(), Mode.NUMERIC)) {
+							score= new Integer(elem.getKey());
+							break;
+						}
+					}catch (NumberFormatException e) {
+						throw new LogicKingChallengeException(
+								LogicKingError.PROCESSING_ERROR, e);
 					}
+	
 		
 			}
 			response = scoreController

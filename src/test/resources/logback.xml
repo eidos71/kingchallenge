@@ -7,11 +7,11 @@
 </encoder>
   </appender>
 
-  <logger name="org.eidos.kingchanllenge" level="DEBUG" />
+  <logger name="org.eidos.kingchanllenge" level="WARN" />
 
  <logger name="test.eidos.kingchanllenge" level="DEBUG" />
  
-  <root level="debug">
+  <root level="WARN">
     <appender-ref ref="STDOUT" />
   </root>
 </configuration>

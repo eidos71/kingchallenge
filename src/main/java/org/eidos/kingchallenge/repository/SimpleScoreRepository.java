@@ -42,8 +42,11 @@ public class SimpleScoreRepository implements ScoreRepository{
 		ConcurrentSkipListSet<KingScore> resultAnotherKingScores= new ConcurrentSkipListSet<KingScore>(
 				new KingScoreChainedComparator( new KingScoreReverseOrderByScore(),new KingScoreReverseUserIdComparator()  ));
 		resultAnotherKingScores.addAll(resultSet);
-		Set<KingScore> kingSetScore= new TreeSet<KingScore>(new KingScoreReverseUserIdComparator());
-		
+		Set<KingScore> kingSetScore = new TreeSet<KingScore>(
+				new KingScoreChainedComparator(
+						new KingScoreReverseOrderByScore(),
+						new KingScoreReverseUserIdComparator()));
+
 		KingScore pollResult;
 		while (kingSetScore.size()<KingConfigStaticProperties.TOPLISTSCORE && resultAnotherKingScores.size()>0){
 			 pollResult = resultAnotherKingScores.pollFirst();
