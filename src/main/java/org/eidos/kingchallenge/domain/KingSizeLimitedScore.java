@@ -42,6 +42,7 @@ public class KingSizeLimitedScore<E> extends ConcurrentSkipListSet<E> {
 	       this.currentElements =new AtomicInteger(0);
 	       
 	    }  
+	 
 	 	/**
 	 	 * 
 	 	 * @param pLevelScope
@@ -50,6 +51,7 @@ public class KingSizeLimitedScore<E> extends ConcurrentSkipListSet<E> {
 	    public KingSizeLimitedScore(int pLevelScope, int maxSize) {
 	        this.maxSize = maxSize;
 	        this.levelScope=pLevelScope;
+		       this.currentElements =new AtomicInteger(0);
 	  
 	    }
 		    public final  boolean remove(Object e) {
@@ -83,9 +85,20 @@ public class KingSizeLimitedScore<E> extends ConcurrentSkipListSet<E> {
 		super.clear();
 	
 	}
-	public final boolean removeAll(Collection<?> c)  {
-		boolean isRemoveAll= super.removeAll(c);
-		if (isRemoveAll) this.currentElements.getAndSet(0);
-		return isRemoveAll;
+	
+
+	public int getMaxSize() {
+		return maxSize;
 	}
+
+	public AtomicInteger getCurrentElements() {
+		return currentElements;
+	}
+
+	public int getLevelScope() {
+		return levelScope;
+	}
+	
+	
+	
 }
