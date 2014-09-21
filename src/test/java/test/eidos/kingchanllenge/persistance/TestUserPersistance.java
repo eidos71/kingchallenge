@@ -34,7 +34,7 @@ public class TestUserPersistance extends EasyMockSupport {
 			.getLogger(TestUserPersistance.class);
 	private final ExecutorService executor = Executors.newCachedThreadPool();
 	private static final LoginPersistanceMap<Long, String, KingUser> bag = new SimpleLoginPersistanceMap();
-	private final static int BAG_SIZE = 40000; // 10
+	private final static int BAG_SIZE = 4000; // 10
 
 	@Before
 	public void setup() {
@@ -50,7 +50,7 @@ public class TestUserPersistance extends EasyMockSupport {
 	public void after() throws InterruptedException {
 		Thread.sleep(30000);
 	}
-	 @Ignore("This test is not meant to be run on a suite of test, only run it to test a specific component on a very stresfful conditions") 
+//	 @Ignore("This test is not meant to be run on a suite of test, only run it to test a specific component on a very stresfful conditions") 
 	@Test
 	public void testAsyncExecStable() {
 		// Threads reading from the persistance bag

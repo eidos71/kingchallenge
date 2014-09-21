@@ -22,12 +22,6 @@ public class HttpKingExchangeHelper {
 
 	static final Logger LOG = LoggerFactory.getLogger(HttpKingExchangeHelper.class);
 
-
-
-	public HttpKingExchangeHelper() {
-	
-	}
-
 	
 
 	/**
@@ -109,9 +103,9 @@ public class HttpKingExchangeHelper {
 	}
 
 	public static Long getLongValue(Map<String,Object> requestParamMap, String keyValue ) {
-		Long value=0L;
-		if (requestParamMap==null)  	throw new KingRunTimeIOException("System Error");
+				if (requestParamMap==null)  	throw new KingRunTimeIOException("System Error");
 		try {
+			LOG.debug("keyValue, {}", keyValue);
 			return	Long.parseLong((String) requestParamMap
 					.get(keyValue));
 

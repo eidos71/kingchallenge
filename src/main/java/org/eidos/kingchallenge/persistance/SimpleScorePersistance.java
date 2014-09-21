@@ -2,27 +2,20 @@ package org.eidos.kingchallenge.persistance;
 
 import java.util.Map.Entry;
 import java.util.Collections;
-import java.util.Map;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.eidos.kingchallenge.KingConfigStaticProperties;
 import org.eidos.kingchallenge.domain.KingSizeLimitedScore;
-import org.eidos.kingchallenge.domain.comparator.KingScoreOrderByScore;
 import org.eidos.kingchallenge.domain.comparator.KingScoreChainedComparator;
 import org.eidos.kingchallenge.domain.comparator.KingScoreReverseOrderByScore;
 import org.eidos.kingchallenge.domain.comparator.KingScoreReverseUserIdComparator;
-import org.eidos.kingchallenge.domain.comparator.KingScoreUserIdComparator;
 import org.eidos.kingchallenge.domain.model.KingScore;
-import org.eidos.kingchallenge.domain.model.KingUser;
 import org.eidos.kingchallenge.utils.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +42,7 @@ final  public class SimpleScorePersistance implements ScorePersistance {
 	};
 	static final Logger LOG = LoggerFactory
 			.getLogger(SimpleScorePersistance.class);
-	private static final int MAXSIZE = 10000000;
+
 	@GuardedBy("navmapScore")
 	private final NavigableMap<Integer, NavigableSet<KingScore>> navmapScore;
 

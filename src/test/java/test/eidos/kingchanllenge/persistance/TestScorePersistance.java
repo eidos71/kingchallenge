@@ -1,19 +1,11 @@
 package test.eidos.kingchanllenge.persistance;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.NavigableSet;
 import java.util.Random;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentSkipListSet;
 
@@ -30,9 +22,7 @@ import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
 import org.eidos.kingchallenge.domain.model.KingScore;
 import org.eidos.kingchallenge.persistance.ScorePersistance;
 import org.eidos.kingchallenge.persistance.SimpleScorePersistance;
-import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -86,7 +76,7 @@ public class TestScorePersistance extends EasyMock {
 		listKingScore.size();
 		Assert.assertTrue(true);
 	}
-	@Ignore
+
 	@Test
 	public void testComparableList() {
 
@@ -117,7 +107,7 @@ public class TestScorePersistance extends EasyMock {
 		LOG.debug("element found  {}",  result);
 	}
 
-	@Ignore
+
 	@Test()
 	public void testA_BagComparable(){
 	
@@ -199,7 +189,7 @@ public class TestScorePersistance extends EasyMock {
 		
 	
 	} 
-	@Ignore
+
 	@Test
 	public void testAutomaticBagPersisatnce() throws Exception{
 		
