@@ -1,5 +1,5 @@
 /**
- * 
+ *  Dto related classes for the domain.
  */
 /**
  * @author eidos71

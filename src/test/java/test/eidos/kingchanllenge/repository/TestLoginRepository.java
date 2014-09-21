@@ -7,10 +7,10 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
+import org.eidos.kingchallenge.KingdomConfManager;
 import org.eidos.kingchallenge.domain.model.KingUser;
 import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
-import org.eidos.kingchallenge.persistance.KingdomConfManager;
 import org.eidos.kingchallenge.persistance.LoginPersistanceMap;
 import org.eidos.kingchallenge.repository.LoginRepository;
 import org.eidos.kingchallenge.repository.SimpleLoginRepository;
@@ -25,7 +25,7 @@ public class TestLoginRepository extends EasyMock {
 	private static final Logger LOG = LoggerFactory
 			.getLogger(TestLoginRepository.class);
 	private LoginRepository loginRepository = new SimpleLoginRepository();
-	private  static boolean isInit=false;
+
 	private static final int BAG_SIZE = 10000;
 
 

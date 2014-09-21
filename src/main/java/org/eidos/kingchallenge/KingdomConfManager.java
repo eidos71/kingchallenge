@@ -1,4 +1,4 @@
-package org.eidos.kingchallenge.persistance;
+package org.eidos.kingchallenge;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,12 +13,9 @@ import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.eidos.kingchallenge.KingConfigStaticProperties;
-import org.eidos.kingchallenge.controller.LoginController;
-import org.eidos.kingchallenge.controller.ScoreController;
-import org.eidos.kingchallenge.controller.SimpleLoginController;
-import org.eidos.kingchallenge.controller.SimpleScoreController;
-import org.eidos.kingchallenge.domain.KingdomHandlerConf;
+import org.eidos.kingchallenge.KingdomHandlerConf;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
+import org.eidos.kingchallenge.persistance.PersistanceBag;
 import org.eidos.kingchallenge.utils.FileReaderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +35,7 @@ public class KingdomConfManager {
 	@GuardedBy("lock")
 	private static volatile KingdomConfManager instance = null;
 	private final static Object lock = new Object();
-	final private Set<org.eidos.kingchallenge.domain.KingdomHandlerConf> handlerConfSet;
+	final private Set<KingdomHandlerConf> handlerConfSet;
 
 	final private PersistanceBag persistanceBag;
 
@@ -48,6 +45,7 @@ public class KingdomConfManager {
 	 * 
 	 * @throws IOException
 	 */
+	@SuppressWarnings("unchecked")
 	private KingdomConfManager()  {
 		persistanceBag = new PersistanceBag.Builder()
 			.setLoginImp(KingConfigStaticProperties.LOGINPERSISTANCE)

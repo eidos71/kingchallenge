@@ -25,7 +25,9 @@ public class TestHttpPetitions {
 	static final Logger LOG = LoggerFactory.getLogger(TestHttpPetitions.class);
 	private final ExecutorService executor = Executors.newCachedThreadPool();
 
-	protected static final String _HERALD = "http://localhost:8000/11/highscorelist";
+	protected static final String _HIGHSCORE = "http://localhost:8000/11/highscorelist";
+	protected static final String _LOGIN= "http://localhost:8000/13/login";
+	protected static final String _POST= "http://localhost:8000/1/score?sessionkey=BabWcCKxRmnzPqyvZVKMfxWPuICmnBzEXIx";
 	private List<Accessor>listAccesor= new ArrayList<Accessor>();
 	private List<Future<?> > listFuture= new ArrayList<Future<?> >();
 	 @Before
@@ -42,7 +44,7 @@ public class TestHttpPetitions {
 	public void testServer() throws Exception {
 		
 
-		 KingdomServer.main(null);
+		 KingdomServer.main( new String[0]);
 		 Thread.sleep(3000);
 		for (Accessor a: listAccesor) {
 			//Execute accesors
@@ -54,7 +56,7 @@ public class TestHttpPetitions {
 				future.get();
 			} catch (InterruptedException | ExecutionException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOG.warn("{}",e);
 			}
 		}
 	}
@@ -79,7 +81,10 @@ public class TestHttpPetitions {
 		@Override
 		public void run() {
 			try {
-				doUrlConnection(_HERALD);
+				doUrlConnection(_LOGIN);
+				doUrlConnection(_POST);				
+				doUrlConnection(_HIGHSCORE);
+
 			}catch(Exception e) {
 				LOG.warn("{}",e);
 			}

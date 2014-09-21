@@ -7,11 +7,9 @@ import java.util.Properties;
 import javax.annotation.concurrent.GuardedBy;
 
 import org.eidos.kingchallenge.persistance.KingPersistance;
-import org.eidos.kingchallenge.persistance.KingdomConfManager;
+
 import org.eidos.kingchallenge.repository.KingdomRepo;
 import org.eidos.kingchallenge.service.KingService;
-import org.eidos.kingchallenge.service.LoginService;
-import org.eidos.kingchallenge.service.SimpleLoginService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

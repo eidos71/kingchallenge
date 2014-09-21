@@ -13,10 +13,11 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
 import org.eidos.kingchallenge.KingConfigStaticProperties;
+import org.eidos.kingchallenge.KingdomConfManager;
+import org.eidos.kingchallenge.KingdomHandlerConf;
 import org.eidos.kingchallenge.controller.KingControllerManager;
 import org.eidos.kingchallenge.controller.SessionWorkerManager;
 import org.eidos.kingchallenge.httpserver.handlers.GenericPageHandler;
-import org.eidos.kingchallenge.persistance.KingdomConfManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -130,7 +131,7 @@ public class KingdomServer {
 	 */
 	@SuppressWarnings("unchecked")
 	protected void createContext() {
-		for (org.eidos.kingchallenge.domain.KingdomHandlerConf confHandler : KingdomConfManager
+		for (KingdomHandlerConf confHandler : KingdomConfManager
 				.getInstance().getHandlerConfList()) {
 			createContext(confHandler.getContext(),
 					confHandler.gethandlerType());

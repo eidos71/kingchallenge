@@ -12,9 +12,9 @@ import static org.hamcrest.Matchers.equalTo;
 
 import org.easymock.EasyMockRunner;
 import org.easymock.EasyMockSupport;
-import org.eidos.kingchallenge.domain.KingdomHandlerConf;
+import org.eidos.kingchallenge.KingdomConfManager;
+import org.eidos.kingchallenge.KingdomHandlerConf;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
-import org.eidos.kingchallenge.persistance.KingdomConfManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -34,7 +34,7 @@ public class TestHandlersBuilder extends EasyMockSupport {
 	@Test
 	public void testKingomDefaultConstructor() {
 		String context="/";
-		KingdomHandlerConf handler = new KingdomHandlerConf.Builder("org.eidos.kingchallenge.httpserver.handlers.HeraldHandler").build();
+		KingdomHandlerConf handler = new org.eidos.kingchallenge.KingdomHandlerConf.Builder("org.eidos.kingchallenge.httpserver.handlers.HeraldHandler").build();
 		LOG.debug(handler.toString() );
 		 assertThat("", handler.getContext(), equalTo(context));
 	}

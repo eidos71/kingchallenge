@@ -1,6 +1,5 @@
 package org.eidos.kingchallenge.domain;
 
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicInteger;

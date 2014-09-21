@@ -1,5 +1,5 @@
 /**
- * 
+ * Exception Classes related to KingChallengeServer.
  */
 /**
  * @author eidos71
