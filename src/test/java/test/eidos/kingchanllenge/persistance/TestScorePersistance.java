@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.NavigableSet;
@@ -31,6 +32,7 @@ import org.eidos.kingchallenge.persistance.ScorePersistance;
 import org.eidos.kingchallenge.persistance.SimpleScorePersistance;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -40,22 +42,24 @@ import org.slf4j.LoggerFactory;
 public class TestScorePersistance extends EasyMock {
 	static final Logger LOG = LoggerFactory.getLogger(TestScorePersistance.class);
 	// 1 MILLION PUTS
-	private static final int PUTS = 500000;
-	// 20 DIFFERENT LEVELS
-	private static final int LEVEL=20;
+	private static final int PUTS = 1000000;
+	// 300 DIFFERENT LEVELS
+	private static final int LEVEL=300;
 	//MAXSCORE
 	private static final int SCORE=50000;
+	//Diferent USERS
 	private static final int DIFFERENTUSERS=1000;
 	private static List<KingScoreDTO> listKingScore= new ArrayList<KingScoreDTO>();
 
-
+	private  final static ScorePersistance sp= new SimpleScorePersistance();
+	
 	@BeforeClass public static void setupOnlyOnce() {
 		 final Random random = new Random();
 		Long level;
 		
 		Integer score;
 		Long userId;
-
+		LOG.debug("************* Preload for insertion");
 		for (int i=0; i<PUTS; i++){
 			 level=new Long(random.nextInt(LEVEL )+1);
 			 userId= new Long(100+random.nextInt(DIFFERENTUSERS ));
@@ -63,15 +67,26 @@ public class TestScorePersistance extends EasyMock {
 				 //LOG.debug("level-{}, points-{}, score- {}",level,points,score);
 			listKingScore.add( new KingScoreDTO.Builder(level,  score, userId ).build()  );
 		}
-		LOG.debug("*************");
+		LOG.debug("************* Preload for read");
+		for (int y=0; y<PUTS; y++){
+			
+			 level=new Long(random.nextInt(LEVEL )+1);
+			 userId= new Long(100+random.nextInt(DIFFERENTUSERS ));
+			 score=  random.nextInt(SCORE );
+
+			sp.put(level.intValue(), transformDTO(craeteKingScoreDTO(level, score, userId)));
+		}
+		LOG.debug("************* END PRELOAD for insertion");
+	
 	}
+
 	
 	@Test
 	public void testEmtpy(){
 		listKingScore.size();
 		Assert.assertTrue(true);
 	}
-
+	@Ignore
 	@Test
 	public void testComparableList() {
 
@@ -102,23 +117,10 @@ public class TestScorePersistance extends EasyMock {
 		LOG.debug("element found  {}",  result);
 	}
 
-	@Test()
-	public void testC_BagComparable(){
-	
-		ScorePersistance sp= new SimpleScorePersistance();
-		boolean result= sp.dumpPersistance();
-		for (KingScoreDTO kingScoreDto: listKingScore){
-			//LOG.debug("{}",kingScoreDto);
-			sp.put(kingScoreDto.getLevel().intValue(), new KingScore.Builder( kingScoreDto.getPoints(),kingScoreDto.getLevel() ).build() );
-		}
-
-		
-		
-		//sp.toString();
-	}
+	@Ignore
 	@Test()
 	public void testA_BagComparable(){
-
+	
 		ScorePersistance sp= new SimpleScorePersistance();
 		boolean result= sp.dumpPersistance();
 		for (KingScoreDTO kingScoreDto: listKingScore){
@@ -129,49 +131,9 @@ public class TestScorePersistance extends EasyMock {
 		//sp.toString();
 	}
 	@Test
-	public void testControlledBag() throws Exception{
+	public void testCreateResultsfromBagUsingDefensiveHash() throws Exception{
 
-		ScorePersistance sp= new SimpleScorePersistance();
-		boolean result= sp.dumpPersistance();
-		if (!result)
-			throw new Exception("pum");
-		//User 1
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 30, 1L)));
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 32, 1L)));
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 31, 1L)));
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 34, 1L)));		
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 33, 1L)));
-		//User 2
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 30, 2L)));
-
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 33, 2L)));
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 34, 2L)));	
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 31, 2L)));
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 32, 2L)));
-		//User 3
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 33, 3L)));
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 34, 3L)));	
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 31, 3L)));
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 30, 3L)));
-
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 32, 3L)));
 	
-		//User 4
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 30, 4L)));
-
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 32, 4L)));
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 33, 4L)));
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 2999, 4L)));
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 3000, 4L)));		
-		//User 5
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 30, 5L)));
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 33, 5L)));
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 32, 5L)));
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 31, 5L)));
-		sp.put(1, transformDTO(craeteKingScoreDTO(1L, 34, 5L)));		
-	
-		sp.toString();
-		 
 		SortedSet<KingScore> resultSet = sp.getScoresByLevel(1);
 		ConcurrentSkipListSet<KingScore> resultAnotherKingScores= new ConcurrentSkipListSet<KingScore>(
 				new KingScoreChainedComparator( new KingScoreReverseOrderByScore(),new KingScoreReverseUserIdComparator()  ));
@@ -203,7 +165,41 @@ public class TestScorePersistance extends EasyMock {
 		
 	
 	} 
+	@Test
+	public void testUsingIteratorHash() throws Exception{
+		 
+		SortedSet<KingScore> resultSet = sp.getScoresByLevel(1);
+
+		Set<KingScore> kingSetScore = new TreeSet<KingScore>(
+				new KingScoreChainedComparator(
+						new KingScoreReverseOrderByScore(),
+						new KingScoreReverseUserIdComparator()));
+		Set<KingScore> kingUserUnique = new TreeSet<KingScore>(
+				new KingScoreReverseUserIdComparator());
+		int _maxNumElemsn=5;
+		KingScore pollResult;
+		
+		for (Iterator<KingScore> resultIterator = resultSet.iterator(); resultIterator
+				.hasNext();) {
+			pollResult = (KingScore) resultIterator.next();
+			if (!kingSetScore.contains(pollResult)
+					&& !kingUserUnique.contains(pollResult)) {
+				kingSetScore.add(pollResult);
+				kingUserUnique.add(pollResult);
+				if (kingSetScore.size() >= _maxNumElemsn)
+					break;
+			}
+		}
 	
+		LOG.debug("size-{}",resultSet.size() );
+		resultSet.remove(transformDTO(craeteKingScoreDTO(1L, 34, 5L)) );
+		resultSet.size();
+		LOG.debug("size-{}",resultSet.size() );
+		LOG.debug("Set to return {}", kingSetScore);
+		
+	
+	} 
+	@Ignore
 	@Test
 	public void testAutomaticBagPersisatnce() throws Exception{
 		
@@ -246,11 +242,11 @@ public class TestScorePersistance extends EasyMock {
 	 * 
 	 * @return
 	 */
-	private  KingScoreDTO  craeteKingScoreDTO(Long lvl, Integer score, Long userId){
+	private  static KingScoreDTO  craeteKingScoreDTO(Long lvl, Integer score, Long userId){
 		return new KingScoreDTO.Builder(lvl, score, userId).build();
 		
 	}
-	private KingScore transformDTO(KingScoreDTO dto){
+	private static KingScore transformDTO(KingScoreDTO dto){
 		return new KingScore.Builder(  dto.getPoints(), dto.getKingUserId() ).build() ;
 	}
 

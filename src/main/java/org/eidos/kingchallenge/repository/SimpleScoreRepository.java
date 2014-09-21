@@ -1,6 +1,7 @@
 package org.eidos.kingchallenge.repository;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -19,9 +20,10 @@ import org.eidos.kingchallenge.persistance.ScorePersistance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SimpleScoreRepository implements ScoreRepository{
+public final class SimpleScoreRepository implements ScoreRepository{
 
 	static final Logger LOG = LoggerFactory.getLogger(SimpleScoreRepository.class);
+	//It is not final because we need to mock it.
 	private ScorePersistance scorePersistance;
 	public SimpleScoreRepository() {
 		this.scorePersistance=KingdomConfManager.getInstance().getPersistanceBag().getScorePersistance();
@@ -39,29 +41,39 @@ public class SimpleScoreRepository implements ScoreRepository{
 		if (resultSet==null || resultSet.size()==0) {
 			return Collections.emptySet();
 		}
-		ConcurrentSkipListSet<KingScore> resultAnotherKingScores= new ConcurrentSkipListSet<KingScore>(
-				new KingScoreChainedComparator( new KingScoreReverseOrderByScore(),new KingScoreReverseUserIdComparator()  ));
-		resultAnotherKingScores.addAll(resultSet);
 		Set<KingScore> kingSetScore = new TreeSet<KingScore>(
 				new KingScoreChainedComparator(
 						new KingScoreReverseOrderByScore(),
 						new KingScoreReverseUserIdComparator()));
+		
 		Set<KingScore> kingUserUnique = new TreeSet<KingScore>(
 				new KingScoreReverseUserIdComparator());
-
 		KingScore pollResult;
-		while (kingSetScore.size()<KingConfigStaticProperties.TOPLISTSCORE && resultAnotherKingScores.size()>0){
-			 pollResult = resultAnotherKingScores.pollFirst();
-			
-			if (!kingSetScore.contains(pollResult) && !kingUserUnique.contains(pollResult) ){
+		for (Iterator<KingScore> resultIterator = resultSet.iterator(); resultIterator
+				.hasNext();) {
+			pollResult = (KingScore) resultIterator.next();
+			if (!kingSetScore.contains(pollResult)
+					&& !kingUserUnique.contains(pollResult)) {
 				LOG.trace("inserting {}",pollResult);
-				kingSetScore.add(	pollResult );
+				kingSetScore.add(pollResult);
 				kingUserUnique.add(pollResult);
-			}		
+				if (kingSetScore.size() >= KingConfigStaticProperties.TOPLISTSCORE)
+					break;
+			}
 		
-		}
+		}	
+
 		LOG.trace("Set to return {}", kingSetScore);
 		return kingSetScore;
+		}
+		/**
+		 * This setter is ONLY to be used by TEST 
+		 * In another context, a FluidBuilderPattern with private reflection or some alternative
+		 * will be defined to avoid setting the Persistance from a Setter method
+		 * @param mockPersistance Persistance Mock
+		 */
+		public void setMockPersistance(ScorePersistance mockPersistance) {
+			this.scorePersistance=mockPersistance;
 		}
 	}
 

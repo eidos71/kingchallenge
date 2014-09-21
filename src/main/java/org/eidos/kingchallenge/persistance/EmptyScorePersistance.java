@@ -1,6 +1,5 @@
 package org.eidos.kingchallenge.persistance;
 
-import java.util.Set;
 import java.util.SortedSet;
 
 import org.eidos.kingchallenge.domain.model.KingScore;

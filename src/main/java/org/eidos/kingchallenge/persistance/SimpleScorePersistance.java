@@ -18,6 +18,8 @@ import org.eidos.kingchallenge.KingConfigStaticProperties;
 import org.eidos.kingchallenge.domain.KingSizeLimitedScore;
 import org.eidos.kingchallenge.domain.comparator.KingScoreOrderByScore;
 import org.eidos.kingchallenge.domain.comparator.KingScoreChainedComparator;
+import org.eidos.kingchallenge.domain.comparator.KingScoreReverseOrderByScore;
+import org.eidos.kingchallenge.domain.comparator.KingScoreReverseUserIdComparator;
 import org.eidos.kingchallenge.domain.comparator.KingScoreUserIdComparator;
 import org.eidos.kingchallenge.domain.model.KingScore;
 import org.eidos.kingchallenge.domain.model.KingUser;
@@ -33,15 +35,15 @@ import org.slf4j.LoggerFactory;
  * @author eidos71
  *
  */
-final public class SimpleScorePersistance implements ScorePersistance {
+final  public class SimpleScorePersistance implements ScorePersistance {
 	private static final NavigableSet<KingScore> EMPTY_SET;
 
 	static {
 
 		EMPTY_SET=  new ConcurrentSkipListSet<KingScore>(
 				new KingScoreChainedComparator(
-						new KingScoreOrderByScore() ,		
-						new KingScoreUserIdComparator()
+						new KingScoreReverseOrderByScore(),
+						new KingScoreReverseUserIdComparator()
 
 						));
 	};
@@ -50,6 +52,7 @@ final public class SimpleScorePersistance implements ScorePersistance {
 	private static final int MAXSIZE = 10000000;
 	@GuardedBy("navmapScore")
 	private final NavigableMap<Integer, NavigableSet<KingScore>> navmapScore;
+
 
 	public SimpleScorePersistance() {
 		this.navmapScore = new ConcurrentSkipListMap<Integer, NavigableSet<KingScore>>();
@@ -68,8 +71,8 @@ final public class SimpleScorePersistance implements ScorePersistance {
 			NavigableSet<KingScore> setKingScore = new KingSizeLimitedScore<KingScore>(level,
 					KingConfigStaticProperties.PERSISTANCE_SCORE_MAX_ELEMS_PER_LVL, 
 					new KingScoreChainedComparator(
-							new KingScoreOrderByScore(),
-							new KingScoreUserIdComparator()
+							new KingScoreReverseOrderByScore(),
+							new KingScoreReverseUserIdComparator()
 
 					));
 			setKingScore.add(kingScore);

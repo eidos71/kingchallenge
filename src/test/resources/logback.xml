@@ -10,9 +10,9 @@
 
 	<logger name="org.eidos.kingchanllenge" level="INFO" />
 
-	<logger name="test.eidos.kingchanllenge" level="INFO" />
+	<logger name="test.eidos.kingchanllenge" level="DEBUG" />
 
-	<root level="WARN">
+	<root level="DEBUG">
 		<appender-ref ref="STDOUT" />
 	</root>
 </configuration>

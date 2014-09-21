@@ -11,10 +11,8 @@ import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.eidos.kingchallenge.domain.comparator.KingScoreChainedComparator;
-import org.eidos.kingchallenge.domain.comparator.KingScoreOrderByScore;
 import org.eidos.kingchallenge.domain.comparator.KingScoreReverseOrderByScore;
 import org.eidos.kingchallenge.domain.comparator.KingScoreReverseUserIdComparator;
-import org.eidos.kingchallenge.domain.comparator.KingScoreUserIdComparator;
 import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
 import org.eidos.kingchallenge.domain.model.KingScore;
 import org.eidos.kingchallenge.domain.model.KingUser;
@@ -28,6 +26,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import test.eidos.kingchanllenge.utils.TestUtils;
 
 @RunWith(EasyMockRunner.class)
 public class TestScoreService extends EasyMock{
@@ -79,20 +79,20 @@ public class TestScoreService extends EasyMock{
 	@Test
 	public void testGetHighScoreAllOk(){
 
-		String expectedResult="5=34, 4=34, 3=34, 2=34, 1=34";
+		String expectedResult="4=4000, 5=34, 3=34, 2=34, 1=34";
 		
 		Set<KingScore> setScore= new TreeSet<KingScore>(
 				new KingScoreChainedComparator( new KingScoreReverseOrderByScore(),new KingScoreReverseUserIdComparator()  )	);
 		//User 1
-		setScore.add(  transformDTO(craeteKingScoreDTO(1L, 34, 1L)) 	 );
+		setScore.add(  TestUtils.transformDTO(TestUtils.craeteKingScoreDTO(1L, 34, 1L)) 	 );
 		//User 2
-		setScore.add(  transformDTO(craeteKingScoreDTO(1L, 34, 2L)) );	
+		setScore.add( TestUtils.transformDTO(TestUtils.craeteKingScoreDTO(1L, 34, 2L)) );	
 		//User 3
-		setScore.add(  transformDTO(craeteKingScoreDTO(1L, 34, 3L))  );	
+		setScore.add(  TestUtils.transformDTO(TestUtils.craeteKingScoreDTO(1L, 34, 3L))  );	
 		//User 4
-		setScore.add(  transformDTO(craeteKingScoreDTO(1L, 34, 4L))  );	
+		setScore.add( TestUtils. transformDTO(TestUtils.craeteKingScoreDTO(1L, 4000, 4L))  );	
 		//User5
-		setScore.add(  transformDTO(craeteKingScoreDTO(1L, 34, 5L))  );	
+		setScore.add( TestUtils. transformDTO(TestUtils.craeteKingScoreDTO(1L, 34, 5L))  );	
 		String sessionKey= "MOCK";
 	
 		//expect(loginService.loginToken(new AtomicLong(-1234L))).andThrow(new RuntimeException());
@@ -144,15 +144,5 @@ public class TestScoreService extends EasyMock{
 		assertThat("", scoreService.getHighScoreList(null, 31L), equalTo(""));
 		
 	}
-	/**
-	 * 
-	 * @return
-	 */
-	private  KingScoreDTO  craeteKingScoreDTO(Long lvl, Integer score, Long userId){
-		return new KingScoreDTO.Builder(lvl, score, userId).build();
-		
-	}
-	private KingScore transformDTO(KingScoreDTO dto){
-		return new KingScore.Builder(  dto.getPoints(), dto.getKingUserId() ).build() ;
-	}
+
 }
