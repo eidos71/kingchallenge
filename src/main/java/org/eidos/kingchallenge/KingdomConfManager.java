@@ -64,7 +64,7 @@ public class KingdomConfManager {
 	private void init() {
 		
 		 InputStream inputStream = 
-	    		   getClass().getClassLoader().getResourceAsStream(HANDLER_PROPERTIES);
+				 this.getClass().getClassLoader().getResourceAsStream(HANDLER_PROPERTIES);
 		
 		Map<String, String> handlerMap = FileReaderUtils.returnEnumList(inputStream);
 		 Iterator<Entry<String, String>> it = handlerMap.entrySet().iterator();

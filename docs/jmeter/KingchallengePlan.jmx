@@ -61,6 +61,12 @@
           </RegexExtractor>
           <hashTree/>
         </hashTree>
+        <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Gaussian Random Timer" enabled="false">
+          <stringProp name="ConstantTimer.delay">5</stringProp>
+          <stringProp name="RandomTimer.range">100</stringProp>
+          <stringProp name="TestPlan.comments">We want to give some time to wait</stringProp>
+        </GaussianRandomTimer>
+        <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POSTScore" enabled="true">
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
@@ -87,12 +93,6 @@
           <boolProp name="HTTPSampler.monitor">false</boolProp>
           <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
         </HTTPSamplerProxy>
-        <hashTree/>
-        <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Gaussian Random Timer" enabled="false">
-          <stringProp name="ConstantTimer.delay">5</stringProp>
-          <stringProp name="RandomTimer.range">100</stringProp>
-          <stringProp name="TestPlan.comments">We want to give some time to wait</stringProp>
-        </GaussianRandomTimer>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HighScore" enabled="true">
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>

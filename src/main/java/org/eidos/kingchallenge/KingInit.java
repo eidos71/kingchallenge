@@ -37,7 +37,7 @@ public class KingInit {
 	private  void loadPropertyConf()  {
 		InputStream input = null;
 		try {
-			input = getClass().getClassLoader().
+			input = this.getClass().getClassLoader().
 					getResourceAsStream(CONFIGURATION_PROPERTIES);
 			prop.load(input);
 			} catch (IOException e) {
