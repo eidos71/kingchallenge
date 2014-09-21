@@ -57,7 +57,7 @@ public class TestHandlersBuilder extends EasyMockSupport {
 	@Test
 	public void testInitHandler() {
 		Set<KingdomHandlerConf> map = KingdomConfManager.getInstance().getHandlerConfList();
-		 assertThat("", map.size(), equalTo(2));
+		 assertThat("", map.size(), equalTo(1));
 	}
 
 

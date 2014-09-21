@@ -82,7 +82,7 @@ public class TestChekExpiration extends EasyMockSupport {
 	@Test
 	public void sessionCheck() throws InterruptedException {
 		
-		if (loginService == null)
+		if (loginService == null || loginService.sessionCheck()==null)
 			LOG.debug("login service is null");
 		loginService.sessionCheck();
 	}
@@ -91,7 +91,7 @@ public class TestChekExpiration extends EasyMockSupport {
 	public void testSessionExecutor() throws InterruptedException,
 			ExecutionException {
 		Set<Mutator> mutatorList = new LinkedHashSet<Mutator>();
-		List<Future<?>> listFuture = new ArrayList<Future<?>>();
+	
 		for (int i = 0; i < MUTATOR; i++)
 			mutatorList.add(new Mutator());
 

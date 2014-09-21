@@ -21,7 +21,7 @@ public enum KingControllerEnum {
 	 */
 	public static KingControllerEnum byControllercontext(String context) {
 		for (KingControllerEnum controller : KingControllerEnum.values()) {
-			if (controller.controllerContext == context)
+			if (controller.controllerContext.equals(context) )
 				return controller;
 		}
 		return UNKNOWN;

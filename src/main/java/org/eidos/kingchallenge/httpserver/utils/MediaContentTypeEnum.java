@@ -26,7 +26,7 @@ public enum MediaContentTypeEnum{
 	 */
 	public static MediaContentTypeEnum byCode(String code) {
 		for (MediaContentTypeEnum typeContent : MediaContentTypeEnum.values()) {
-			if (typeContent.code() == code)
+			if (typeContent.code().equals(code) )
 				return typeContent;
 		}
 

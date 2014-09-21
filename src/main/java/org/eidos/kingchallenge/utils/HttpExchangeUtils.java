@@ -33,8 +33,8 @@ public class HttpExchangeUtils {
 					value = URLDecoder.decode(param[1],
 							System.getProperty("file.encoding"));
 				}
-
-				parameters.put(key.toLowerCase(), value);
+				if (key!=null)
+					parameters.put(key.toLowerCase(), value);
 			}
 		}
 	}

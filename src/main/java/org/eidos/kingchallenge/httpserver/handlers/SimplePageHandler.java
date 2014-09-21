@@ -90,9 +90,6 @@ public final class SimplePageHandler implements HttpHandler {
 		}catch (Exception ex) {
 			LOG.info("Exception {}", ex);
 			streamWriterToResponse(HttpURLConnection.HTTP_INTERNAL_ERROR, new KingResponseDTO.Builder().putContentBody("").build(),httpExchange );
-		}catch (Throwable ex) {
-			LOG.info("{}", ex);
-			 streamWriterToResponse(HttpURLConnection.HTTP_INTERNAL_ERROR, null,httpExchange );
 		}
 		
 	}
@@ -104,7 +101,9 @@ public final class SimplePageHandler implements HttpHandler {
 	 * @throws IOException 
 	 */
 	private OutputStream  streamWriterToResponse(int httpCodeHeader, KingResponseDTO responseDto, HttpExchange httpExchange ) throws IOException {
-	
+			if (responseDto==null) {
+				responseDto=new KingResponseDTO.Builder().putContentBody("").build();
+			}
 			OutputStream os = null;
 			try {
 				Headers responseHeaders = httpExchange.getResponseHeaders();
@@ -115,7 +114,8 @@ public final class SimplePageHandler implements HttpHandler {
 				os.write(responseDto.getContentBody().toString().getBytes());
 				return os;
 			}finally {
-				os.close();
+				if (os!=null)
+					os.close();
 			}
 	
 

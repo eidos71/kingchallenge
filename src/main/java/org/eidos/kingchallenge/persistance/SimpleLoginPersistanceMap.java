@@ -72,12 +72,11 @@ public final class SimpleLoginPersistanceMap implements LoginPersistanceMap<Long
 			KingUser removedSession = mapBySession.remove(sessionKey);
 			if (removedSession==null) {
 				LOG.debug("- sessionKey {} was not found", sessionKey);
+				return false;
+			}else {
+				return mapByLogin.remove(removedSession.getKingUserId().get() ) != null;
 			}
-				
-			return mapByLogin.remove(removedSession.getKingUserId().get() ) != null;
-		
-			
-		}
+			}
 	}
 	@Override
 	public boolean removeByLogin(Long loginKey) {

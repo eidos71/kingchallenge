@@ -1,0 +1,35 @@
+Recomended Java Usage:
+
+This application is intensive in the user of defensive copys and inmutable objects, interlaced with the Builder pattern it involves the creation of a lot of instances, 
+
+After some analysis, this is the recommended configuration of the JVM, although -server is by default on the 1.7 version and the application has only been tested for a 1.7 64bits jvm, it is at least informative for the system admin.
+
+
+-server -Xms200m -Xmx200m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:NewSize=50m -XX:MaxNewSize=50m -XX:+UseParNewGC -XX:MaxTenuringThreshold=2 -XX:SurvivorRatio=8 -XX:+UnlockDiagnosticVMOptions -XX:ParGCCardsPerStrideChunk=4096 -XX:+AlwaysPreTouch -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime -XX:-OmitStackTraceInFastThrow -XX:+UseConcMarkSweepGC
+
+Starting Configuration options:
+
+The application will start and expect two different configurations properties:
+
+handler.properties
+Allows to define different contexts and define which handler its taking care of its petition.
+
+configuration.properties
+
+Defines the basic behaviour of the application, it includes default sevices ,repositories and persistence units.
+
+On /Test/resources
+You can find on the resources a JMETER basic test, configured to create random petitions on the three statements.
+
+
+
+Logging, for convenience Logback has been set as the basic Log provider, I am not sure if that qualifies as an external library, if so, please consider I removed all instance of log and replaced with the Logger factory Sun internals (or on its worse, replace all entries of logback).
+
+some points i would like to talk:
+
+The Persistence in memory implied to manage great number of datas on memory, given the fact that all the exclusions were stated on the highscorelist and not the Post, I tried to keep the storage the bigger posible keeping the history of the users, and limiting to displaying 15 on a CSV format on the request. In a real project I will surely talked with the Functional people to clarify if that exclusion could be done on the storage or not.
+
+The ties were not specified, actually the system just lists the top 15 scores, if some users are tied and some of them will be excluded because the 15 limit. This issue would also asked in a real project, because I didn't saw an easy bussiness action (what happens if 20000 people ties for the 4 place ..i list all of them?, which criteria..etc).
+
+The Session Expiration is deal two ways, any Post Score petition is checked for sesion expiration, and refreshed if not. Also a Worker Watchdog runs each 90 seconds (configured on the configuration.properties) to clean abandoned session
+

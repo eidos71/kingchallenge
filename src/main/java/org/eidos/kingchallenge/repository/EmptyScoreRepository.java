@@ -16,7 +16,7 @@ public class EmptyScoreRepository implements ScoreRepository {
 	@Override
 	public Boolean insertScore(KingScoreDTO kingScore) {
 		// TODO Auto-generated method stub
-		return null;
+		return false;
 	}
 
 	@Override
