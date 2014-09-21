@@ -55,7 +55,7 @@ public class KingdomServer {
 
 	protected void initServer() throws IOException, InterruptedException {
 
-		LOG.info("Sarting server on {} :  Shutdown port on:{} ", serverPort);
+		LOG.info("Sarting server on {} ", serverPort);
 		server = HttpServer.create(new InetSocketAddress(serverPort),
 				HTTP_POOL_CONNECTIONS);
 
