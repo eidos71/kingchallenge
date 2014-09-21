@@ -122,7 +122,7 @@ public class TestScorePersistance extends EasyMock {
 	public void testA_BagComparable(){
 	
 		ScorePersistance sp= new SimpleScorePersistance();
-		boolean result= sp.dumpPersistance();
+	sp.dumpPersistance();
 		for (KingScoreDTO kingScoreDto: listKingScore){
 			//LOG.debug("{}",kingScoreDto);
 			sp.put(kingScoreDto.getLevel().intValue(), new KingScore.Builder( kingScoreDto.getPoints(),kingScoreDto.getLevel() ).build() );

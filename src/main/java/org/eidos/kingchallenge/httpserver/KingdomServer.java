@@ -32,7 +32,7 @@ public class KingdomServer {
 	static final Logger LOG = LoggerFactory.getLogger(KingdomServer.class);
 	private static final int HTTP_POOL_CONNECTIONS = KingConfigStaticProperties.HTTP_POOL_CONNECTIONS;
 	private static final int HTTP_MAX_CONNECTIONS = HTTP_POOL_CONNECTIONS * 2;
-	private static final int HTTP_QUEUE_MAX_ITEMS = HTTP_POOL_CONNECTIONS * 4;
+	private static final int HTTP_QUEUE_MAX_ITEMS = HTTP_POOL_CONNECTIONS * 2;
 	private static final int DELAY_FOR_TERMINATION = 0;
 	final int serverPort = Integer.getInteger("serverPort",  KingConfigStaticProperties.BINDING_PORT);
 

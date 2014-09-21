@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -34,13 +35,12 @@ import com.sun.net.httpserver.HttpHandler;
  */
 @SuppressWarnings("restriction")
 public final class SimplePageHandler implements HttpHandler {
-	// Theard Local Exchange and Info storage
-	private static ThreadLocal<HttpExchange> tlEx = new ThreadLocal<HttpExchange>();
-	private static ThreadLocal<HttpKingExchangeHelper> tlExInfo = new ThreadLocal<HttpKingExchangeHelper>();
+
 
 	static final Logger LOG = LoggerFactory.getLogger(SimplePageHandler.class);
 	private final LoginController loginController;
 	private final ScoreController scoreController;
+	private final Object locked= new Object();
 
 	public SimplePageHandler() {
 		this.loginController = KingControllerManager.getInstance()
@@ -50,73 +50,75 @@ public final class SimplePageHandler implements HttpHandler {
 
 	}
 
-	@SuppressWarnings({  "resource" })
+	@SuppressWarnings({  "resource", "unchecked" })
 	@Override
 	public void handle(HttpExchange httpExchange) throws IOException {
 
-		tlEx.set(httpExchange);
-		tlExInfo.set(new HttpKingExchangeHelper());
-
+		
 		KingResponseDTO response = null;
-		OutputStream os = null;
 	
 		try {
-
-			if (tlExInfo.get() == null) LOG.info("null tlExinfo");
-			if (tlEx.get() == null) LOG.info("null tlEx");
-
-			LOG.debug("{}", tlExInfo.get().getPath(tlEx.get()));
-			tlExInfo.get().parseGetParameters(tlEx.get());
-			tlExInfo.get().parsePostParameters(tlEx.get());
-			// Specific to this handler class.
-			parseUrlEncodedParameters(tlEx.get());
-			//
-			@SuppressWarnings("unchecked")
-			Map<String, Object> params = (Map<String, Object>) tlEx.get()
-					.getAttribute(KingConfigStaticProperties.KING_REQUEST_PARAM);
+			Map<String, Object> params ;
+			synchronized(locked){
+				HttpKingExchangeHelper.parseGetParameters(httpExchange);
+				HttpKingExchangeHelper.parsePostParameters(httpExchange);
+				// Specific to this handler class.
+				parseUrlEncodedParameters(httpExchange);
+			
+				params = Collections.synchronizedMap((Map<String, Object>)httpExchange
+						.getAttribute(KingConfigStaticProperties.KING_REQUEST_PARAM) );
+			}
+	
 			if (LOG.isDebugEnabled()) {
 				for (Entry<String, Object> value : params.entrySet())
 					LOG.debug("String-{}  Value-{}", value.getKey(),
 							value.getValue());
+				LOG.debug("response {}", response);
 			}
-			LOG.debug("response {}", response);
-			os= streamWriterToResponse(HttpURLConnection.HTTP_OK, prepareResponse(params));
+		
+
+				streamWriterToResponse(HttpURLConnection.HTTP_OK, prepareResponse(params,httpExchange),httpExchange);
+		
 		} catch (KingInvalidSessionException ex) {
 			LOG.info("{}", ex);
-			os= streamWriterToResponse(HttpURLConnection.HTTP_FORBIDDEN,
-					new KingResponseDTO.Builder().putContentBody(ex.getMessage()).build() );
+			streamWriterToResponse(HttpURLConnection.HTTP_FORBIDDEN,
+					new KingResponseDTO.Builder().putContentBody(ex.getMessage()).build(),httpExchange);
 		} catch (KingRunTimeIOException | LogicKingChallengeException ex) {
 			LOG.info("KingRunTimeIOException or KingRunTimeIOException {}", ex);
-			os= streamWriterToResponse(HttpURLConnection.HTTP_INTERNAL_ERROR,
-					new KingResponseDTO.Builder().putContentBody(ex.getMessage()).build() );
+			 streamWriterToResponse(HttpURLConnection.HTTP_INTERNAL_ERROR,
+					new KingResponseDTO.Builder().putContentBody(ex.getMessage()).build() ,httpExchange);
 		}catch (Exception ex) {
 			LOG.info("Exception {}", ex);
-			os= streamWriterToResponse(HttpURLConnection.HTTP_INTERNAL_ERROR, new KingResponseDTO.Builder().putContentBody("").build() );
+			streamWriterToResponse(HttpURLConnection.HTTP_INTERNAL_ERROR, new KingResponseDTO.Builder().putContentBody("").build(),httpExchange );
 		}catch (Throwable ex) {
 			LOG.info("{}", ex);
-			os= streamWriterToResponse(HttpURLConnection.HTTP_INTERNAL_ERROR, null );
-		} finally {
-			os.close();
-			tlExInfo.remove();
-			tlEx.remove();
+			 streamWriterToResponse(HttpURLConnection.HTTP_INTERNAL_ERROR, null,httpExchange );
 		}
+		
 	}
 	/**
 	 * 
 	 * @param httpCodeHeader
+	 * @param httpExchange 
 	 * @param os
 	 * @throws IOException 
 	 */
-	private OutputStream  streamWriterToResponse(int httpCodeHeader, KingResponseDTO response ) throws IOException {
-		OutputStream os = null;
+	private OutputStream  streamWriterToResponse(int httpCodeHeader, KingResponseDTO responseDto, HttpExchange httpExchange ) throws IOException {
+	
+			OutputStream os = null;
+			try {
+				Headers responseHeaders = httpExchange.getResponseHeaders();
+				responseHeaders.set("Content-Type", responseDto.getContentType().code());
+				httpExchange.sendResponseHeaders(httpCodeHeader,
+						(responseDto == null) ? 0 : responseDto.getContentBody().length());
+				os = httpExchange.getResponseBody();
+				os.write(responseDto.getContentBody().toString().getBytes());
+				return os;
+			}finally {
+				os.close();
+			}
+	
 
-		Headers responseHeaders = tlEx.get().getResponseHeaders();
-		responseHeaders.set("Content-Type", response.getContentType().code());
-		tlEx.get().sendResponseHeaders(httpCodeHeader,
-				(response == null) ? 0 : response.getContentBody().length());
-		os = tlEx.get().getResponseBody();
-		os.write(response.getContentBody().toString().getBytes());
-		return os;
 	}
 	/**
 	 * 
@@ -125,9 +127,10 @@ public final class SimplePageHandler implements HttpHandler {
 	 * @param httpExchange
 	 * @return
 	 */
-	protected KingResponseDTO prepareResponse(Map<String, Object> requestParamMap) {
+	protected KingResponseDTO prepareResponse(Map<String, Object> requestParamMap, HttpExchange httpExchange) {
 		KingResponseDTO response;
-		switch (tlExInfo.get().defineController(tlEx.get())) {
+		
+		switch (HttpKingExchangeHelper.defineController( httpExchange)) {
 		case HIGHSCORELIST:
 			LOG.debug("HIGHSCORELIST");
 			if (scoreController == null)
@@ -153,24 +156,27 @@ public final class SimplePageHandler implements HttpHandler {
 						LogicKingError.PROCESSING_ERROR);
 			Integer score =null;
 			for (Entry<String, Object> elem : requestParamMap.entrySet()) {
-					LOG.debug("****** {}", elem.getKey()  );
+	
 					//If the key is a number, it is the Post parameter
 					try {
 						if (Validator.isValidString(elem.getKey(), Mode.NUMERIC)) {
 							score= new Integer(elem.getKey());
+							LOG.debug("****** {}", elem.getKey()  );
 							break;
 						}
 					}catch (NumberFormatException e) {
 						throw new LogicKingChallengeException(
 								LogicKingError.PROCESSING_ERROR, e);
+					}catch(NullPointerException e) {
+						
 					}
 	
 		
 			}
+		
 			response = scoreController
-					.putHighScore((String) requestParamMap.get("sessionkey"),
-							Long.parseLong((String) requestParamMap
-									.get("levelid")), score);
+					.putHighScore(HttpKingExchangeHelper.getKey(requestParamMap, "sessionkey"),
+						HttpKingExchangeHelper.getLongValue(requestParamMap,"levelid"), score);
 			break;
 		case UNKNOWN:
 			LOG.debug("UNKNOWN");
@@ -184,7 +190,7 @@ public final class SimplePageHandler implements HttpHandler {
 		return response;
 
 	}
-
+	
 	/**
 	 * Specific parsing of the incoming request, based on the Handler Due the
 	 * way the URL pettions are set, is needed to reorder the different

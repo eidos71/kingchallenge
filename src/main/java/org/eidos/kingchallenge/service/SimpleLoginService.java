@@ -46,10 +46,10 @@ public final class SimpleLoginService implements LoginService {
 	public KingUser sessionCheckBySessionKey(String sessionKey) {
 		
 		if (sessionKey == null || "".equals(sessionKey) )
-			throw new KingInvalidSessionException();
+			throw new KingInvalidSessionException("Empty or Null SessionKey ");
 		
 		KingUser kingUser=loginRepository.findBySessionId(sessionKey);	
-		if (kingUser==null) throw	new KingInvalidSessionException("Not found sessionKey");
+		if (kingUser==null) throw	new KingInvalidSessionException("Not found sessionKey "+ sessionKey);
 		//We check if it is still a valid Session
 		LOG.debug("user to check: {}",kingUser);
 		boolean isInvalid=!checkInvalidSessionByKey(sessionKey,kingUser.getDateLogin());

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eidos.kingchallenge.KingConfigStaticProperties;
+import org.eidos.kingchallenge.exceptions.KingRunTimeIOException;
 import org.eidos.kingchallenge.httpserver.enums.KingControllerEnum;
 import org.eidos.kingchallenge.utils.HttpExchangeUtils;
 import org.slf4j.Logger;
@@ -27,17 +28,7 @@ public class HttpKingExchangeHelper {
 	
 	}
 
-	public String getRemoteHostName( HttpExchange httpExchange) {
-		return httpExchange.getRemoteAddress().getHostName();
-	}
-
-	public String getQuery(HttpExchange httpExchange) {
-		return httpExchange.getRequestURI().getQuery();
-	}
-
-	public String getPath(HttpExchange httpExchange) {
-		return httpExchange.getRequestURI().getPath();
-	}
+	
 
 	/**
 	 * Parses parameters coming from a GET
@@ -45,7 +36,7 @@ public class HttpKingExchangeHelper {
 	 * @param exchange
 	 * @throws UnsupportedEncodingException
 	 */
-	protected void parseGetParameters(HttpExchange exchange)
+	protected static void parseGetParameters(final HttpExchange exchange)
 			throws UnsupportedEncodingException {
 
 		Map<String, Object> parameters = new HashMap<String, Object>();
@@ -61,7 +52,7 @@ public class HttpKingExchangeHelper {
 	 * @param exchange
 	 * @throws UnsupportedEncodingException
 	 */
-	protected void parsePostParameters(HttpExchange exchange) throws IOException {
+	protected static void parsePostParameters(HttpExchange exchange) throws IOException {
 
 		if ("post".equalsIgnoreCase(exchange.getRequestMethod())) {
 			@SuppressWarnings("unchecked")
@@ -82,7 +73,7 @@ public class HttpKingExchangeHelper {
 	 * @param httpExchange Exchange
 	 * @return @KingConfigConstants controller
 	 */
-	protected  KingControllerEnum defineController(HttpExchange httpExchange) {
+	protected static KingControllerEnum defineController(HttpExchange httpExchange) {
 		
 /*		Map<String, Object> requestParamsMap = (Map<String, Object>) httpExchange
 				.getAttribute(KingConfigConstants.KING_REQUEST_PARAM);*/
@@ -100,5 +91,42 @@ public class HttpKingExchangeHelper {
 			return KingControllerEnum.LOGIN;
 		return KingControllerEnum.UNKNOWN;
 	}
+
+
+
+	public static String getKey(Map<String,Object> requestParamMap, String mapkey ) {
+		if (requestParamMap==null)  	throw new KingRunTimeIOException("System Error");
+		try {
+			return (String) requestParamMap.get( mapkey);
+
+		}catch(NullPointerException er) {
+			throw er;
+		}catch (Exception er) {
+			throw er;
+		}
+		
 	
+	}
+
+	public static Long getLongValue(Map<String,Object> requestParamMap, String keyValue ) {
+		Long value=0L;
+		if (requestParamMap==null)  	throw new KingRunTimeIOException("System Error");
+		try {
+			return	Long.parseLong((String) requestParamMap
+					.get(keyValue));
+
+		}catch(NullPointerException er) {
+			LOG	.warn("{}, {}", keyValue, er);
+			throw er;
+		}catch(java.lang.NumberFormatException er ) {
+			LOG	.warn("{}, {} ",keyValue ,er);
+			throw er;
+		}catch(Exception er) {
+			LOG	.warn("{}, {} ",keyValue ,er);
+			throw er;
+		}
+	
+		
+		
+	}
 }
