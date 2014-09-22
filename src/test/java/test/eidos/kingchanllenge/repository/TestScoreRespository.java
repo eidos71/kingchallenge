@@ -3,11 +3,9 @@ package test.eidos.kingchanllenge.repository;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.concurrent.ConcurrentSkipListSet;
 
-import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
@@ -15,7 +13,6 @@ import org.eidos.kingchallenge.domain.comparator.KingScoreChainedComparator;
 import org.eidos.kingchallenge.domain.comparator.KingScoreReverseOrderByScore;
 import org.eidos.kingchallenge.domain.comparator.KingScoreReverseUserIdComparator;
 import org.eidos.kingchallenge.domain.model.KingScore;
-import org.eidos.kingchallenge.persistance.EmptyScorePersistance;
 import org.eidos.kingchallenge.persistance.ScorePersistance;
 import org.eidos.kingchallenge.repository.SimpleScoreRepository;
 import org.eidos.kingchallenge.utils.CollectionsChallengeUtils;
@@ -88,7 +85,7 @@ public class TestScoreRespository  extends AbstractKingTest {
 			 );
 		replay(scorePersistance);		
 		scoreRepo.setMockPersistance(scorePersistance);		
-		assertThat("", CollectionsChallengeUtils.returnCsvFromCollection(scoreRepo.getTopScoresForLevel(1L)), equalTo(expectedResult));
+		assertThat("", CollectionsChallengeUtils.returnCsvFromCollection(scoreRepo.forceTopScoresForLevel(1L)), equalTo(expectedResult));
 		
 	}
 	@Test
@@ -113,7 +110,7 @@ public class TestScoreRespository  extends AbstractKingTest {
 				 );
 			replay(scorePersistance);		
 			scoreRepo.setMockPersistance(scorePersistance);		
-			assertThat("", CollectionsChallengeUtils.returnCsvFromCollection(scoreRepo.getTopScoresForLevel(1L)), equalTo(expectedResult));
+			assertThat("", CollectionsChallengeUtils.returnCsvFromCollection(scoreRepo.forceTopScoresForLevel(1L)), equalTo(expectedResult));
 	}
 	@Test
 	public void testUserWithMultipleTopScoresButOnlyReturningHerHighest() {
@@ -166,7 +163,7 @@ public class TestScoreRespository  extends AbstractKingTest {
 			 );
 		replay(scorePersistance);		
 		scoreRepo.setMockPersistance(scorePersistance);		
-		assertThat("", CollectionsChallengeUtils.returnCsvFromCollection(scoreRepo.getTopScoresForLevel(1L)), equalTo(expectedResult));
+		assertThat("", CollectionsChallengeUtils.returnCsvFromCollection(scoreRepo.forceTopScoresForLevel(1L)), equalTo(expectedResult));
 	}
 
 	

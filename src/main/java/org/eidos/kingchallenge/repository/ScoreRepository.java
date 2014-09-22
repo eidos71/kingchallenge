@@ -16,17 +16,21 @@ import org.eidos.kingchallenge.domain.model.KingScore;
 public interface ScoreRepository  extends KingdomRepo{
 	
 	/**
-	 * 
-	 * @param sessionKey
-	 * @param gameLevel
-	 * @param score
-	 * @return
+	 * Inserts a score
+	 * @param kingScore a KingScoreDTO 
+	 * @return True if inserted /false if not
 	 */
 	Boolean insertScore(KingScoreDTO kingScore) ;
 	/**
-	 * 
-	 * @param levelValue
+	 *  Gets a list of top scores
+	 * @param levelValue a Level Long
 	 * @return 
 	 */
 	Set<KingScore> getTopScoresForLevel(Long levelValue);
+	/**
+	 * Gets a list of top scores ignoring the cache
+	 * @param level Level to create
+	 * @return a Set of the defined top scores for a particular level
+	 */
+	Set<KingScore> forceTopScoresForLevel(Long level);
 }

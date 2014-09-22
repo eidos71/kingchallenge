@@ -40,6 +40,10 @@ public class TestHttpPetitions  extends AbstractKingTest {
 	 }
 //	 @Ignore("This test is not meant to be run on a suite of test, only run it to test the server component") 
 	 @Test
+	 /**
+	  * This test only checks handlers are answering
+	  * @throws Exception
+	  */
 	public void testServer() throws Exception {
 		
 
@@ -80,9 +84,9 @@ public class TestHttpPetitions  extends AbstractKingTest {
 		public void run() {
 			try {
 				doUrlConnection(_LOGIN);
-				doUrlConnection(_POST);				
 				doUrlConnection(_HIGHSCORE);
-
+				doUrlConnection(_POST);				
+				
 			}catch(Exception e) {
 			
 			}

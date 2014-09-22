@@ -25,6 +25,12 @@ public class EmptyScoreRepository implements ScoreRepository {
 		return null;
 	}
 
+	@Override
+	public Set<KingScore> forceTopScoresForLevel(Long level) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 

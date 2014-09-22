@@ -1,5 +1,6 @@
 package org.eidos.kingchallenge.repository;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
@@ -7,8 +8,10 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.eidos.kingchallenge.KingConfigStaticProperties;
@@ -24,10 +27,12 @@ import org.eidos.kingchallenge.persistance.ScorePersistance;
 
 @ThreadSafe
 public final class SimpleScoreRepository implements ScoreRepository{
-	final AtomicBoolean isCacheValid = new AtomicBoolean(false);
+	static final Logger LOG = Logger.getLogger(SimpleScoreRepository.class.getName());
 	//Persistanc Map to avoid computing the expensive operation
+	@GuardedBy("scorePersistance")
 	private   Map<Long,Set<KingScore>> cachedScore ;
 		//It is not final because we need to mock it.
+
 	private ScorePersistance scorePersistance;
 	/**
 	 * Public constructor, with specific Basic initialization from the Persistancebag
@@ -44,20 +49,16 @@ public final class SimpleScoreRepository implements ScoreRepository{
 		
 		boolean inserted = scorePersistance.put(kngDto.getLevel().intValue(), new KingScore.Builder(kngDto.getPoints(), kngDto.getKingUserId()).build());
 		if (inserted){
-			isCacheValid.set(false);
+			synchronized(cachedScore) {
+				this.cachedScore.put(kngDto.getLevel(), Collections.unmodifiableSet(getInternalTopScoresForLevel( kngDto.getLevel() ) ) );
+			}
 		}
 		return inserted;
 	}
 	@Override
 	public  Set<KingScore>   getTopScoresForLevel (Long levelValue){
-		if (!isCacheValid.get() ){
-			cachedScore.put(levelValue, 
-					 Collections.unmodifiableSet(getInternalTopScoresForLevel( levelValue) ) );
-			isCacheValid.set(true);
-		
-		}
+		if (LOG.isLoggable(Level.FINE ) ) LOG.fine("We recreate cache ");
 		return cachedScore.get(levelValue);
-		
 	}
 	/**
 	 * Internal Private method that calculeates the top 15 elements for that level
@@ -65,6 +66,7 @@ public final class SimpleScoreRepository implements ScoreRepository{
 	 * @return a
 	 */
 	private Set<KingScore> getInternalTopScoresForLevel(Long levelValue) {
+		if (LOG.isLoggable(Level.FINE ) ) LOG.fine("We recreate cache ");
 		SortedSet<KingScore> resultSet = scorePersistance.getScoresByLevel(levelValue.intValue());
 
 		if (resultSet==null || resultSet.size()==0) {
@@ -103,6 +105,12 @@ public final class SimpleScoreRepository implements ScoreRepository{
 		public void setMockPersistance(ScorePersistance mockPersistance) {
 			this.scorePersistance=mockPersistance;
 		}
+		@Override
+		public   Set<KingScore>    forceTopScoresForLevel(Long level) {
+			// TODO Auto-generated method stub
+			return getInternalTopScoresForLevel( level );
+		}
+	
 	}
 
 
