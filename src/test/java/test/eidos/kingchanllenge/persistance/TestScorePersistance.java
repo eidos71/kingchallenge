@@ -24,6 +24,7 @@ import org.eidos.kingchallenge.domain.model.KingScore;
 import org.eidos.kingchallenge.persistance.ScorePersistance;
 import org.eidos.kingchallenge.persistance.SimpleScorePersistance;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -32,7 +33,7 @@ import org.junit.runner.RunWith;
 public class TestScorePersistance extends EasyMock {
 	static final Logger LOG = Logger.getLogger(TestScorePersistance.class.getName());
 	// 1 MILLION PUTS
-	private static final int PUTS = 1000000;
+	private static final int PUTS = 5000000;
 	// 300 DIFFERENT LEVELS
 	private static final int LEVEL=300;
 	//MAXSCORE
@@ -50,12 +51,13 @@ public class TestScorePersistance extends EasyMock {
 		Integer score;
 		Long userId;
 		LOG.fine("************* Preload for insertion");
-		for (int i=0; i<PUTS; i++){
-			 level=new Long(random.nextInt(LEVEL )+1);
-			 userId= new Long(100+random.nextInt(DIFFERENTUSERS ));
-			 score=  random.nextInt(SCORE );
-				 //LOG.debug("level-{}, points-{}, score- {}",level,points,score);
-			listKingScore.add( new KingScoreDTO.Builder(level,  score, userId ).build()  );
+		for (int i = 0; i < PUTS; i++) {
+			level = new Long(random.nextInt(LEVEL) + 1);
+			userId = new Long(100 + random.nextInt(DIFFERENTUSERS));
+			score = random.nextInt(SCORE);
+			// LOG.debug("level-{}, points-{}, score- {}",level,points,score);
+			listKingScore.add(new KingScoreDTO.Builder(level, score, userId)
+					.build());
 		}
 		LOG.fine("************* Preload for read");
 		for (int y=0; y<PUTS; y++){
@@ -70,13 +72,13 @@ public class TestScorePersistance extends EasyMock {
 	
 	}
 
-	
+	@Ignore
 	@Test
 	public void testEmtpy(){
 		listKingScore.size();
 		Assert.assertTrue(true);
 	}
-
+	@Ignore
 	@Test
 	public void testComparableList() {
 
@@ -109,6 +111,7 @@ public class TestScorePersistance extends EasyMock {
 
 
 	@Test()
+	@Ignore
 	public void testA_BagComparable(){
 	
 		ScorePersistance sp= new SimpleScorePersistance();
@@ -145,11 +148,9 @@ public class TestScorePersistance extends EasyMock {
 			}
 	
 		}
+		System.out.println("" + kingSetScore.toString() );
 	
-	
-		resultSet.remove(transformDTO(craeteKingScoreDTO(1L, 34, 5L)) );
-		resultSet.size();
-
+		
 	
 	} 
 	@Test
@@ -177,16 +178,15 @@ public class TestScorePersistance extends EasyMock {
 					break;
 			}
 		}
-	
-		
-		resultSet.remove(transformDTO(craeteKingScoreDTO(1L, 34, 5L)) );
-		resultSet.size();
+		System.out.println("" + kingSetScore.toString() );
+
 
 		
 	
 	} 
 
 	@Test
+	@Ignore
 	public void testAutomaticBagPersisatnce() throws Exception{
 		
 		 final Random random = new Random();

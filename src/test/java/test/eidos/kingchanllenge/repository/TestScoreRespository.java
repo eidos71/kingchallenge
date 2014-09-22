@@ -168,6 +168,6 @@ public class TestScoreRespository  extends AbstractKingTest {
 		scoreRepo.setMockPersistance(scorePersistance);		
 		assertThat("", CollectionsChallengeUtils.returnCsvFromCollection(scoreRepo.getTopScoresForLevel(1L)), equalTo(expectedResult));
 	}
-	
+
 	
 }

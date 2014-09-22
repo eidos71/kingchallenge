@@ -8,7 +8,8 @@ import org.eidos.kingchallenge.domain.dto.KingScoreDTO;
 import org.eidos.kingchallenge.domain.model.KingScore;
 
 /**
- * 
+ * Repository that deals with the persistance storage
+ * to manage the scores
  * @author eidos71
  *
  */
