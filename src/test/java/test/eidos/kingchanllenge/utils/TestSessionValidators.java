@@ -1,5 +1,7 @@
 package test.eidos.kingchanllenge.utils;
 
+import java.util.logging.Logger;
+
 import junit.framework.Assert;
 
 import org.easymock.EasyMock;
@@ -9,12 +11,14 @@ import org.eidos.kingchallenge.utils.Validator;
 import org.eidos.kingchallenge.utils.UtilsEnum.Mode;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import test.eidos.kingchanllenge.AbstractKingTest;
+
 @RunWith(EasyMockRunner.class)
-public class TestSessionValidators extends EasyMock{
-	static final Logger LOG = LoggerFactory
-			.getLogger(TestSessionValidators.class);
+public class TestSessionValidators extends AbstractKingTest {
+	static final Logger LOG = Logger
+			.getLogger(TestSessionValidators.class.getName()
+					);
 	@Test
 	public  void TestAlphaValidNullString() {
 		Assert.assertFalse("Expected to fail an Apha String ", Validator.isValidString(null, Mode.ALPHA) );

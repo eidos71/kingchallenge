@@ -7,21 +7,19 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.easymock.EasyMockRunner;
-import org.easymock.EasyMockSupport;
 import org.eidos.kingchallenge.domain.model.KingUser;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.persistance.LoginPersistanceMap;
 import org.eidos.kingchallenge.persistance.SimpleLoginPersistanceMap;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import test.eidos.kingchanllenge.AbstractKingTest;
+
 @RunWith(EasyMockRunner.class)
-public class TestLoginPersistance  extends EasyMockSupport  {
-	static final Logger LOG = LoggerFactory
-			.getLogger(TestLoginPersistance.class);
+public class TestLoginPersistance  extends AbstractKingTest  {
+
 	private static final LoginPersistanceMap<Long, String, KingUser> bag = new SimpleLoginPersistanceMap();
 	private KingUser aKingUser=null;
 	@Before
@@ -55,10 +53,10 @@ public class TestLoginPersistance  extends EasyMockSupport  {
 	public void testInsertDuplicateIdStoresfistEntry() {
 		aKingUser =new KingUser.Builder(1).build();
 		bag.put(aKingUser.getKingUserId().get(), aKingUser.getSessionKey(), aKingUser);
-		LOG.debug("{} ",aKingUser);
+
 		KingUser secondUser = new KingUser.Builder(1).build();
 		bag.put(aKingUser.getKingUserId().get(), aKingUser.getSessionKey(), secondUser);
-		LOG.debug("{} ",secondUser);
+
 		 assertThat("T", bag.getMapByLogin().get(1L).getSessionKey() , equalTo(aKingUser.getSessionKey()));
 
 	}
@@ -66,10 +64,10 @@ public class TestLoginPersistance  extends EasyMockSupport  {
 	public void testInsertDuplicateIDStoresLastEntry() {
 		aKingUser =new KingUser.Builder(1).build();
 		bag.put(aKingUser.getKingUserId().get(), aKingUser.getSessionKey(), aKingUser);
-		LOG.debug("{} ",aKingUser);
+		
 		aKingUser =new KingUser.Builder(1).build();
 		bag.put(aKingUser.getKingUserId().get(), aKingUser.getSessionKey(), aKingUser);
-		LOG.debug("{} ",aKingUser);
+
 		 assertThat("Total King users 1", bag.getMapByLogin().get(1L).getSessionKey() , equalTo(aKingUser.getSessionKey()));
 
 	}

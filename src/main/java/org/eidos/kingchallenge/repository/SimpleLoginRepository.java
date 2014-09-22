@@ -13,13 +13,10 @@ import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.persistance.LoginPersistanceMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @ThreadSafe
 public final class SimpleLoginRepository implements LoginRepository {
-	static final Logger LOG = LoggerFactory
-			.getLogger(SimpleLoginRepository.class);
+
 	/**
 	 * Persistance storage for logged users
 	 */
@@ -80,7 +77,7 @@ public final class SimpleLoginRepository implements LoginRepository {
 	public boolean removeKingUserBySession(String sessionId) {
 		if (sessionId == null || "".equals(sessionId))
 			throw new  KingInvalidSessionException();
-		LOG.debug("We want to remove user by sessionId" + sessionId);
+
 		boolean missing = !getAllKingdomBySession().containsKey(sessionId);
 		if (missing)
 			throw new LogicKingChallengeException(LogicKingError.USER_NOT_FOUND);

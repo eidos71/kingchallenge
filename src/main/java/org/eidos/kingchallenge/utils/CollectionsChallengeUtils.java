@@ -2,8 +2,7 @@ package org.eidos.kingchallenge.utils;
 
 import java.util.Collection;
 import org.eidos.kingchallenge.domain.model.KingScore;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 
 
@@ -16,8 +15,7 @@ public class CollectionsChallengeUtils {
 	private static final String EMPTY_ARRAY = ARRAY_START + ARRAY_END;
 
 	private static final String DEFAULT_EMTPYCOLLECTION = "";
-	private static final Logger LOG = LoggerFactory
-			.getLogger(CollectionsChallengeUtils.class);
+
 
 
 	public static String returnCsvFromCollection(
@@ -27,7 +25,7 @@ public class CollectionsChallengeUtils {
 			return DEFAULT_EMTPYCOLLECTION;
 		String result= arrayToDelimitedString(highScoreCollection.toArray(),
 				ARRAY_ELEMENT_SEPARATOR);
-		LOG.debug ("element sent: {}", result );
+
 		return result;
 	}
 

@@ -3,11 +3,10 @@ package org.eidos.kingchallenge.domain;
 import java.util.Comparator;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.annotation.concurrent.ThreadSafe;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Sets a Limited ConcurrentSkipListSet with a max Size
@@ -22,8 +21,8 @@ public class KingSizeLimitedScore<E> extends ConcurrentSkipListSet<E> {
 	 * 
 	 */
 	private static final long serialVersionUID = -3740024596713101252L;
-	static final Logger LOG = LoggerFactory
-			.getLogger(ConcurrentSkipListSet.class);
+	static final Logger LOG = Logger
+			.getLogger(ConcurrentSkipListSet.class.getName());
 	 private final int maxSize;
 	 private   AtomicInteger currentElements;
 	 private final Object lock= new Object();
@@ -75,7 +74,9 @@ public class KingSizeLimitedScore<E> extends ConcurrentSkipListSet<E> {
 		if (isAdded) {
 			//We only take care of the existing elements
 			this.currentElements.incrementAndGet();
-			LOG.trace("currentElem:{}, LevelScope:{}",this.currentElements.get(),this.levelScope);
+			if (LOG.isLoggable(Level.FINEST))
+				LOG.finest(String.format("currentElem:%1$s, LevelScope:%2$s",
+						this.currentElements.get(), this.levelScope));
 		}
 		return isAdded;
 	}

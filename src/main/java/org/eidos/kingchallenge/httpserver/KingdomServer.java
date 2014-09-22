@@ -1,5 +1,7 @@
 package org.eidos.kingchallenge.httpserver;
 
+
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -8,18 +10,21 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
 import org.eidos.kingchallenge.KingConfigStaticProperties;
+import org.eidos.kingchallenge.KingInit;
 import org.eidos.kingchallenge.KingdomConfManager;
 import org.eidos.kingchallenge.KingdomHandlerConf;
 import org.eidos.kingchallenge.controller.KingControllerManager;
 import org.eidos.kingchallenge.controller.SessionWorkerManager;
 import org.eidos.kingchallenge.httpserver.handlers.GenericPageHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 /**
  * Basic KingDom Server
@@ -29,8 +34,16 @@ import org.slf4j.LoggerFactory;
  */
 @SuppressWarnings("restriction")
 public class KingdomServer {
+	private static final LogManager LOGMANAGER = LogManager.getLogManager();
+	static{
+		try {
+			LOGMANAGER.readConfiguration(KingInit.class.getClassLoader().getResourceAsStream(	"kinglog.properties") );
 
-	static final Logger LOG = LoggerFactory.getLogger(KingdomServer.class);
+		} catch (SecurityException | IOException e) {
+
+		}
+	}
+	static final Logger LOG = Logger.getLogger(KingdomServer.class.getName());
 	private static final int HTTP_POOL_CONNECTIONS = KingConfigStaticProperties.HTTP_POOL_CONNECTIONS;
 	private static final int HTTP_MAX_CONNECTIONS = HTTP_POOL_CONNECTIONS * 2;
 	private static final int HTTP_QUEUE_MAX_ITEMS = HTTP_MAX_CONNECTIONS+HTTP_POOL_CONNECTIONS * 2;
@@ -56,7 +69,7 @@ public class KingdomServer {
 
 	protected void initServer() throws IOException, InterruptedException {
 
-		LOG.info("Sarting server on {} ", serverPort);
+		LOG.info(String.format("Sarting server on %1$s ", serverPort) );
 		server = HttpServer.create(new InetSocketAddress(serverPort),
 				HTTP_POOL_CONNECTIONS);
 
@@ -116,13 +129,13 @@ public class KingdomServer {
 			}
 
 		} catch (Exception e) {
-			LOG.warn("starting server {}", e);
+			LOG.log(Level.WARNING,"error  starting server {}",e);
+
 		}
 	}
 
 	protected <T extends HttpHandler> void createContext(String context,
 			Class<T> clazz) {
-		LOG.info("context: {},  handler: {}",context, clazz.getName());
 		server.createContext(context, new GenericPageHandler(clazz));
 	}
 

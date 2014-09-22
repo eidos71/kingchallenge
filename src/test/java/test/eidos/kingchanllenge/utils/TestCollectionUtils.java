@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.equalTo;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
-import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.eidos.kingchallenge.domain.comparator.KingScoreChainedComparator;
 import org.eidos.kingchallenge.domain.comparator.KingScoreReverseOrderByScore;
@@ -16,13 +15,13 @@ import org.eidos.kingchallenge.utils.CollectionsChallengeUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import test.eidos.kingchanllenge.AbstractKingTest;
+
 
 @RunWith(EasyMockRunner.class)
-public class TestCollectionUtils extends EasyMock {
-	private static final Logger LOG = LoggerFactory
-			.getLogger(TestCollectionUtils.class);
+public class TestCollectionUtils extends AbstractKingTest {
+
 	private static TreeSet<KingScore> setScore=  new TreeSet<KingScore>(
 			new KingScoreChainedComparator( new KingScoreReverseOrderByScore(),new KingScoreReverseUserIdComparator()  )	);
 	

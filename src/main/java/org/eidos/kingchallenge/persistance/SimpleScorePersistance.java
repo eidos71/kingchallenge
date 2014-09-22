@@ -7,6 +7,8 @@ import java.util.NavigableSet;
 import java.util.SortedSet;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.logging.Logger;
+
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
@@ -17,8 +19,7 @@ import org.eidos.kingchallenge.domain.comparator.KingScoreReverseOrderByScore;
 import org.eidos.kingchallenge.domain.comparator.KingScoreReverseUserIdComparator;
 import org.eidos.kingchallenge.domain.model.KingScore;
 import org.eidos.kingchallenge.utils.Validator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 @ThreadSafe
 /**
@@ -30,6 +31,7 @@ import org.slf4j.LoggerFactory;
  */
 final  public class SimpleScorePersistance implements ScorePersistance {
 	private static final NavigableSet<KingScore> EMPTY_SET;
+	static final Logger LOG = Logger.getLogger(SimpleScorePersistance.class.getName() );
 
 	static {
 
@@ -40,8 +42,7 @@ final  public class SimpleScorePersistance implements ScorePersistance {
 
 						));
 	};
-	static final Logger LOG = LoggerFactory
-			.getLogger(SimpleScorePersistance.class);
+
 
 	@GuardedBy("navmapScore")
 	private final NavigableMap<Integer, NavigableSet<KingScore>> navmapScore;
@@ -101,14 +102,14 @@ final  public class SimpleScorePersistance implements ScorePersistance {
 		
 		for (Entry<Integer, NavigableSet<KingScore>> anEntry: navmapScore.entrySet()){
 			
-			LOG.trace(" Level:[{}", anEntry.getKey() );
+		
 			sf.append("Level["+anEntry.getKey() );
 			for (KingScore setElem: anEntry.getValue() ) {
-				LOG.trace("{}", setElem);
+		
 				sf.append("["+setElem.toString()+"],");
 			}
 			sf.append("]" );
-			LOG.trace("]");
+	
 			
 		}
 		
@@ -130,7 +131,7 @@ final  public class SimpleScorePersistance implements ScorePersistance {
 				result=true;
 			}
 		}catch (Exception err){
-			LOG.warn("error clean collectoin {}",err);
+			LOG.severe(String.format("error clean collectoin %1$s",err) );
 		}
 		return result;
 	}

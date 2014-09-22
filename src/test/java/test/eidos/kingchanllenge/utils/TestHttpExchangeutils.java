@@ -8,20 +8,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.eidos.kingchallenge.httpserver.handlers.HttpKingExchangeHelper;
-import org.eidos.kingchallenge.utils.CollectionsChallengeUtils;
 import org.eidos.kingchallenge.utils.HttpExchangeUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import test.eidos.kingchanllenge.AbstractKingTest;
+
 
 @RunWith(EasyMockRunner.class)
-public class TestHttpExchangeutils   extends EasyMock{
-	private static final Logger LOG = LoggerFactory
-			.getLogger(TestHttpExchangeutils.class);
+public class TestHttpExchangeutils   extends AbstractKingTest{
+
 	@Test
 	public void testTestHttpExchangeutils() throws UnsupportedEncodingException {
 		Map<String,Object> map= new HashMap<String,Object>();

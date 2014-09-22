@@ -4,9 +4,9 @@ import java.util.Random;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Logger;
 
 import org.easymock.EasyMockRunner;
-import org.easymock.EasyMockSupport;
 import org.eidos.kingchallenge.domain.model.KingUser;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
@@ -14,11 +14,10 @@ import org.eidos.kingchallenge.persistance.LoginPersistanceMap;
 import org.eidos.kingchallenge.persistance.SimpleLoginPersistanceMap;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import test.eidos.kingchanllenge.AbstractKingTest;
 
 @RunWith(EasyMockRunner.class)
 /**
@@ -29,9 +28,9 @@ import org.slf4j.LoggerFactory;
  * @author ernestpetit
  *
  */
-public class TestUserPersistance extends EasyMockSupport {
-	static final Logger LOG = LoggerFactory
-			.getLogger(TestUserPersistance.class);
+public class TestUserPersistance extends AbstractKingTest {
+	static final Logger LOG = Logger
+			.getLogger(TestUserPersistance.class.getName());
 	private final ExecutorService executor = Executors.newCachedThreadPool();
 	private static final LoginPersistanceMap<Long, String, KingUser> bag = new SimpleLoginPersistanceMap();
 	private final static int BAG_SIZE = 4000; // 10
@@ -41,7 +40,7 @@ public class TestUserPersistance extends EasyMockSupport {
 		KingUser user = null;
 		for (int i = 1; i < BAG_SIZE; i++) {
 			user = new KingUser.Builder(i).build();
-			LOG.trace("inserting-> {}", bag);
+		
 			bag.put(user.getKingUserId().get(), user.getSessionKey(), user);
 		}
 	}
@@ -85,7 +84,7 @@ public class TestUserPersistance extends EasyMockSupport {
 		public void run() {
 			for (Entry<Long, KingUser> entry : this.theBag.getMapByLogin()
 					.entrySet()) {
-				LOG.debug("Key- {}, Value {}", entry.getKey(), entry.getValue());
+				LOG.fine(String.format("Key- {}, Value {}", entry.getKey(), entry.getValue()));
 			}
 		}
 	}
@@ -105,12 +104,12 @@ public class TestUserPersistance extends EasyMockSupport {
 			for (int i = 1; i < BAG_SIZE; i++) {
 				try {
 					long randomInt = random.nextInt(BAG_SIZE);
-					LOG.debug("element GOING to be deleted-> {}", randomInt);
+					LOG.fine(String.format("element GOING to be deleted-> {}", randomInt) );
 					this.theBag.removeByLogin(randomInt);
 					user = new KingUser.Builder(randomInt).build();
 					bag.put(user.getKingUserId().get(), user.getSessionKey(),
 							user);
-					LOG.debug("element modified-> {}", randomInt);
+					LOG.fine(String.format("element modified-> {}", randomInt) );
 				} catch (LogicKingChallengeException exception) {
 					// if the LogicKingChallengeException is of type
 					// INVALID_TOKEN

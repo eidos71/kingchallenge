@@ -21,10 +21,6 @@ Defines the basic behaviour of the application, it includes default sevices ,rep
 On /Test/resources
 You can find on the resources a JMETER basic test, configured to create random petitions on the three statements.
 
-
-
-Logging, for convenience Logback has been set as the basic Log provider, I am not sure if that qualifies as an external library, if so, please consider I removed all instance of log and replaced with the Logger factory Sun internals (or on its worse, replace all entries of logback).
-
 some points i would like to talk:
 
 The Persistence in memory implied to manage great number of datas on memory, given the fact that all the exclusions were stated on the highscorelist and not the Post, I tried to keep the storage the bigger posible keeping the history of the users, and limiting to displaying 15 on a CSV format on the request. In a real project I will surely talked with the Functional people to clarify if that exclusion could be done on the storage or not.

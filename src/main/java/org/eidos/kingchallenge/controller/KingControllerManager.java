@@ -4,12 +4,9 @@ package org.eidos.kingchallenge.controller;
 import javax.annotation.concurrent.GuardedBy;
 
 import org.eidos.kingchallenge.KingConfigStaticProperties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class KingControllerManager {
-	static final Logger LOG = LoggerFactory
-			.getLogger(KingControllerManager.class);
+
 	final private LoginController loginController;
 	final private ScoreController scoreController;
 	@GuardedBy("lock")

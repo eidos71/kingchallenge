@@ -7,20 +7,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 @SuppressWarnings("restriction") 
 public class HeraldHandler implements HttpHandler {
-	static final Logger LOG = LoggerFactory.getLogger(HeraldHandler.class);
 
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		LOG.info("herald summoned");
-		 
+
+
 		Headers responseHeaders = exchange.getResponseHeaders();
 		responseHeaders.set("Content-Type", "text/plain");
 		exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);

@@ -19,8 +19,9 @@ import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import test.eidos.kingchanllenge.AbstractKingTest;
+
 
 /**
  * 
@@ -28,11 +29,10 @@ import org.slf4j.LoggerFactory;
  *
  */
 @RunWith(EasyMockRunner.class)
-public class TestCheckLoginService extends EasyMock {
+public class TestCheckLoginService extends AbstractKingTest {
 	private static final String EXPIREDUSER = "EXPIREDUSER";
 	private static final String OKUSER = "OKUSER";
-	private static final Logger LOG = LoggerFactory
-			.getLogger(TestCheckLoginService.class);
+
 	long fiveMinutesLong = MILLISECONDS.convert(
 			5, MINUTES);
 	long tenMinutesLong = MILLISECONDS.convert(
@@ -64,7 +64,7 @@ public class TestCheckLoginService extends EasyMock {
 	public void testRenewLastLogin(){
 		 KingUser sessionUser = loginService.renewLastLogin(OKUSER);
 		 assertThat("", sessionUser.getSessionKey(), equalTo(OKUSER));
-		 LOG.debug("{}", sessionUser);
+	
 //		//We find if the value exists.
 		 assertThat("", loginService.sessionCheckBySessionKey(sessionUser.getSessionKey() ).getDateLogin() ,
 				 Matchers.greaterThan (fiveMinutesDate));

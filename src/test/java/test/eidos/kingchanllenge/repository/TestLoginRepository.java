@@ -2,10 +2,11 @@ package test.eidos.kingchanllenge.repository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.easymock.EasyMock;
+
 import org.easymock.EasyMockRunner;
 import org.eidos.kingchallenge.KingdomConfManager;
 import org.eidos.kingchallenge.domain.model.KingUser;
@@ -17,13 +18,12 @@ import org.eidos.kingchallenge.repository.SimpleLoginRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import test.eidos.kingchanllenge.AbstractKingTest;
 
 @RunWith(EasyMockRunner.class)
-public class TestLoginRepository extends EasyMock {
-	private static final Logger LOG = LoggerFactory
-			.getLogger(TestLoginRepository.class);
+public class TestLoginRepository extends AbstractKingTest {
+
 	private LoginRepository loginRepository = new SimpleLoginRepository();
 
 	private static final int BAG_SIZE = 10000;
@@ -69,10 +69,11 @@ public class TestLoginRepository extends EasyMock {
 		KingUser kingUser = new KingUser.Builder(2).build();
 
 		KingUser oldKingUser = loginRepository.findByLoginId(new AtomicLong(2));
-		LOG.debug("oldKingUser {} ", oldKingUser);
+
 		loginRepository.updateKingUser(kingUser);
 		KingUser newKingUser = loginRepository.findByLoginId(new AtomicLong(2));
-		LOG.debug("newKingUser {} ", newKingUser);
+		assertThat ( newKingUser.getDateLogin(), greaterThan(oldKingUser.getDateLogin()) );
+		
 	}
 
 	@Test
@@ -83,7 +84,7 @@ public class TestLoginRepository extends EasyMock {
 		assertThat("Total King users ", loginRepository.getAllKingdomBySession()
 				.size(), equalTo(BAG_SIZE-1));
 
-		//loginRepository.addKingUser(kingUser);
+	
 	}
 
 	@Test(expected = LogicKingChallengeException.class)

@@ -8,15 +8,14 @@ import org.eidos.kingchallenge.domain.dto.KingResponseDTO;
 import org.eidos.kingchallenge.httpserver.utils.MediaContentTypeEnum;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import test.eidos.kingchanllenge.AbstractKingTest;
+
 
 
 @RunWith(EasyMockRunner.class)
-public class TestMeditaDTO  extends EasyMock{
+public class TestMeditaDTO  extends AbstractKingTest{
 
-	private static final Logger LOG = LoggerFactory
-			.getLogger(TestMeditaDTO.class);
 	
 	@Test
 	public void test() {

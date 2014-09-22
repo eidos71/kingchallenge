@@ -17,13 +17,11 @@ import org.eidos.kingchallenge.domain.model.KingScore;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.persistance.ScorePersistance;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 public final class SimpleScoreRepository implements ScoreRepository{
 
-	static final Logger LOG = LoggerFactory.getLogger(SimpleScoreRepository.class);
-	//It is not final because we need to mock it.
+		//It is not final because we need to mock it.
 	private ScorePersistance scorePersistance;
 	public SimpleScoreRepository() {
 		this.scorePersistance=KingdomConfManager.getInstance().getPersistanceBag().getScorePersistance();
@@ -54,7 +52,7 @@ public final class SimpleScoreRepository implements ScoreRepository{
 			pollResult = (KingScore) resultIterator.next();
 			if (!kingSetScore.contains(pollResult)
 					&& !kingUserUnique.contains(pollResult)) {
-				LOG.trace("inserting {}",pollResult);
+		
 				kingSetScore.add(pollResult);
 				kingUserUnique.add(pollResult);
 				if (kingSetScore.size() >= KingConfigStaticProperties.TOPLISTSCORE)
@@ -63,7 +61,6 @@ public final class SimpleScoreRepository implements ScoreRepository{
 		
 		}	
 
-		LOG.trace("Set to return {}", kingSetScore);
 		return kingSetScore;
 		}
 		/**

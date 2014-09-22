@@ -3,11 +3,10 @@ package org.eidos.kingchallenge.utils;
 import java.util.Date;
 
 import org.eidos.kingchallenge.utils.UtilsEnum.Mode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 public class Validator {
-	private static final Logger LOG = LoggerFactory.getLogger(Validator.class);
+
 	private static final Mode DEFAULT_MODE = Mode.ALPHA;
 	/**
 	 * Validates if it is a valid Unsigned Int
@@ -96,7 +95,7 @@ public class Validator {
 		Date now= new Date();
 		long duration = now.getTime() - lastDate.getTime();
 		if (duration >= SESSION_EXPIRATION) {
-			LOG.debug("Session expiration greater for date {} and now {} ", lastDate, now );
+
 			return true;
 		}
 		return false;

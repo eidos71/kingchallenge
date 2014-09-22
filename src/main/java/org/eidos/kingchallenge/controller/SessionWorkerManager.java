@@ -1,13 +1,14 @@
 package org.eidos.kingchallenge.controller;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.eidos.kingchallenge.service.LoginService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class SessionWorkerManager implements Runnable {
 	final LoginService  loginService ;
-	static final Logger LOG = LoggerFactory
-			.getLogger(SessionWorkerManager.class);
+	static final Logger LOG = Logger
+			.getLogger(SessionWorkerManager.class.getName());
 	
 	public SessionWorkerManager(LoginService service) {
 		loginService= service;
@@ -19,11 +20,11 @@ public class SessionWorkerManager implements Runnable {
 	public void run() {
 		try {
 			Boolean result = loginService.sessionCheck();
-			LOG.debug("False: No session had expired, True: Sessions were removed --> {}", result);
+			if (LOG.isLoggable(Level.FINE))  LOG.fine(String.format("False: No session had expired, True: Sessions were removed -->%1$s", result) );
 		} catch (Exception e) {
-			LOG.warn("{}", e);
+			if (LOG.isLoggable(Level.INFO)) LOG.log(Level.INFO," exception",e);
 		} catch (Throwable e) {
-			LOG.error("{}", e);
+			LOG.log(Level.SEVERE," exception",e);
 		}
 
 	}

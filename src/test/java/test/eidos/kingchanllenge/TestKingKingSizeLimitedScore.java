@@ -2,7 +2,6 @@ package test.eidos.kingchanllenge;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,14 +12,12 @@ import org.eidos.kingchallenge.domain.KingSizeLimitedScore;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 
 @RunWith(EasyMockRunner.class)
-public class TestKingKingSizeLimitedScore extends EasyMock {
-	static final Logger LOG = LoggerFactory.getLogger(TestKingKingSizeLimitedScore.class);
-	private static final int maxElems = 300;
+public class TestKingKingSizeLimitedScore extends AbstractKingTest {
+		private static final int maxElems = 300;
 	private  KingSizeLimitedScore<String> tKgScore;
 	@Before
 	public void setup() {

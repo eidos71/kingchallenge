@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -17,11 +18,12 @@ import org.eidos.kingchallenge.KingdomHandlerConf;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import test.eidos.kingchanllenge.AbstractKingTest;
+
 @RunWith(EasyMockRunner.class)
-public class TestHandlersBuilder extends EasyMockSupport {
-	static final Logger LOG = LoggerFactory.getLogger(TestHandlersBuilder.class);
+public class TestHandlersBuilder extends AbstractKingTest  {
+	static final Logger LOG = Logger.getLogger(TestHandlersBuilder.class.getName());
 	Map<AtomicInteger,Date> lastLogin=Collections.synchronizedMap(new HashMap<AtomicInteger,Date>() );
 
 
@@ -35,7 +37,7 @@ public class TestHandlersBuilder extends EasyMockSupport {
 	public void testKingomDefaultConstructor() {
 		String context="/";
 		KingdomHandlerConf handler = new org.eidos.kingchallenge.KingdomHandlerConf.Builder("org.eidos.kingchallenge.httpserver.handlers.HeraldHandler").build();
-		LOG.debug(handler.toString() );
+		LOG.info(handler.toString() );
 		 assertThat("", handler.getContext(), equalTo(context));
 	}
 	@Test
@@ -43,7 +45,7 @@ public class TestHandlersBuilder extends EasyMockSupport {
 		String context="/herald";
 			KingdomHandlerConf handler = new KingdomHandlerConf.Builder("org.eidos.kingchallenge.httpserver.handlers.HeraldHandler")
 		.contextPath(context).build();
-			LOG.debug(handler.toString() );
+			LOG.info(handler.toString() );
 			 assertThat("", handler.getContext(), equalTo(context));
 	}
 	@Test
@@ -51,7 +53,7 @@ public class TestHandlersBuilder extends EasyMockSupport {
 		String context="/";
 			KingdomHandlerConf handler = new KingdomHandlerConf.Builder("org.eidos.kingchallenge.httpserver.handlers.HeraldHandler")
 		.contextPath(null).build();
-			LOG.debug(handler.toString() );
+			LOG.info((handler.toString() ) );
 			 assertThat("", handler.getContext(), equalTo(context));
 	}
 	@Test

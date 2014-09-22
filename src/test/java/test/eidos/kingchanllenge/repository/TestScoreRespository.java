@@ -22,14 +22,13 @@ import org.eidos.kingchallenge.utils.CollectionsChallengeUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+
+import test.eidos.kingchanllenge.AbstractKingTest;
 import test.eidos.kingchanllenge.utils.TestUtils;
 @RunWith(EasyMockRunner.class)
-public class TestScoreRespository  extends EasyMock {
-	private static final Logger LOG = LoggerFactory
-			.getLogger(TestScoreRespository.class);
+public class TestScoreRespository  extends AbstractKingTest {
+
 	@Mock()
 	private ScorePersistance scorePersistance;
 	@TestSubject

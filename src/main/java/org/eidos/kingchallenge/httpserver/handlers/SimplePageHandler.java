@@ -7,6 +7,8 @@ import java.net.HttpURLConnection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.eidos.kingchallenge.KingConfigStaticProperties;
 import org.eidos.kingchallenge.controller.KingControllerManager;
@@ -20,8 +22,6 @@ import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.httpserver.enums.KingControllerEnum;
 import org.eidos.kingchallenge.utils.UtilsEnum.Mode;
 import org.eidos.kingchallenge.utils.Validator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
@@ -37,7 +37,7 @@ import com.sun.net.httpserver.HttpHandler;
 public final class SimplePageHandler implements HttpHandler {
 
 
-	static final Logger LOG = LoggerFactory.getLogger(SimplePageHandler.class);
+	static final Logger LOG = Logger.getLogger(SimplePageHandler.class.getName());
 	private final LoginController loginController;
 	private final ScoreController scoreController;
 	private final Object locked= new Object();
@@ -50,7 +50,7 @@ public final class SimplePageHandler implements HttpHandler {
 
 	}
 
-	@SuppressWarnings({  "resource", "unchecked" })
+	@SuppressWarnings({  "unchecked" })
 	@Override
 	public void handle(HttpExchange httpExchange) throws IOException {
 
@@ -69,26 +69,25 @@ public final class SimplePageHandler implements HttpHandler {
 						.getAttribute(KingConfigStaticProperties.KING_REQUEST_PARAM) );
 			}
 	
-			if (LOG.isDebugEnabled()) {
-				for (Entry<String, Object> value : params.entrySet())
-					LOG.debug("String-{}  Value-{}", value.getKey(),
-							value.getValue());
-				LOG.debug("response {}", response);
+			if (LOG.isLoggable(Level.FINE)) {
+				for (Entry<String, Object> value : params.entrySet()) {
+					LOG.fine(String.format("String- %1$s  Value-%2$s",
+							value.getKey(), value.getValue()));
+				}
+				LOG.fine(String.format("response %1$s ", response));
 			}
-		
-
-				streamWriterToResponse(HttpURLConnection.HTTP_OK, prepareResponse(params,httpExchange),httpExchange);
-		
+			streamWriterToResponse(HttpURLConnection.HTTP_OK, prepareResponse(params,httpExchange),httpExchange);
+			
 		} catch (KingInvalidSessionException ex) {
-			LOG.info("{}", ex);
+			if (LOG.isLoggable(Level.INFO )  ) LOG.log(Level.INFO," exception",ex);
 			streamWriterToResponse(HttpURLConnection.HTTP_FORBIDDEN,
 					new KingResponseDTO.Builder().putContentBody(ex.getMessage()).build(),httpExchange);
 		} catch (KingRunTimeIOException | LogicKingChallengeException ex) {
-			LOG.info("KingRunTimeIOException or KingRunTimeIOException {}", ex);
+			if (LOG.isLoggable(Level.INFO )  )  LOG.log(Level.INFO," exception",ex);
 			 streamWriterToResponse(HttpURLConnection.HTTP_INTERNAL_ERROR,
 					new KingResponseDTO.Builder().putContentBody(ex.getMessage()).build() ,httpExchange);
 		}catch (Exception ex) {
-			LOG.info("Exception {}", ex);
+			if (LOG.isLoggable(Level.INFO )  ) LOG.log(Level.INFO," exception",ex);
 			streamWriterToResponse(HttpURLConnection.HTTP_INTERNAL_ERROR, new KingResponseDTO.Builder().putContentBody("").build(),httpExchange );
 		}
 		
@@ -132,8 +131,7 @@ public final class SimplePageHandler implements HttpHandler {
 		
 		switch (HttpKingExchangeHelper.defineController( httpExchange)) {
 		case HIGHSCORELIST:
-			LOG.debug("HIGHSCORELIST");
-			if (scoreController == null)
+				if (scoreController == null)
 				throw new LogicKingChallengeException(
 						LogicKingError.PROCESSING_ERROR);
 
@@ -141,8 +139,7 @@ public final class SimplePageHandler implements HttpHandler {
 					.parseLong((String) requestParamMap.get("levelid")));
 			break;
 		case LOGIN:
-			LOG.debug("LOGIN");
-			if (loginController == null)
+				if (loginController == null)
 				throw new LogicKingChallengeException(
 						LogicKingError.PROCESSING_ERROR);
 
@@ -150,8 +147,7 @@ public final class SimplePageHandler implements HttpHandler {
 					.parseLong((String) requestParamMap.get("userid")));
 			break;
 		case SCORE:
-			LOG.debug("SCORE");
-			if (scoreController == null) 
+				if (scoreController == null) 
 				throw new LogicKingChallengeException(
 						LogicKingError.PROCESSING_ERROR);
 			Integer score =null;
@@ -161,7 +157,6 @@ public final class SimplePageHandler implements HttpHandler {
 					try {
 						if (Validator.isValidString(elem.getKey(), Mode.NUMERIC)) {
 							score= new Integer(elem.getKey());
-							LOG.debug("****** {}", elem.getKey()  );
 							break;
 						}
 					}catch (NumberFormatException e) {
@@ -179,12 +174,10 @@ public final class SimplePageHandler implements HttpHandler {
 						HttpKingExchangeHelper.getLongValue(requestParamMap,"levelid"), score);
 			break;
 		case UNKNOWN:
-			LOG.debug("UNKNOWN");
 			throw new KingRunTimeIOException("HTTP_BAD_REQUEST");
 
 		default:
-			LOG.debug("UNKNOWN");
-			throw new KingRunTimeIOException("HTTP_BAD_REQUEST");
+				throw new KingRunTimeIOException("HTTP_BAD_REQUEST");
 
 		}
 		return response;

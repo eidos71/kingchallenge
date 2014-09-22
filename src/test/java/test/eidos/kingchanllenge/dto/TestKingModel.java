@@ -10,8 +10,10 @@ import org.eidos.kingchallenge.domain.model.KingUser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import test.eidos.kingchanllenge.AbstractKingTest;
+
 @RunWith(EasyMockRunner.class)
-public class TestKingModel extends EasyMock {
+public class TestKingModel extends AbstractKingTest {
 	@Test
 	public void testScore() {
 		KingScore a1 = new KingScore.Builder(300, 351234L).build();

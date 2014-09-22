@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 import java.util.Set;
 
 import javax.annotation.concurrent.GuardedBy;
@@ -17,8 +18,6 @@ import org.eidos.kingchallenge.KingdomHandlerConf;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.persistance.PersistanceBag;
 import org.eidos.kingchallenge.utils.FileReaderUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Manager that helds all Handler managed by the Kingdom
@@ -28,8 +27,9 @@ import org.slf4j.LoggerFactory;
  */
 @ThreadSafe
 public class KingdomConfManager {
-	static final Logger LOG = LoggerFactory
-			.getLogger(KingdomConfManager.class);
+	static final Logger LOG = Logger
+			.getLogger(KingdomConfManager.class.getName());
+	
 
 	private static final String HANDLER_PROPERTIES = "handler.properties";
 	@GuardedBy("lock")
@@ -78,7 +78,7 @@ public class KingdomConfManager {
 								.build()
 								);
 					 }catch(LogicKingChallengeException ex) {
-						 LOG.warn("exceptoion {}", ex);
+						 LOG.severe(String.format("*static:end %1$s", ex) );
 					 }
 				 }
 		 }

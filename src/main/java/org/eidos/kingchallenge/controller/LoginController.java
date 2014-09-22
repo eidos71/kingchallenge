@@ -1,7 +1,5 @@
 package org.eidos.kingchallenge.controller;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import org.eidos.kingchallenge.domain.dto.KingResponseDTO;
 
 /**

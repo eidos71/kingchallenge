@@ -2,10 +2,13 @@ package org.eidos.kingchallenge.service;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.MINUTES;
+
 import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.annotation.concurrent.ThreadSafe;
 
@@ -16,11 +19,10 @@ import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.repository.LoginRepository;
 import org.eidos.kingchallenge.utils.Validator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 @ThreadSafe
 public final class SimpleLoginService implements LoginService {
-	static final Logger LOG = LoggerFactory.getLogger(SimpleLoginService.class);
+	static final Logger LOG = Logger.getLogger(SimpleLoginService.class.getName() );
 
 	private  final LoginRepository loginRepository ;
 
@@ -51,8 +53,7 @@ public final class SimpleLoginService implements LoginService {
 		KingUser kingUser=loginRepository.findBySessionId(sessionKey);	
 		if (kingUser==null) throw	new KingInvalidSessionException("Not found sessionKey "+ sessionKey);
 		//We check if it is still a valid Session
-		LOG.debug("user to check: {}",kingUser);
-		boolean isInvalid=!checkInvalidSessionByKey(sessionKey,kingUser.getDateLogin());
+			boolean isInvalid=!checkInvalidSessionByKey(sessionKey,kingUser.getDateLogin());
 		if (isInvalid) 	throw new KingInvalidSessionException();
 		return kingUser;
 		
@@ -67,11 +68,11 @@ public final class SimpleLoginService implements LoginService {
 		if (mapLoginUser.isEmpty()) result=false;
 		for (Entry<String, KingUser> entry : mapLoginUser.entrySet()) {
 			try {
-				LOG.trace("entry-> {}",entry.getValue());
 				checkInvalidSessionByKey(entry.getKey(), entry.getValue()
 						.getDateLogin());
 			}catch (NullPointerException  | LogicKingChallengeException err) {
-				LOG.info("This entry {} has failed:  with the following error {} ",entry .getKey(), err);
+				if (LOG.isLoggable(Level.INFO))
+					LOG.info(String.format("This entry %1%s has failed:  with the following error %2$s ",entry .getKey(), err) );
 			}
 		
 		}
@@ -92,7 +93,6 @@ public final class SimpleLoginService implements LoginService {
 		long SESSION_EXPIRATION = MILLISECONDS.convert(
 				KingConfigStaticProperties.SESSION_EXPIRATION_MINUTES, MINUTES);
 		if (Validator.validateSessionExpired(lastLoginDate, SESSION_EXPIRATION)) {
-			LOG.debug("expiration is expired for {} with lastLoginDate {}", sessionId, lastLoginDate);
 			// we have to remove this user
 			loginRepository.removeKingUserBySession(sessionId);
 			isValid=false;
@@ -102,12 +102,10 @@ public final class SimpleLoginService implements LoginService {
 
 	@Override
 	public KingUser renewLastLogin(String sessionKey ) {
-		LOG.debug("loginToken  {} ", sessionKey);
 		if (sessionKey==null || "".equals(sessionKey) )
 			throw new KingInvalidSessionException();
 		//
 		KingUser toUpdateUser= sessionCheckBySessionKey(sessionKey);
-		LOG.debug("user to Update: {}",toUpdateUser);
 		toUpdateUser= new KingUser.Builder(toUpdateUser.getKingUserId().get()).setSessionKey(toUpdateUser.getSessionKey()).build();
 		return this.loginRepository.updateKingUser(toUpdateUser);
 

@@ -7,20 +7,19 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.eidos.kingchallenge.KingConfigStaticProperties;
 import org.eidos.kingchallenge.exceptions.KingRunTimeIOException;
 import org.eidos.kingchallenge.httpserver.enums.KingControllerEnum;
 import org.eidos.kingchallenge.utils.HttpExchangeUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.sun.net.httpserver.HttpExchange;
 @SuppressWarnings("restriction")
 public class HttpKingExchangeHelper {
 	private static final String UTF_8 = "utf-8";
 
-	static final Logger LOG = LoggerFactory.getLogger(HttpKingExchangeHelper.class);
+	static final Logger LOG = Logger.getLogger(HttpKingExchangeHelper.class.getName() );
 
 	
 
@@ -105,22 +104,13 @@ public class HttpKingExchangeHelper {
 	public static Long getLongValue(Map<String,Object> requestParamMap, String keyValue ) {
 				if (requestParamMap==null)  	throw new KingRunTimeIOException("System Error");
 		try {
-			LOG.debug("keyValue, {}", keyValue);
+			LOG.fine(String.format("keyValue, %1$s", keyValue) );
 			return	Long.parseLong((String) requestParamMap
 					.get(keyValue));
-
-		}catch(NullPointerException er) {
-			LOG	.warn("{}, {}", keyValue, er);
-			throw er;
-		}catch(java.lang.NumberFormatException er ) {
-			LOG	.warn("{}, {} ",keyValue ,er);
-			throw er;
-		}catch(Exception er) {
-			LOG	.warn("{}, {} ",keyValue ,er);
+		}catch(NullPointerException | NumberFormatException er) {
+			LOG	.warning(String.format("keyvalue, %1$s, %2$s", keyValue, er) );
 			throw er;
 		}
-	
-		
-		
+			
 	}
 }

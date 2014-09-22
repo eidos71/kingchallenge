@@ -8,16 +8,11 @@ import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.repository.LoginRepository;
 import org.eidos.kingchallenge.repository.ScoreRepository;
-import org.eidos.kingchallenge.repository.SimpleLoginRepository;
-import org.eidos.kingchallenge.repository.SimpleScoreRepository;
 import org.eidos.kingchallenge.utils.CollectionsChallengeUtils;
 import org.eidos.kingchallenge.utils.Validator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class SimpleScoreService implements ScoreService {
 
-	static final Logger LOG = LoggerFactory.getLogger(SimpleScoreService.class);
 	private ScoreRepository scoreRepository= KingConfigStaticProperties.SCOREREPO;
 	private LoginRepository loginRepository = KingConfigStaticProperties.LOGINREPO;
 
@@ -31,8 +26,7 @@ public final class SimpleScoreService implements ScoreService {
 			throw new KingInvalidSessionException("Invalid sessionKey: " + sessionKey);
 		if (score==null)
 			throw new LogicKingChallengeException(LogicKingError.PROCESSING_ERROR);
-		LOG.debug("{}", score);
-		
+			
 		return this.scoreRepository.insertScore(score); 
 	}
 	/**

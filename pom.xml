@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.eidos</groupId>
 	<artifactId>kingchallenge</artifactId>
-	<version>0.5.1-SNAPSHOT</version>
+	<version>0.9.2-SNAPSHOT</version>
 	<name>King challenge</name>
 	<description>King challenge, 4</description>
 	<properties>
@@ -34,22 +34,7 @@
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-all</artifactId>
 			<version>${hamcrest.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>${logback.classic}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>${org.slf4j-version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-core</artifactId>
-			<version>${logback-core}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>

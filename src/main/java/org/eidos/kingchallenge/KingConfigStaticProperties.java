@@ -1,5 +1,8 @@
 package org.eidos.kingchallenge;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.eidos.kingchallenge.controller.LoginController;
 import org.eidos.kingchallenge.controller.ScoreController;
 import org.eidos.kingchallenge.controller.SimpleLoginController;
@@ -13,14 +16,15 @@ import org.eidos.kingchallenge.repository.ScoreRepository;
 import org.eidos.kingchallenge.service.KingService;
 import org.eidos.kingchallenge.service.LoginService;
 import org.eidos.kingchallenge.service.ScoreService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 @SuppressWarnings("rawtypes")
 public class KingConfigStaticProperties {
+
 	// Used to store
-	static final Logger LOG = LoggerFactory
-			.getLogger(KingConfigStaticProperties.class);
+	static final Logger LOG = Logger
+			.getLogger(KingConfigStaticProperties.class.getName());
+	
 	public static final String KING_REQUEST_PARAM;
 	public static final int BINDING_PORT;
 	public static final int HTTP_POOL_CONNECTIONS;
@@ -39,7 +43,7 @@ public class KingConfigStaticProperties {
 	public static final ScorePersistance SCOREPERSISTANCE;
 
 	static {
-		LOG.debug("static:init*");
+		if (LOG.isLoggable(Level.FINE)) LOG.fine("static:init*");
 		KING_REQUEST_PARAM = (getProperty("KING_REQUEST_PARAM") != null) ? getProperty("KING_REQUEST_PARAM")
 				: "kingparams";
 		// load a properties file
@@ -65,7 +69,9 @@ public class KingConfigStaticProperties {
 		SCORESERVICE = (ScoreService) getService("SCORESERVICE");
 		LOGINCONTROLLER= new SimpleLoginController.Builder().build();
 		SCORECONTROLLER= new SimpleScoreController.Builder().build();
-		LOG.debug("*static:end {}, {} ", SCOREREPO, LOGINREPO);
+		if (LOG.isLoggable(Level.FINE)){
+			LOG.fine(String.format("*static:end %1$s, %2$s ", SCOREREPO, LOGINREPO) );
+		}
 	}
 
 	private static KingService getService(String key) {

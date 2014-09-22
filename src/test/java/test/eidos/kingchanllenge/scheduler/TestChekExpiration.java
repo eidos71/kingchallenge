@@ -2,6 +2,7 @@ package test.eidos.kingchanllenge.scheduler;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.MINUTES;
+
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Random;
@@ -14,7 +15,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.easymock.EasyMockRunner;
-import org.easymock.EasyMockSupport;
 import org.eidos.kingchallenge.KingdomConfManager;
 import org.eidos.kingchallenge.controller.SessionWorkerManager;
 import org.eidos.kingchallenge.domain.model.KingUser;
@@ -25,17 +25,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import test.eidos.kingchanllenge.persistance.TestLoginPersistance;
+import test.eidos.kingchanllenge.AbstractKingTest;
 
 @RunWith(EasyMockRunner.class)
-public class TestChekExpiration extends EasyMockSupport {
+public class TestChekExpiration extends AbstractKingTest {
 	
 	LoginService  	loginService = new SimpleLoginService();
-	private static final Logger LOG = LoggerFactory
-			.getLogger(TestLoginPersistance.class);
+
 	private static final int BAG_SIZE = 1000;
 	private static final int SEED_SESSIONEXPIRATION=15;
 	private static final int MUTATOR = 10;
@@ -59,9 +56,9 @@ public class TestChekExpiration extends EasyMockSupport {
 				long randomValue = MILLISECONDS.convert(
 						random.nextInt(SEED_SESSIONEXPIRATION), MINUTES);
 				finalDate.setTime(now.getTime()-randomValue);
-				LOG.trace("now{}", finalDate);
+			
 				user = new KingUser.Builder(i).setTime(finalDate).build();
-				LOG.debug("inserting-> {}", user);
+				
 				bag.put(user.getKingUserId().get(), user.getSessionKey(), user);
 			}
 			init=true;
@@ -72,11 +69,8 @@ public class TestChekExpiration extends EasyMockSupport {
 	@Test
 	public void sessionCheck() throws InterruptedException {
 		
-		if (loginService == null || loginService.sessionCheck()==null)	{
-			LOG.debug("login service is null");
-		}else {
-			if (loginService.sessionCheck()!=null)
-				loginService.sessionCheck();
+		if (loginService != null  && loginService.sessionCheck()  !=null)	{
+			loginService.sessionCheck();
 		}
 		
 	}
@@ -137,7 +131,7 @@ public class TestChekExpiration extends EasyMockSupport {
 				new KingUser.Builder(randomInt)
 						.setSessionKey(result.getSessionKey()).build();
 			
-				LOG.debug("result {}", result.getSessionKey());
+
 
 			} catch (InterruptedException e) {
 

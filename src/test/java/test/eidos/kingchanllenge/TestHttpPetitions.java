@@ -11,18 +11,17 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.logging.Logger;
 
 import org.eidos.kingchallenge.httpserver.KingdomServer;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class TestHttpPetitions {
+
+public class TestHttpPetitions  extends AbstractKingTest {
 	private static final int _NUMPETITIONS = 1000;
-	static final Logger LOG = LoggerFactory.getLogger(TestHttpPetitions.class);
+	static final Logger LOG = Logger.getLogger(TestHttpPetitions.class.getName());
 	private final ExecutorService executor = Executors.newCachedThreadPool();
 
 	protected static final String _HIGHSCORE = "http://localhost:8000/11/highscorelist";
@@ -55,8 +54,7 @@ public class TestHttpPetitions {
 			try {
 				future.get();
 			} catch (InterruptedException | ExecutionException e) {
-				// TODO Auto-generated catch block
-				LOG.warn("{}",e);
+
 			}
 		}
 	}
@@ -71,7 +69,7 @@ public class TestHttpPetitions {
 	        		conn.getInputStream()));
 	        String inputLine;
 	        while ((inputLine = in.readLine()) != null) 
-	        	LOG.debug(inputLine);
+	        	LOG.fine(inputLine);
 	      
 	        in.close();
 	}
@@ -86,7 +84,7 @@ public class TestHttpPetitions {
 				doUrlConnection(_HIGHSCORE);
 
 			}catch(Exception e) {
-				LOG.warn("{}",e);
+			
 			}
 			
 			

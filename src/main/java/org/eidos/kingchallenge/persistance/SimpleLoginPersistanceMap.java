@@ -3,6 +3,8 @@ package org.eidos.kingchallenge.persistance;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
@@ -12,8 +14,6 @@ import org.eidos.kingchallenge.exceptions.KingInvalidSessionException;
 import org.eidos.kingchallenge.exceptions.LogicKingChallengeException;
 import org.eidos.kingchallenge.exceptions.enums.LogicKingError;
 import org.eidos.kingchallenge.utils.Validator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 
@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
  */
 @ThreadSafe
 public final class SimpleLoginPersistanceMap implements LoginPersistanceMap<Long, String, KingUser> {
-	static final Logger LOG = LoggerFactory.getLogger(SimpleLoginPersistanceMap.class);
+	static final Logger LOG = Logger.getLogger(SimpleLoginPersistanceMap.class.getName() );
 	private final Object lockLogin= new Object();
 	private final Object lockSession= new Object();
 	
@@ -50,7 +50,6 @@ public final class SimpleLoginPersistanceMap implements LoginPersistanceMap<Long
 		synchronized(lockLogin) {
 			if (!Validator.isValidUnsignedInt(loginKey) )
 				throw new LogicKingChallengeException(LogicKingError.INVALID_TOKEN);
-			LOG.trace("loginKey {}, sessionKey {}, value {} ",loginKey,sessionKey,value );
 			mapByLogin.put(loginKey, value);
 			mapBySession.put(sessionKey, value);
 		
@@ -71,8 +70,8 @@ public final class SimpleLoginPersistanceMap implements LoginPersistanceMap<Long
 		synchronized(lockSession) {
 			KingUser removedSession = mapBySession.remove(sessionKey);
 			if (removedSession==null) {
-				LOG.debug("- sessionKey {} was not found", sessionKey);
-				return false;
+				if (LOG.isLoggable(Level.FINE )  )  LOG.fine(String.format("sessionKey %1$s was not found", sessionKey) );
+					return false;
 			}else {
 				return mapByLogin.remove(removedSession.getKingUserId().get() ) != null;
 			}
@@ -86,8 +85,7 @@ public final class SimpleLoginPersistanceMap implements LoginPersistanceMap<Long
 		synchronized(lockLogin) {
 			KingUser removed = mapByLogin.remove(loginKey);
 			if (removed==null) {
-				LOG.debug("- loginkey {} was not found", loginKey);
-				return false;
+					return false;
 			}
 			return (mapBySession.remove(removed.getSessionKey() ) != null );
 		

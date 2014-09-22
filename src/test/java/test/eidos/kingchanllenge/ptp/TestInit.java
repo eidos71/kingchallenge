@@ -23,8 +23,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import test.eidos.kingchanllenge.AbstractKingTest;
+
 @RunWith(EasyMockRunner.class)
-public class TestInit extends EasyMockSupport {
+public class TestInit extends AbstractKingTest {
 	@Mock
 	private LoginService loginService;
 	@TestSubject

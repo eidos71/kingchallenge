@@ -9,14 +9,13 @@ import org.eidos.kingchallenge.domain.model.KingUser;
 import org.eidos.kingchallenge.httpserver.utils.MediaContentTypeEnum;
 import org.eidos.kingchallenge.service.LoginService;
 import org.eidos.kingchallenge.service.ScoreService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 @Immutable
 public final class SimpleScoreController implements ScoreController {
 	private final ScoreService  scoreService;
 	private final LoginService loginService;
-	static final Logger LOG = LoggerFactory.getLogger(SimpleScoreController.class);
+
 
 	@Override
 	public KingResponseDTO putHighScore(String sessionKey, Long level, int score) {

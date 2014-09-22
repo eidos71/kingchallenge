@@ -2,16 +2,23 @@ package test.eidos.kingchanllenge.utils;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.util.Random;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
+import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.EasyMockSupport;
 import org.eidos.kingchallenge.utils.Validator;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import test.eidos.kingchanllenge.AbstractKingTest;
+
+
+
+
 
 @RunWith(EasyMockRunner.class)
 /**
@@ -19,11 +26,12 @@ import org.slf4j.LoggerFactory;
  * @author ernestpetit
  *
  */
-public class TestUnsignedInt extends EasyMockSupport {
-	
+public class TestUnsignedInt extends AbstractKingTest {
 
 	private static final int _NUMGEN = 100;
-	static final Logger LOG = LoggerFactory.getLogger(TestUnsignedInt.class);
+
+
+	static final Logger LOG = Logger.getLogger(TestUnsignedInt.class.getName());
 
 	@Test
 	public void testValidatesCreation() {
@@ -35,7 +43,7 @@ public class TestUnsignedInt extends EasyMockSupport {
 
 			num[i] = (Validator.isValidUnsignedInt(result)) ? result : 0;
 			Long uuid = new Long(num[i]);
-			LOG.debug("result:: {}", uuid);
+			LOG.info(String.format("result:: %1$s}", uuid) );
 
 		}
 

@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.logging.Logger;
 
 import junit.framework.Assert;
 
@@ -25,12 +26,11 @@ import org.eidos.kingchallenge.persistance.SimpleScorePersistance;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 @RunWith(EasyMockRunner.class)
 public class TestScorePersistance extends EasyMock {
-	static final Logger LOG = LoggerFactory.getLogger(TestScorePersistance.class);
+	static final Logger LOG = Logger.getLogger(TestScorePersistance.class.getName());
 	// 1 MILLION PUTS
 	private static final int PUTS = 1000000;
 	// 300 DIFFERENT LEVELS
@@ -49,7 +49,7 @@ public class TestScorePersistance extends EasyMock {
 		
 		Integer score;
 		Long userId;
-		LOG.debug("************* Preload for insertion");
+		LOG.fine("************* Preload for insertion");
 		for (int i=0; i<PUTS; i++){
 			 level=new Long(random.nextInt(LEVEL )+1);
 			 userId= new Long(100+random.nextInt(DIFFERENTUSERS ));
@@ -57,7 +57,7 @@ public class TestScorePersistance extends EasyMock {
 				 //LOG.debug("level-{}, points-{}, score- {}",level,points,score);
 			listKingScore.add( new KingScoreDTO.Builder(level,  score, userId ).build()  );
 		}
-		LOG.debug("************* Preload for read");
+		LOG.fine("************* Preload for read");
 		for (int y=0; y<PUTS; y++){
 			
 			 level=new Long(random.nextInt(LEVEL )+1);
@@ -66,7 +66,7 @@ public class TestScorePersistance extends EasyMock {
 
 			sp.put(level.intValue(), transformDTO(craeteKingScoreDTO(level, score, userId)));
 		}
-		LOG.debug("************* END PRELOAD for insertion");
+		LOG.fine("************* END PRELOAD for insertion");
 	
 	}
 
@@ -101,10 +101,10 @@ public class TestScorePersistance extends EasyMock {
 		if (result==null ) 
 		setKingScore.add(new KingScore.Builder( 7, 135L).build());
 		for ( KingScore elem : setKingScore ){
-			LOG.debug(" {}",elem);
+			LOG.fine(elem.toString() );
 		}
 
-		LOG.debug("element found  {}",  result);
+		LOG.fine(String.format("element found  {}",  result) );
 	}
 
 
@@ -134,10 +134,10 @@ public class TestScorePersistance extends EasyMock {
 		KingScore pollResult;
 		while (kingSetScore.size()<_maxNumElemsn && resultAnotherKingScores.size()>0){
 			 pollResult = resultAnotherKingScores.pollFirst();
-				LOG.debug("pollResult {}, {} ",pollResult);
+				LOG.fine(String.format("pollResult %1$s ",pollResult) );
 			if (!kingSetScore.contains(pollResult) ){
 				if (!kingUserUnique.contains(pollResult)) {
-					LOG.debug("inserting--> {}",pollResult);
+					LOG.fine(String.format("inserting %1$s ",pollResult) );
 					kingSetScore.add(pollResult);
 					kingUserUnique.add(	pollResult );
 				}
@@ -146,13 +146,10 @@ public class TestScorePersistance extends EasyMock {
 	
 		}
 	
-		LOG.debug("size-{}",resultSet.size() );
+	
 		resultSet.remove(transformDTO(craeteKingScoreDTO(1L, 34, 5L)) );
 		resultSet.size();
-		LOG.debug("size-{}",resultSet.size() );
-		LOG.debug("resultAnotherKingScores-{}",resultAnotherKingScores.size() );
-		LOG.debug("Set to return {}", kingSetScore);
-		
+
 	
 	} 
 	@Test
@@ -181,11 +178,10 @@ public class TestScorePersistance extends EasyMock {
 			}
 		}
 	
-		LOG.debug("size-{}",resultSet.size() );
+		
 		resultSet.remove(transformDTO(craeteKingScoreDTO(1L, 34, 5L)) );
 		resultSet.size();
-		LOG.debug("size-{}",resultSet.size() );
-		LOG.debug("Set to return {}", kingSetScore);
+
 		
 	
 	} 
@@ -195,7 +191,7 @@ public class TestScorePersistance extends EasyMock {
 		
 		 final Random random = new Random();
 		 ScorePersistance sp= new SimpleScorePersistance();
-			boolean result= sp.dumpPersistance();
+		 sp.dumpPersistance();
 		Long level;
 		
 		Integer score;
@@ -218,14 +214,14 @@ public class TestScorePersistance extends EasyMock {
 		KingScore pollResult;
 		while (kingSetScore.size()<_maxNumElemsn && resultAnotherKingScores.size()>0){
 			 pollResult = resultAnotherKingScores.pollFirst();
-				LOG.debug("pollResult {}, {} ",pollResult);
+				LOG.fine(String.format("pollResult %1$s ",pollResult) );
 			if (!kingSetScore.contains(pollResult) ){
-				LOG.debug("inserting--> {}",pollResult);
+				LOG.fine(String.format("inserting %1$s ",pollResult) );
 				kingSetScore.add(	pollResult );
 			}		
 		
 		}
-		LOG.debug("Set to return {}", kingSetScore);
+		
 		}
 	
 	/**
